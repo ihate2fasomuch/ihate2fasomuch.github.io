@@ -292,6 +292,13 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
   border-radius:3px;padding:9px 11px;box-shadow:0 6px 22px rgba(0,0,0,.22);pointer-events:none;
   display:flex;flex-direction:column;gap:4px}
 #tip[hidden]{display:none}
+#tip.big{max-width:320px;padding:0;gap:0;overflow:hidden;border-radius:6px}
+#tip.big .ihead{color:#fff;font:700 16px "Bitter",serif;padding:8px 12px}
+#tip.big .ikind{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:700;padding:8px 12px 0}
+#tip.big .ieff{font-size:16px;font-weight:600;line-height:1.35;padding:4px 12px 8px;color:var(--ink)}
+#tip.big .irow{display:grid;grid-template-columns:70px 1fr;gap:6px;padding:6px 12px;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink2)}
+#tip.big .irow b{color:var(--ink)}
+#logPanel[hidden]{display:none!important}
 #tip .tn{font-family:"Bitter",serif;font-weight:600;font-size:15px}
 #tip .tm{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink2)}
 #tip .tt{font-size:13px;color:var(--ink2);line-height:1.35}
@@ -418,58 +425,121 @@ button.btn.primary.warnbtn:not(:disabled){background:#B03A2E;border-color:#B03A2
 .infbadge{margin-top:3px;font-size:12px;font-weight:700;color:#fff;background:#7D3C98;border-radius:3px;padding:1px 5px;align-self:flex-start;cursor:help}
 @keyframes fx-infest{0%,100%{box-shadow:0 0 0 0 rgba(142,68,173,0)}50%{box-shadow:0 0 0 4px rgba(142,68,173,.35)}}
 
-/* ---- p50: battle layout — the whole fight on one screen, side menus left and right ---- */
+/* ---- p52: the whole game always fits the window ----
+   .wrap is sized to the window by JS and zoomed so a ~1280×760 design fills any screen.
+   Nothing scrolls the page; the few long lists (shelf, log, deck) scroll inside themselves. */
 .rail{display:none}
-body.battle .wrap{max-width:1900px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:12px}
-body.battle header{grid-column:1 / -1;grid-row:1}
-body.battle #railL{grid-column:1;grid-row:2}
-body.battle #stage{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:10px;min-width:0}
-body.battle #railR{grid-column:3;grid-row:2}
-body.battle .rail{display:flex;flex-direction:column;gap:10px;position:sticky;top:58px;max-height:calc(100vh - 72px);overflow-y:auto;width:310px}
-body.battle .rail.collapsed{width:46px;overflow:visible}
-body.battle .rail.collapsed .railbody{display:none}
-.railtog{font:inherit;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:4px;padding:8px 10px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow)}
+html,body{height:100%}
+body.fit{overflow:hidden;padding:0}
+body.fit .wrap{max-width:none;margin:0;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);gap:8px 10px;padding:8px 12px;overflow:hidden;position:relative}
+body.fit header{grid-column:1 / -1;grid-row:1;position:static;margin:0;padding:0;flex-wrap:nowrap;align-items:center}
+body.fit #railL{grid-column:1;grid-row:2}
+body.fit #stage{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;overflow:hidden}
+body.fit #railR{grid-column:3;grid-row:2}
+body.fit .rail{display:flex;flex-direction:column;gap:8px;min-height:0;width:280px}
+body.fit #railR{width:300px}
+body.fit #railR.collapsed{width:42px}
+body.fit.narrowui .rail.collapsed{width:34px}
+body.fit.narrowui .rail.collapsed .railtog{padding:10px 4px;font-size:11.5px}
+body.fit #railR .decklist{grid-template-columns:1fr;gap:8px}
+body.fit #railR .dcard{padding:2px 7px}
+body.fit #railR .deckinfo{font-size:12px}
+body.fit #railR .panel-head{margin-bottom:6px}
+body.fit #railR .panel-head .tiny{display:none}
+body.fit .rail .railbody{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:2px}
+body.fit .rail.collapsed{width:42px}
+body.fit .rail.collapsed .railbody{display:none}
+body.fit.narrowui .rail:not(.collapsed){position:absolute;top:56px;bottom:8px;z-index:25;background:var(--ground);box-shadow:0 8px 30px rgba(0,0,0,.3);padding:6px;border-radius:6px}
+body.fit.narrowui #railL:not(.collapsed){left:8px} body.fit.narrowui #railR:not(.collapsed){right:8px}
+body.fit.pick #railL,body.fit.pick #railR{display:none}
+body.fit.pick #stage{grid-column:1 / -1;overflow-y:auto}
+.railtog{font:inherit;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:4px;padding:8px 10px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow);flex:none}
 .railtog:hover{border-color:var(--ink)}
-.rail.collapsed .railtog{writing-mode:vertical-rl;text-orientation:mixed;padding:12px 8px;min-height:170px;justify-content:flex-start}
-.rr.collapsed .railtog{transform:none}
-.railbody{display:flex;flex-direction:column;gap:10px}
-body.battle .rail .front{padding:10px 12px}
-body.battle .rail .zone-labels span{font-size:10px;letter-spacing:.02em}
-body.battle .rail .front-head{margin-bottom:4px}
-body.battle .rail .panel{padding:12px}
-body.battle .rail .log{max-height:none}
-body.battle .rail .feed{max-height:none;margin:0}
-body.battle{padding-block:10px 12px}
-body.battle header{padding-block:6px;margin-block:-6px 0;flex-wrap:nowrap;align-items:center}
-body.battle .hd-left{flex-direction:row;align-items:baseline;gap:10px;flex:none}
-body.battle h1{font-size:18px;white-space:nowrap}
-body.battle .hd-right{flex-direction:row;align-items:center;flex-wrap:nowrap;justify-content:flex-end;gap:10px;min-width:0}
-body.battle .res{flex-wrap:nowrap;gap:5px}
-body.battle .chip .lab{font-size:11px;letter-spacing:.05em}
-body.battle .chip{white-space:nowrap;align-items:center}
-@media (max-width:1440px){body.battle .hd-left .eyebrow{font-size:11px}body.battle .chip .lab{font-size:10px;letter-spacing:.02em}body.battle .chip{padding:4px 7px;gap:5px}body.battle .chip.big{padding:4px 9px}}
-body.battle .chip b{font-size:15px}
-body.battle .refbtns{flex-wrap:nowrap;gap:4px}
-body.battle .refbtns .fchip{font-size:12.5px;padding:4px 8px;white-space:nowrap}
-@media (max-width:1500px){body.battle h1{display:none}}
-body.battle .chip{padding:4px 9px}
-body.battle .chip.big{padding:4px 12px}
-body.battle .chip.big b{font-size:22px}
-body.battle .todo{padding:7px 14px}
-body.battle .todo-h{display:inline;margin:0 10px 0 0}
-body.battle .todo ol{display:inline;padding:0;list-style:none}
-body.battle .todo li{display:inline}
-body.battle .todo li:not(.now){display:none}
-body.battle #stage .panel{padding:12px 14px}
-body.battle #stage .panel-head{margin-bottom:8px}
-body.battle #stage .banner{display:none}
-body.battle #stage hr.sep{display:none}
-body.battle .lane{min-height:186px}
-body.battle .lane-side{padding:4px}
-body.battle #stage .cards{margin-top:6px!important;gap:6px}
-body.battle #stage .cards .card{width:148px;padding:6px 8px}
-body.battle #stage .cards .card .txt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-body.battle .handhead{margin-top:10px}
+.rail.collapsed .railtog{writing-mode:vertical-rl;padding:12px 7px;min-height:150px}
+body.fit .rail .front{padding:10px 12px}
+body.fit .rail .zone-labels span{font-size:10px;letter-spacing:.02em}
+body.fit .rail .front-head{margin-bottom:4px}
+body.fit .rail .panel{padding:10px 12px}
+body.fit .rail .log{max-height:none}
+body.fit .rail .feed{max-height:none;margin:0}
+body.fit .hd-left{flex-direction:row;align-items:baseline;gap:10px;flex:none}
+body.fit h1{font-size:18px;white-space:nowrap}
+body.fit .hd-right{flex-direction:row;align-items:center;flex-wrap:nowrap;justify-content:flex-end;gap:8px;min-width:0}
+body.fit .res{flex-wrap:nowrap;gap:5px}
+body.fit .chip{padding:4px 8px;white-space:nowrap;align-items:center}
+body.fit .chip .lab{font-size:10.5px;letter-spacing:.04em}
+body.fit .chip b{font-size:15px}
+body.fit .chip.big{padding:3px 11px}
+body.fit .chip.big b{font-size:21px}
+body.fit .refbtns{flex-wrap:nowrap;gap:4px}
+body.fit .refbtns .fchip{font-size:12.5px;padding:4px 8px;white-space:nowrap}
+body.fit.narrowui header{flex-wrap:wrap;row-gap:4px}
+body.fit.narrowui h1{display:none}
+body.fit.narrowui .hd-right{flex-wrap:wrap;justify-content:flex-start}
+body.fit.narrowui .res{flex-wrap:wrap}
+body.fit .todo{padding:6px 14px;flex:none}
+body.fit .todo-h{display:inline;margin:0 10px 0 0}
+body.fit .todo ol{display:inline;padding:0;list-style:none}
+body.fit .todo li{display:inline}
+body.fit .todo li:not(.now){display:none}
+body.fit #stage>.panel{padding:10px 14px;flex:none}
+body.fit #stage>.panel.phase{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto}
+body.fit #stage .panel-head{margin-bottom:6px;flex:none}
+body.fit #stage .banner{display:none}
+body.fit #stage hr.sep{display:none}
+body.fit #stage .feed{flex:none;max-height:none;overflow:hidden;margin-bottom:6px;padding:4px 10px}
+.feed p{animation-duration:.5s!important}
+/* combat + round end: the board takes whatever height is left */
+body.fit #stage .phase>.board{flex:1;min-height:150px}
+body.fit #stage .phase>.board:not(.wide){grid-template-rows:minmax(0,1fr)}
+body.fit #stage .board.wide{display:flex}
+body.fit #stage .board.wide>.board.mains{flex:1.2;min-height:0;grid-template-rows:minmax(0,1fr)}
+body.fit #stage .board.wide>.flankrow{flex:1;min-height:0}
+body.fit #stage .board.wide .sector{display:flex;flex-direction:column;min-height:0}
+body.fit #stage .board.wide .sector>.board{flex:1;min-height:0;grid-template-rows:minmax(0,1fr)}
+body.fit .lane{min-height:0}
+body.fit .lane-side{padding:4px;min-height:0;overflow:hidden}
+body.fit .unit{padding:4px 7px}
+body.fit #stage .phase>div:has(>.handhead){flex:none}
+body.fit .handhead{margin-top:8px}
+body.fit #stage .cards{margin-top:6px!important;gap:6px}
+body.fit #stage .combat-hand{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}
+body.fit #stage .combat-hand .card{width:150px;flex:none;padding:6px 8px}
+body.fit #stage .combat-hand .card .txt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* supply + market: two columns */
+.phasecols{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px}
+.pcol{min-height:0;display:flex;flex-direction:column;gap:10px}
+.pcol.scroll{overflow-y:auto;padding-right:4px}
+.shelfcol{min-height:0;display:flex;flex-direction:column}
+.shelfcol .cards{flex:1;min-height:0;overflow-y:auto;align-content:flex-start;padding:2px}
+body.fit .packs.stack{grid-template-columns:1fr;gap:8px}
+body.fit .pack{padding:10px 12px;gap:7px}
+body.fit .slotrow{min-height:44px;gap:6px}
+body.fit .slot,body.fit .mini,body.fit .hidden-card{min-height:44px}
+body.fit .read{padding:5px 8px}
+.minihead{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+.offerrow{display:flex;flex-wrap:wrap;gap:6px}
+.offerrow .fchip.on{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.menubtns{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.menubtn{font:inherit;text-align:left;border:1px solid var(--line);border-radius:5px;background:var(--surface2);padding:9px 11px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+.menubtn:hover:not(:disabled){border-color:var(--accent);background:var(--accentSoft)}
+.menubtn b{font-size:15px} .menubtn span{font-size:12.5px;color:var(--ink2)}
+.tonicrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tonicrow .upcard .txt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+body.fit.narrowui .phasecols{grid-template-columns:1fr;overflow-y:auto}
+body.fit.narrowui .shelfcol .cards{overflow:visible}
+body.fit.narrowui .shelfcol>div{flex:none!important}
+body.fit.narrowui .shelfcol{display:block}
+body.fit.narrowui .pcol.scroll{overflow:visible}
+.rotatetip{display:none}
+@media (orientation:portrait) and (max-width:700px){body.fit:not(.pick) .rotatetip{display:block;font-size:12px;text-align:center;color:var(--ink2);flex:none}}
+/* the start menu in two columns when there is room */
+body.fit.pick #stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);align-content:start;gap:10px}
+body.fit.pick #stage>.tutcard{grid-column:1}
+body.fit.pick #stage>.modegrid{grid-column:2;grid-row:1 / span 3;align-self:start}
+body.fit.pick.narrowui #stage{grid-template-columns:1fr}
+body.fit.pick.narrowui #stage>.modegrid{grid-column:1;grid-row:auto}
+body.fit.pick #stage .modegrid{grid-template-columns:1fr}
 
 /* ---- p51: menus ---- */
 #modal{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -491,6 +561,116 @@ body.battle .handhead{margin-top:10px}
 .mbody>.btn{align-self:flex-start}
 .upcard:not(:disabled){cursor:pointer}
 .upcard:not(:disabled):hover{border-color:var(--accent)}
+
+.stickbonus{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px 9px;border-radius:4px;background:var(--metaSoft);border:1px solid var(--metaC);font-size:13px;cursor:help}
+.stickbonus .stk{font-weight:700;color:var(--metaC);text-transform:uppercase;font-size:11.5px;letter-spacing:.06em}
+.menubtn.ready{border-color:var(--accent);animation:fx-ready 1.8s ease-in-out infinite}
+@keyframes fx-ready{0%,100%{box-shadow:0 0 0 0 rgba(46,125,79,0)}50%{box-shadow:0 0 0 5px rgba(46,125,79,.3)}}
+.worktip{grid-column:1 / -1;background:var(--todo);color:var(--todoInk);border-radius:5px;padding:8px 11px;font-size:13.5px}
+.worktip b{color:var(--todoHi)}
+.howto{font-size:13.5px;color:var(--ink2);background:var(--surface2);border-left:4px solid var(--accent);padding:6px 10px;border-radius:3px;margin:6px 0}
+.recipe{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px;border:1px solid var(--line);border-radius:5px;background:var(--surface);width:100%}
+.rchip{padding:4px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--line);font-size:13px;font-weight:600;cursor:help}
+.rchip.rout{background:var(--accentSoft);border-color:var(--accent)}
+.rop{font-weight:700;font-size:16px;color:var(--ink3)}
+.recipe .btn{margin-left:auto}
+.forge{position:fixed;inset:0;z-index:90;background:rgba(10,14,10,.7);display:flex;align-items:center;justify-content:center;animation:fx-fade .25s ease-out}
+.fbox{background:var(--surface);border-radius:10px;padding:22px 26px;display:flex;flex-direction:column;align-items:center;gap:14px;min-width:min(560px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.fverb{font:700 30px "Bitter",serif;color:var(--accent);opacity:0;animation:fx-pop .5s ease-out 1.1s forwards}
+.frow{position:relative;height:120px;width:100%;display:flex;align-items:center;justify-content:center}
+.fcard{position:absolute;width:118px;padding:8px;border:3px solid var(--ink3);border-radius:7px;background:var(--surface2);display:flex;flex-direction:column;gap:3px;text-align:center}
+.fcard b{font-size:14px}
+.fin{left:calc(50% - 59px + (var(--i) - (var(--n) - 1)/2)*140px);animation:fx-in .9s cubic-bezier(.5,0,.8,.4) .25s forwards}
+.fout{left:calc(50% - 59px);opacity:0;transform:scale(.3);background:var(--accentSoft);animation:fx-out .6s cubic-bezier(.2,1.6,.4,1) 1s forwards;box-shadow:0 0 30px rgba(242,193,78,.7)}
+.fflash{position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px;border-radius:50%;background:radial-gradient(#fff,#F2C14E 40%,transparent 70%);opacity:0;animation:fx-flash .7s ease-out .85s}
+.fsub{font-size:15px;text-align:center;max-width:460px;opacity:0;animation:fx-fade .4s ease-out 1.4s forwards}
+@keyframes fx-in{60%{opacity:1}100%{left:calc(50% - 59px);transform:scale(.5) rotate(calc((var(--i) - 1)*25deg));opacity:0}}
+@keyframes fx-out{to{opacity:1;transform:scale(1.15)}}
+@keyframes fx-flash{0%{opacity:0;transform:scale(1)}40%{opacity:1;transform:scale(9)}100%{opacity:0;transform:scale(14)}}
+@keyframes fx-pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes fx-fade{from{opacity:0}to{opacity:1}}
+
+body.fit .mini{font-size:13px;padding:4px 7px}
+body.fit .mini .mn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.fit .mini .ms{font-size:12px}
+body.fit #stage .phase>.panel-head{flex-wrap:nowrap}
+
+body.fit:not(.pick) h1{display:none}
+body.fit .hd-left{min-width:0;overflow:hidden}
+.menubtns{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.menubtn{padding:7px 10px}
+
+/* p56 — lanes */
+.lane.tinted{background:linear-gradient(to bottom,color-mix(in srgb,var(--tcol) 30%,var(--surface2)),color-mix(in srgb,var(--tcol) 14%,var(--surface2)))}
+.lane.tinted .lane-name{background:color-mix(in srgb,var(--tcol) 40%,var(--surface2));color:var(--ink)}
+.lane.enved{box-shadow:inset 0 0 0 3px var(--ecol)!important}
+.lane-name{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:nowrap;white-space:nowrap}
+.lane-icons{display:inline-flex;gap:3px}
+.lico{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:13px;line-height:1;box-shadow:0 0 0 2px var(--surface);cursor:help;letter-spacing:0}
+.lico.env{border-radius:5px}
+/* p56 — one-line units */
+body.fit .unit{flex-direction:row;align-items:center;gap:6px;padding:3px 7px;min-height:0;flex:none}
+body.fit .unit .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+body.fit .unit .st{flex:none;white-space:nowrap;display:flex;gap:5px;align-items:center;font-size:13px}
+.unit .st .vet{color:#B7791F;font-weight:700}
+body.fit .lane-side{overflow-y:auto;gap:3px;scrollbar-width:thin}
+.infbadge{flex:none;margin:0;font-size:11.5px;padding:1px 4px}
+/* p56 — depot */
+.headact{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.penalty.slim{margin:0;padding:4px 10px;font-size:13px;border-width:2px;border-left-width:5px;cursor:help}
+.fdrow{grid-template-columns:repeat(8,minmax(0,1fr))!important;min-height:0!important}
+body.fit .fdrow .hidden-card{min-height:30px;font-size:14px;font-weight:700}
+.dzone{border-radius:8px;padding:9px 11px;border:2px solid}
+.pcol>*{flex:none}
+.z-tonic{background:#FBEFC8;border-color:#D9A51F}
+.z-up{background:#DDEBF7;border-color:#4A86B8}
+.z-up .pack{background:transparent;border:none;padding:0;margin:0!important}
+.menubtn.m-work{background:#D8EDD9;border:2px solid #2E7D4F}
+.menubtn.m-stick{background:#E9E2F7;border:2px solid #6A4FB0}
+.overpanel{position:relative;overflow:hidden!important;align-items:center;justify-content:center}
+.overpanel.won{background:radial-gradient(circle at 50% 35%,#FFF6D6,var(--surface) 70%)}
+.overpanel.lost{background:radial-gradient(circle at 50% 35%,#F3DCD3,var(--surface) 70%)}
+.overin{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:10px}
+.overicon{font-size:64px;animation:fx-pop .6s cubic-bezier(.2,1.6,.4,1)}
+.overtitle{display:block!important;font-size:52px;color:var(--accent);animation:fx-pop .6s ease-out .15s both}
+.overpanel.lost .overtitle{color:#A8502A}
+.oversub{margin:0;font-size:18px;color:var(--ink2)}
+.overstats{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:10px;margin:8px 0}
+.overstats div{background:var(--surface2);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;align-items:center}
+.overstats b{font:700 26px "IBM Plex Mono",monospace}
+.overstats span{font-size:12.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em}
+.confetti{position:absolute;inset:0;pointer-events:none}
+.confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:fx-conf linear infinite}
+@keyframes fx-conf{to{top:105%;transform:rotate(720deg)}}
+.tuask{position:absolute;left:6px;right:6px;bottom:8px;z-index:5;background:var(--surface);border:2px solid var(--accent);border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:5px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.tuask b{font-size:12.5px}
+.tuask .btn{padding:5px 8px;font-size:13px}
+.lane{position:relative}
+.apv{font-weight:700;color:var(--ink)}
+.card.multi .tag::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--t2);margin-left:6px;vertical-align:1px}
+.menubtn.m-crate{background:#FBE3EF;border:2px solid #B0487A}
+.menubtn.m-cut{background:#F4DFD6;border:2px solid #B0553A}
+.menubtn b{font-size:16px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .z-tonic{background:#3A3218}:root:not([data-theme="light"]) .z-up{background:#1E2E3C}:root:not([data-theme="light"]) .menubtn.m-work{background:#1F3A28}:root:not([data-theme="light"]) .menubtn.m-stick{background:#2C2640}:root:not([data-theme="light"]) .menubtn.m-cut{background:#3E2620}}
+/* p56 — supply shelf */
+body.fit .card.compact{width:auto;padding:4px 7px}
+body.fit .card.compact .tag{display:none}
+body.fit .card.compact .nm{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.fit .shelfcol .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:5px}
+
+.stockcols{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+body.fit .card.compact{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;padding:5px 7px}
+body.fit .card.compact .row{display:contents}
+body.fit .card.compact .stats{order:2;font-size:12.5px}
+body.fit .card.compact .cost{order:3;background:var(--sunSoft);border-radius:9px;padding:0 6px;min-width:20px;text-align:center}
+body.fit .card.compact.trick .nm::after{content:" · trick";font-family:"Archivo",sans-serif;font-weight:500;font-size:11.5px;color:var(--warn)}
+body.fit .shelfcol .fbar .fchip{padding:3px 8px;font-size:12.5px}
+
+body.fit .slotrow{min-height:0;gap:5px}
+body.fit .slot,body.fit .mini{min-height:38px}
+body.fit .mini{padding:3px 7px;gap:0}
+body.fit .pack{gap:6px;padding:9px 11px}
+body.fit .z-up .offerrow .fchip{padding:3px 8px}
 </style>
 
 <div class="wrap">
@@ -546,7 +726,7 @@ body.battle .handhead{margin-top:10px}
       <button type="button" class="dtab" data-tab="guide">How to play</button>
       <button type="button" class="dtab" data-tab="rosters">Rosters</button>
       <button type="button" class="dtab" data-tab="glossary">Glossary</button>
-      <button type="button" class="dtab" data-tab="sound">Sound</button>
+      <button type="button" class="dtab" data-tab="sound">Sound &amp; settings</button>
     </div>
     <button type="button" class="btn ghost" id="drawerClose" aria-label="Close">✕</button>
   </div>
@@ -611,9 +791,9 @@ body.battle .handhead{margin-top:10px}
       <div class="gbody">
         <p>Each lane has a <b>capture bar</b>. If only your units are left standing in a lane, they push the bar by their <b>total attack × total health</b> per turn. A lone 2/2 pushes 4%; two 2/2s push 4×4 = 16%, the same as one 4/4. Going wide counts. Lanes with units from both sides don't move.</p>
         <div class="grid2">
-          <div class="tcard"><h3>20% — held</h3><p>Counts toward winning the round and pays resource.</p></div>
+          <div class="tcard"><h3>20% — held</h3><p>Counts toward winning the round. (Holding lanes gives no extra sun — that snowballed.)</p></div>
           <div class="tcard"><h3>60% — captured</h3><p>Your strongest unit there stays as a garrison next round. A captured flank also rakes the main lane beside it and speeds your capture there.</p></div>
-          <div class="tcard"><h3>Flanks</h3><p>Holding a flank sector at round end pays <b>+3 meta</b> and <b>breaks ties</b> on main lanes. Flanks move 1.6× faster and get random terrain. On the wide map, hold 2 of a sector's 3.</p></div>
+          <div class="tcard"><h3>Flanks</h3><p><b>Sneak attack:</b> hold a flank and your flankers hit the enemy's REAR unit in the main lane beside it every turn while that lane is deadlocked (half their attack; all of it once captured). <b>Cut off:</b> if the enemy holds that main lane, your units on the flank lose 1 health every turn. Holding a flank sector at round end also pays <b>+3 meta</b> and <b>breaks ties</b> on main lanes. Flanks move 1.6× faster and get random terrain. On the wide map, hold 2 of a sector's 3.</p></div>
           <div class="tcard"><h3>Backs to the wall</h3><p>Units fight +1 in a lane the enemy holds, +2 once it is captured.</p></div>
         </div>
       </div>
@@ -681,6 +861,11 @@ body.battle .handhead{margin-top:10px}
 /* A tonic changes ONE copy. That copy gets its own id ("thornling~k3x9") so it
    can carry its own tonics, veterancy and growth; the card table fills variant
    entries in on first use, so every seat and every saved state can read them. */
+/* MULTI-TRIBE: a card can belong to two tribes (tag + tag2). It counts as both
+   for auras, scaling, kickers, grafting, synergy and filters. */
+function isT(x,t){return !!x&&!!t&&(x.tag===t||x.tag2===t);}
+function tagsOf(x){return x?[x.tag,x.tag2].filter(t=>t&&t!=="Tribeless"):[];}
+function tagLabel(d){return d.tag2?d.tag+" · "+d.tag2:d.tag;}
 function baseId(id){const i=typeof id==="string"?id.indexOf("~"):-1;return i>0?id.slice(0,i):id;}
 function cardTable(o){return new Proxy(o,{get(t,k){
   if(typeof k==="string"&&!(k in t)){const i=k.indexOf("~");if(i>0&&t[k.slice(0,i)])t[k]=Object.assign({},t[k.slice(0,i)],{vof:k.slice(0,i)});}
@@ -695,18 +880,18 @@ const C = cardTable({
   thornling:{n:"Thornling",s:"grove",c:2,a:2,h:2,tag:"Thorn",t:"CROSS-BREED two at the workshop (between rounds) to make a Bramblejack.",fuse:"bramblejack"},
   bristlecap:{n:"Bristlecap",s:"grove",c:3,a:0,h:3,tag:"Thorn",t:"Your other THORN units in this lane get +2 attack. It has none of its own.",aura:"Thorn",aurav:2},
   nettleweave:{n:"Nettleweave",s:"grove",c:3,a:0,h:3,tag:"Thorn",t:"+1 attack per other THORN you control anywhere, up to +4. Inert alone.",scale:"Thorn"},
-  bloomspike:{n:"Bloomspike",s:"grove",c:3,a:2,h:3,tag:"Thorn",t:"BLOOM — gains +1/+1 at the end of every turn it survives.",bloom:1},
+  bloomspike:{n:"Bloomspike",s:"grove",c:3,a:2,h:3,tag:"Thorn",tag2:"Flower",t:"BLOOM — gains +1/+1 at the end of every turn it survives.",bloom:1},
   ironvine:{n:"Ironvine",s:"grove",c:4,a:3,h:5,tag:"Thorn",t:"THORNMAIL — deals 2 damage straight back to whatever attacks it.",thornmail:2},
   zealvine:{n:"Zealvine",s:"grove",c:3,a:2,h:3,tag:"Thorn",t:"ZEAL — +3 attack while the front line sits on your half of the map.",zeal:3},
   /* ROOT — walls and economy */
   seedpod:{n:"Seedpod",s:"grove",c:1,a:1,h:2,tag:"Root",t:"A cheap body and nothing more."},
   taproot:{n:"Taproot",s:"grove",c:2,a:0,h:4,tag:"Root",t:"+1 resource at the start of every turn it survives. It pays from NEXT turn, so it costs you tempo now.",prod:1},
   sapwell:{n:"Sapwell",s:"grove",c:3,a:0,h:4,tag:"Root",t:"+2 resource at the start of every turn it survives. It pays from NEXT turn.",prod:2},
-  barkplate:{n:"Barkplate",s:"grove",c:3,a:0,h:8,tag:"Root",t:"Eight health for three. No ability, and it doesn't need one."},
-  gallnut:{n:"Gallnut",s:"grove",c:2,a:1,h:4,tag:"Root",t:"BULWARK — gains +1 attack every time it is attacked.",bulwark:1},
+  barkplate:{n:"Barkplate",s:"grove",c:3,a:0,h:8,tag:"Root",t:"TEAM-UP. Eight health for three — step it in front of your attackers.",teamup:1},
+  gallnut:{n:"Gallnut",s:"grove",c:2,a:1,h:4,tag:"Root",t:"TEAM-UP. BULWARK — gains +1 attack every time it is attacked.",bulwark:1,teamup:1},
   deeproot:{n:"Deeproot",s:"grove",c:3,a:0,h:2,tag:"Root",t:"On play: the unit in front of it gains +4 health.",bolster:4},
   worldroot:{n:"Worldroot",s:"grove",c:7,a:5,h:9,tag:"Root",t:"Your other units in this lane get +2 health while it lives.",ward:2},
-  ancientwood:{n:"Ancientwood",s:"grove",c:4,a:5,h:8,tag:"Root",t:"Playable from turn 4 onward. ENTRENCH — its lane keeps gaining capture at half speed even while contested.",late:4,entrench:1},
+  ancientwood:{n:"Ancientwood",s:"grove",c:4,a:5,h:8,tag:"Root",t:"Playable from turn 3 onward. ENTRENCH — its lane keeps gaining capture at half speed even while contested. On play: its roots spread — your other units in this lane get +0/+2.",late:3,entrench:1,rootgift:2},
   titanbloom:{n:"Titanbloom",s:"grove",c:6,a:6,h:7,tag:"Root",t:"Enormous stats, no text. That is the whole card."},
   /* FLOWER — reaction and support */
   petalward:{n:"Petalward",s:"grove",c:3,a:1,h:5,tag:"Flower",t:"VIGIL — draw a card every time it is attacked.",vigil:1},
@@ -741,14 +926,14 @@ const C = cardTable({
   heirloom:{n:"Heirloom Sprig",s:"grove",c:1,a:0,h:1,tag:"Flower",t:"Each time you play it, it PERMANENTLY gains +1/+1 in your deck (up to +5/+5).",growplay:1},
   ringwood:{n:"Ringwood",s:"grove",c:3,a:1,h:3,tag:"Root",t:"If it survives the round, it PERMANENTLY gains +1/+2 in your deck (up to +5/+10), on top of veterancy.",growsurvive:1},
   /* MAP CARDS — they change the ground itself */
-  sacredgrove:{n:"Sacred Grove",s:"grove",c:4,a:1,h:6,tag:"Root",t:"LANDMARK — this lane becomes a Sacred Grove: your units here get +1 attack and take 1 less damage. If it survives the round, the grove stays next round.",landmark:{n:"Sacred Grove",d:"Grove landmark: its owner's units here get +1 attack and take 1 less damage.",ownAtk:1,ownSoak:1,col:"#3E7A3A"}},
-  surveyor:{n:"Surveyor",s:"grove",c:2,a:2,h:2,tag:"Aquatic",t:"On play: this lane's capture moves 15% your way.",claim:15},
-  clearground:{n:"Clear the Ground",s:"grove",c:1,trick:true,t:"A lane becomes OPEN GROUND (+1 attack for everyone) for the rest of the round.",terraform:"Open Ground"},
-  tanglefoot:{n:"Tanglefoot",s:"grove",c:2,trick:true,t:"A lane becomes BRAMBLE WALL (2 less damage for everyone) for the rest of the round.",terraform:"Bramble Wall"},
+  sacredgrove:{n:"Glowberry Patch",s:"grove",c:4,a:0,h:1,tag:"Flower",tag2:"Root",t:"LANDMARK — the glowberries spread out and grow this lane into a SACRED GROVE (your units here get +1 attack and take 1 less damage), then the patch withers. The grove stays for the rest of the match — until Blight HOLDS this lane at the end of a round.",wither:1,landmark:{n:"Sacred Grove",d:"Grove landmark grown from glowberries: its owner's units here get +1 attack and take 1 less damage. Stays until the enemy holds this lane at the end of a round.",ownAtk:1,ownSoak:1,col:"#3E7A3A",perm:1}},
+  surveyor:{n:"Surveyor",s:"grove",c:2,a:2,h:2,tag:"Aquatic",t:"SURVEY — each turn it survives, this lane's capture moves 6% your way, even while contested.",survey:6},
+  clearground:{n:"Clear the Ground",s:"grove",c:1,trick:true,t:"A lane becomes OPEN GROUND (+1 attack for everyone) for the rest of the round. Your units there get +1 health. Draw a card.",terraform:"Open Ground",tfhp:1},
+  tanglefoot:{n:"Tanglefoot",s:"grove",c:1,trick:true,t:"A lane becomes BRAMBLE WALL (2 less damage for everyone) for the rest of the round. Your units there get +1 attack. Draw a card.",terraform:"Bramble Wall",tfatk:1},
   /* ENVIRONMENTS — turn a lane into a place that only helps you */
-  sunnymeadow:{n:"Sunny Meadow",s:"grove",c:2,trick:true,t:"ENVIRONMENT — every unit you play in this lane gives you +1 sun.",envset:"meadow"},
-  echoglade:{n:"Echo Glade",s:"grove",c:4,trick:true,t:"ENVIRONMENT — the first unit you play here each turn also puts a copy of itself into your hand.",envset:"echo"},
-  bramblegallery:{n:"Bramble Gallery",s:"grove",c:5,trick:true,t:"ENVIRONMENT — your units in this lane strike TWICE each exchange.",envset:"gallery"},
+  sunnymeadow:{n:"Sunny Meadow",s:"grove",c:1,trick:true,t:"ENVIRONMENT — every unit you play in this lane gives you +1 sun. Gain 1 sun now.",envset:"meadow",envsun:1},
+  echoglade:{n:"Echo Glade",s:"grove",c:3,trick:true,t:"ENVIRONMENT — the first unit you play here each turn also puts a copy of itself into your hand.",envset:"echo"},
+  bramblegallery:{n:"Bramble Gallery",s:"grove",c:4,trick:true,t:"ENVIRONMENT — your units in this lane strike TWICE each exchange.",envset:"gallery"},
   /* GROVE TRICKS — proactive. Grove sees their board, so it acts on its own turn. */
   brambleshot:{n:"Bramble Shot",s:"grove",c:2,trick:true,t:"Deal 3 to the FRONT enemy unit in a lane.",dmg:3},
   thornlash:{n:"Thornlash",s:"grove",c:3,trick:true,t:"Deal 4 to the LAST enemy unit in a lane. Reaches past walls.",dmg:4,back:true},
@@ -785,7 +970,7 @@ const C = cardTable({
   mutagen:{n:"Mutagen",s:"blight",c:3,a:2,h:3,tag:"Spore",t:"MUTATE — on play it becomes a random other SPORE card, and that card arrives with +2/+2.",mutate:"Spore",mutbuff:2},
   blightpod:{n:"Blightpod",s:"blight",c:4,a:2,h:4,tag:"Spore",t:"On death: draw 2 cards. It wants to die.",rattledraw:2},
   /* BONE — sacrifice and the long game */
-  crawler:{n:"Crawler",s:"blight",c:2,a:1,h:4,tag:"Bone",t:"On death: deal 4 damage to the enemy front unit. A wall that bites back once.",rattledmg:4},
+  crawler:{n:"Crawler",s:"blight",c:2,a:1,h:4,tag:"Bone",t:"TEAM-UP. On death: deal 4 damage to the enemy front unit. A wall that bites back once.",rattledmg:4,teamup:1},
   gravekeeper:{n:"Gravekeeper",s:"blight",c:3,a:1,h:3,tag:"Bone",t:"CONSUME — on play, destroy one of your own units here. That card PERMANENTLY gains +1/+1 in your deck.",consume:1},
   bonegarrison:{n:"Bone Garrison",s:"blight",c:4,a:1,h:6,tag:"Bone",t:"Takes 2 less damage in MAIN lanes. A useless garrison on a flank.",tough:2},
   boneline:{n:"Bone Line",s:"blight",c:3,a:0,h:5,tag:"Bone",t:"SCREEN — while you hold 3+ units here, damage never carries from one to the next.",screen:true},
@@ -819,11 +1004,11 @@ const C = cardTable({
   tallyworm:{n:"Tallyworm",s:"blight",c:1,a:0,h:2,tag:"Bone",t:"The first time one of your units dies each round while it is on the board, it PERMANENTLY gains +1/+1 in your deck (up to +5/+5).",growtally:1},
   blightpit:{n:"Blight Pit",s:"blight",c:4,a:0,h:6,tag:"Spore",t:"LANDMARK — this lane becomes a Blight Pit: enemy units here take 1 damage at the end of every turn. If it survives the round, the pit stays next round.",landmark:{n:"Blight Pit",d:"Blight landmark: enemies of its owner take 1 damage here at the end of every turn.",fester:1,col:"#7A3A5A"}},
   gravemarker:{n:"Grave Marker",s:"blight",c:2,a:1,h:2,tag:"Bone",t:"On death: this lane's capture moves 15% your way.",deathclaim:15},
-  mireover:{n:"Mire Over",s:"blight",c:1,trick:true,t:"A lane becomes MARSH (−1 attack for everyone) for the rest of the round.",terraform:"Marsh"},
-  rotfog:{n:"Rot Fog",s:"blight",c:2,trick:true,t:"A lane becomes THICKET (1 less damage for everyone) for the rest of the round.",terraform:"Thicket"},
-  mutationchamber:{n:"Mutation Chamber",s:"blight",c:2,trick:true,t:"ENVIRONMENT — every unit you play here transforms into a random unit that costs 1 more.",envset:"chamber"},
-  whisperingcrypt:{n:"Whispering Crypt",s:"blight",c:3,trick:true,t:"ENVIRONMENT — at the start of each turn, if you have a unit here, CONJURE a random card.",envset:"crypt"},
-  bonechute:{n:"Bone Chute",s:"blight",c:3,trick:true,t:"ENVIRONMENT — STRIKETHROUGH: each exchange, every enemy unit behind the front here also takes 1 damage.",envset:"chute"},
+  mireover:{n:"Mire Over",s:"blight",c:1,trick:true,t:"A lane becomes MARSH (−1 attack for everyone) for the rest of the round. Your units there get +1 health. Draw a card.",terraform:"Marsh",tfhp:1},
+  rotfog:{n:"Rot Fog",s:"blight",c:1,trick:true,t:"A lane becomes THICKET (1 less damage for everyone) for the rest of the round. Your units there get +1 attack. Draw a card.",terraform:"Thicket",tfatk:1},
+  mutationchamber:{n:"Mutation Chamber",s:"blight",c:1,trick:true,t:"ENVIRONMENT — every unit you play here transforms into a random unit that costs 1 more.",envset:"chamber"},
+  whisperingcrypt:{n:"Whispering Crypt",s:"blight",c:2,trick:true,t:"ENVIRONMENT — at the start of each turn, if you have a unit here, CONJURE a random card.",envset:"crypt"},
+  bonechute:{n:"Bone Chute",s:"blight",c:2,trick:true,t:"ENVIRONMENT — STRIKETHROUGH: each exchange, every enemy unit behind the front here also takes 1 damage.",envset:"chute"},
   /* BLIGHT TRICKS — reactive. Blight moves last, so it warps what already happened. */
   sporeburst:{n:"Spore Burst",s:"blight",c:2,trick:true,t:"Deal 3 to the FRONT enemy unit in a lane.",dmg:3},
   sporelance:{n:"Spore Lance",s:"blight",c:3,trick:true,t:"Deal 4 to the LAST enemy unit in a lane.",dmg:4,back:true},
@@ -870,7 +1055,7 @@ const C = cardTable({
   lonepine:{n:"Lone Pine",s:"grove",c:4,a:3,h:6,tag:"Tribeless",t:"No tribe. SHIELD 1 — shrugs off the first point of damage every turn.",shield:1},
   relicbloom:{n:"Relicbloom",s:"grove",c:5,a:5,h:6,tag:"Tribeless",t:"No tribe. On play: draw a card.",draw:1},
   straggler:{n:"Straggler",s:"blight",c:2,a:2,h:3,tag:"Tribeless",t:"No tribe. On death: draw a card.",rattledraw:1},
-  boneheap:{n:"Boneheap",s:"blight",c:3,a:1,h:7,tag:"Tribeless",t:"No tribe. Seven health for three and no text at all."},
+  boneheap:{n:"Boneheap",s:"blight",c:3,a:1,h:7,tag:"Tribeless",t:"TEAM-UP. No tribe. Seven health for three.",teamup:1},
   scrapling:{n:"Scrapling",s:"blight",c:3,a:2,h:3,tag:"Tribeless",t:"No tribe. On play: gain 3 resource.",gainflat:3},
   hollowed:{n:"Hollowed",s:"blight",c:4,a:3,h:5,tag:"Tribeless",t:"No tribe. On death: draw a card.",rattledraw:1},
   revenant:{n:"Revenant",s:"blight",c:5,a:5,h:6,tag:"Tribeless",t:"No tribe. On death: deal 3 to the enemy front unit.",rattledmg:3},
@@ -906,6 +1091,11 @@ const C = cardTable({
   graft_Ichor:{n:"Ichormass",s:"blight",c:4,a:6,h:6,tag:"Ichor",t:"Grafted from three Ichor cards. CORRODE 2.",corrode:2},
   rubble:{n:"Rubble",s:"both",c:0,junk:true,t:"Dead weight. Does nothing, ever — but you can at least scrap it for resource."},
   tangle:{n:"Tangle",s:"both",c:0,junk:true,t:"Dead weight that cannot even be scrapped. It just sits in your hand.",noscrap:true},
+  /* multi-tribe cards */
+  mossback:{n:"Mossback",s:"grove",c:3,a:1,h:6,tag:"Root",tag2:"Aquatic",t:"TEAM-UP. Counts as ROOT and AQUATIC — so it can wade into Water lanes.",teamup:1},
+  thornpetal:{n:"Thornpetal",s:"grove",c:2,a:2,h:2,tag:"Flower",tag2:"Thorn",t:"Counts as FLOWER and THORN. Your other THORN and FLOWER units in this lane get +1 attack.",aura:"Thorn",aura2:"Flower"},
+  bonerot:{n:"Bonerot",s:"blight",c:3,a:2,h:4,tag:"Rot",tag2:"Bone",t:"Counts as ROT and BONE. On death: deal 2 damage to the enemy front unit.",rattledmg:2},
+  ichorspore:{n:"Ichorspore",s:"blight",c:2,a:1,h:3,tag:"Ichor",tag2:"Spore",t:"Counts as ICHOR and SPORE — it can swim. +1 spore at the start of every turn it survives.",prod:1},
   blightedsoil:{n:"Blighted Soil",s:"both",c:0,junk:true,t:"Dead weight. Scrapping it gives you nothing at all.",noscrapvalue:true}
 });
 const TAG_ORDER=["Thorn","Root","Flower","Aquatic","Rot","Spore","Bone","Ichor","Tribeless","Hybrid","Abomination","Minion"];
@@ -927,6 +1117,7 @@ const BLIGHT_POOL=["rotling","rotling","gnawer","gnawer","hivecaller","rotchoir"
   "sporeburst","sporelance","witherbreath","necrotize","displace","mirepull","sporestorm","rotburn",
   "bonepyre","graverob","broodsong","plaguewind","hungermaw","tallyworm","blightpit","gravemarker","mireover","rotfog","mutationchamber","whisperingcrypt","bonechute","sporematron","hexwright","hoardergrub","pallidscribe","gravedigger","chitterhost",
   "whisperspores","rotharvest","broodsurge","carrioncall","plaguetide","nightmarket","sporetax","rottingpact","vivisector","leechling","sporetick","marrowfluke","ichorwasp","broodhusk","rubble","tangle"];
+GROVE_POOL.push("mossback","thornpetal");BLIGHT_POOL.push("bonerot","ichorspore");
 const POOL={grove:GROVE_POOL,blight:BLIGHT_POOL};
 const FNAME={grove:"Grove",blight:"Blight"};
 const FRES={grove:"sun",blight:"spore"};
@@ -986,7 +1177,8 @@ function applyCfg(c){
   PACK_SIZE_REQ=CFG.pack; DRAW_SIZE=PACK_SIZE_REQ*2;
 }
 function cfgChanged(){return Object.keys(CFG_DEFAULT).some(k=>CFG[k]!==CFG_DEFAULT[k]);}
-function laneRoom(arr){return !CFG.laneCap||arr.length<CFG.laneCap;}
+/* TEAM-UP units don't count toward the lane cap, and can step in FRONT of an ally. */
+function laneRoom(arr){return !CFG.laneCap||arr.filter(u=>!u.teamup).length<CFG.laneCap;}
 /* Every summoned/spawned body goes through here, so a full lane simply has no room. */
 function addU(arr,u){if(!laneRoom(arr))return false;arr.push(u);return true;}
 /* ENVIRONMENTS (after PvZ's lawn / pool / roof / night). They set PERMANENT
@@ -1072,7 +1264,7 @@ const VET_CAP=3;
 function vet(who,id){return Math.min(vetCap(id),((S[who].vet&&S[who].vet[id])||0));}
 /* Veterancy cap by cost: cheap cards can climb to +3, 3–4 costs to +2, anything
    bigger (and every graft, hybrid or abomination) to +1. */
-function vetCap(id){const d=C[id];if(!d)return 0;if(id.startsWith("graft_")||d.tag==="Hybrid"||d.tag==="Abomination")return 1;
+function vetCap(id){const d=C[id];if(!d)return 0;if(id.startsWith("graft_")||isT(d,"Hybrid")||isT(d,"Abomination"))return 1;
   const c=d.c||0;return c<=2?3:(c<=4?2:1);}
 let UIDN=0;
 function newUid(){return (++UIDN).toString(36)+Math.random().toString(36).slice(2,6);}
@@ -1080,11 +1272,11 @@ function mk(id,who){
   const d=C[id], v=who?vet(who,id):0, m=who?cardMods(who,id):{};
   const r=who?resonance(who,id):0;
   const gr=(who&&S&&S[who]&&S[who].grow&&S[who].grow[id])||{a:0,h:0};
-  const nightA=(S&&S.env==="night"&&(d.tag==="Spore"||d.tag==="Aquatic"))?1:0;
-  const heroH=((who&&S&&S[who]&&S[who].hero==="warden"&&d.tag==="Root")?1:0)+nightA;
+  const nightA=(S&&S.env==="night"&&(isT(d,"Spore")||isT(d,"Aquatic")))?1:0;
+  const heroH=((who&&S&&S[who]&&S[who].hero==="warden"&&isT(d,"Root"))?1:0)+nightA;
   return{uid:newUid(),hive:d.hive||0,disc:d.disc||null,digger:d.digger||0,fbase:d.fusion?id:null,onPlayDraw:(d.draw||0)+(m.draw||0),mods:m,id,n:d.n,vet:v,treated:(m.a||m.h||m.shield||m.slay||m.draw)?1:0,
-  base:(d.a||0)+v+(m.a||0)+r+gr.a+nightA,h:(d.h||0)+v+(m.h||0)+r+gr.h+heroH,growth:gr,res:r,prod:d.prod||0,tag:d.tag||null,
-  aura:d.aura||null,aurav:d.aurav||1,scale:d.scale||null,ward:d.ward||0,lone:d.lone||0,
+  base:(d.a||0)+v+(m.a||0)+r+gr.a+nightA,h:(d.h||0)+v+(m.h||0)+r+gr.h+heroH,growth:gr,res:r,prod:d.prod||0,tag:d.tag||null,tag2:d.tag2||null,teamup:d.teamup||0,survey:d.survey||0,wither:d.wither||0,
+  aura:d.aura||null,aura2:d.aura2||null,aurav:d.aurav||1,scale:d.scale||null,ward:d.ward||0,lone:d.lone||0,
   slay:(d.slay||0)+(m.slay||0),spite:d.spite||0,shield:(d.shield||0)+(m.shield||0),rear:d.rear||0,flankb:d.flankb||0,
   mainb:d.mainb||0,tough:d.tough||0,hoard:d.hoard||0,ascetic:d.ascetic||0,zeal:d.zeal||0,
   mirror:!!d.mirror,crowd:d.crowd||0,screen:!!d.screen,horde:d.horde||0,
@@ -1177,18 +1369,18 @@ function captureRelief(l,side){
 }
 function atk(u,lane,side){
   let a=u.base;
-  lane[side].forEach(o=>{if(o!==u&&o.aura&&u.tag===o.aura)a+=(o.aurav||1);});
-  if(u.scale){let n=0;S.lanes.forEach(L=>L[side].forEach(o=>{if(o!==u&&o.tag===u.scale)n++;}));a+=Math.min(4,n);}
+  lane[side].forEach(o=>{if(o!==u&&o.aura&&(isT(u,o.aura)||(o.aura2&&isT(u,o.aura2))))a+=(o.aurav||1);});
+  if(u.scale){let n=0;S.lanes.forEach(L=>L[side].forEach(o=>{if(o!==u&&isT(o,u.scale))n++;}));a+=Math.min(4,n);}
   if(u.lone&&lane[side].length===1)a+=u.lone;
   if(u.rear&&lane[side][0]!==u)a+=u.rear;
-  if(u.cross&&lane[side].some(o=>o!==u&&o.tag===u.cross))a+=u.crossv;
+  if(u.cross&&lane[side].some(o=>o!==u&&isT(o,u.cross)))a+=u.crossv;
   if(u.crowd||u.hordeCheck!==false){
     const all=S.lanes.reduce((t,L)=>t+L[side].length,0);
     if(u.crowd)a+=Math.min(u.crowd,Math.floor((all-1)/2));
     if(all>=5){let hz=0;S.lanes.forEach(L=>L[side].forEach(o=>{if(o.horde&&o.horde>hz)hz=o.horde;}));a+=hz;}
   }
   if(u.flankb&&lane.flank)a+=u.flankb;
-  if(lane.flank&&u.tag==="Thorn"&&S[side]&&S[side].hero==="briar")a+=1;
+  if(lane.flank&&isT(u,"Thorn")&&S[side]&&S[side].hero==="briar")a+=1;
   if(u.mainb&&!lane.flank)a+=u.mainb;
   if(u.hoard)a+=Math.min(u.hoard,(side==="p"?S.p.hand.length:S.a.hand.length));
   if(u.ascetic&&(side==="p"?S.p.hand.length:S.a.hand.length)<=(C[u.id].asceticat||0))a+=u.ascetic;
@@ -1205,7 +1397,7 @@ function atk(u,lane,side){
 }
 /* Never open on a hand of nothing but tricks and rubble: seed it with bodies if the deck has any. */
 function openingHand(deck,who){
-  const size=5+upLvl(who,"hand");
+  const size=5+upLvl(who,"hand")+(S.map==="wide"?2:0);
   refillPile(who);
   const hand=[];
   /* Seed two real bodies so you never open on a fistful of tricks, then draw the
@@ -1224,7 +1416,7 @@ function openingHand(deck,who){
    nothing arrives unexplained. */
 function incomeParts(w){
   const mains=S.lanes.filter(l=>!l.flank).length;
-  const parts=[["base",2+Math.min(4,S.turn)],["mains held",Math.floor(mainsHeld(w)*3/mains)],
+  const parts=[["base",2+Math.min(4,S.turn)],["wide front",S.map==="wide"?2:0],
                ["Irrigation",upLvl(w,"sun")]];
   let prod=0;S.lanes.forEach(l=>l[w].forEach(u=>prod+=u.prod||0));parts.push(["producers",prod]);
   /* Sporeticks: a parasite in an enemy unit feeds its owner. */
@@ -1300,7 +1492,7 @@ function deckProfile(deck){
     if(d.junk){p.junk++;return;}
     if(d.trick){p.tricks++;return;}
     if(d.c<=2)p.cheap++; else if(d.c<=4)p.mid++; else p.top++;
-    if(d.tag&&d.tag!=="Tribeless")p.tribes[d.tag]=(p.tribes[d.tag]||0)+1;
+    tagsOf(d).forEach(t=>{p.tribes[t]=(p.tribes[t]||0)+1;});
   });
   return p;
 }
@@ -1333,7 +1525,7 @@ function valuePack(cards,deck,opt){
       const gap=noGap?0:nd[bucketOf(d)];
       if(gap>0)v+=Math.min(3,gap*0.9);      // fills a hole
       else if(gap<-2)v-=1.2;                // already drowning in these
-      if(d.tag)tags[d.tag]=(tags[d.tag]||0)+1;
+      tagsOf(d).forEach(t=>{tags[t]=(tags[t]||0)+1;});
     }
   });
   /* Synergy is judged against the WHOLE deck, not just this pack — a deck with
@@ -1347,7 +1539,7 @@ function valuePack(cards,deck,opt){
     if(d.kicker&&total(d.kicker)>=2)v+=1.8;
     if(d.bolster&&bodies>=2)v+=1.2;
     if(d.horde&&bodies>=3)v+=1.5;
-    if(d.tag&&d.tag!=="Tribeless"&&(have[d.tag]||0)>=3)v+=0.8;
+    if(tagsOf(d).some(t=>(have[t]||0)>=3))v+=0.8;
   });
   /* A deck cannot win a lane without attack: a survivor only takes ground if it can
      swing, so a pack of 0-attack economy bodies is worthless no matter how efficient
@@ -1407,6 +1599,7 @@ function startStock(){
 function startMarket(){
   if(mpOn())return;                      // multiplayer resolves the market itself
   S.phase="market"; S.sel=null;
+  tagPacks(S.a.packs,"p");tagPacks(S.p.packs,"a");
   log("— "+FNAME[S.af]+" inspects your two packs —",true);
   // It takes AT MOST ONE pack.
   /* Prices are fixed, so "is it worth the price" is the wrong question. The real
@@ -1436,6 +1629,7 @@ function startMarket(){
   if(best){
     S.a.meta-=buyCost(best.pk,"a"); S.p.meta+=sellerTake(best.pk.price);
     S.a.deck.push(...best.pk.cards); best.pk.taken=true;
+    if(best.pk.sticker)giveSticker("a",best.pk.sticker);
     log(FNAME[S.af]+" buys "+best.nm+". You earn "+sellerTake(best.pk.price)+" meta after the depot's cut.",true);
     const other=S.p.packs.find(p=>!p.taken);
     if(other)log("The other pack goes unsold and is discarded.");
@@ -1554,7 +1748,7 @@ function aiPlaceUnits(){
       if(d.cond==="losing"&&(l.cap||0)<40)return false;   // Blight's desperation card needs Grove ahead
       if(d.infest&&!l.p.length)return false;
       if(l.terr&&l.terr.water&&!canSwim(d))return false;
-      if(!d.infest&&!(d.fusion===undefined&&l.a.some(u=>u.fbase))&&!laneRoom(l.a))return false;
+      if(!d.infest&&!d.teamup&&!(d.fusion===undefined&&l.a.some(u=>u.fbase))&&!laneRoom(l.a))return false;
       if(d.consume&&l.a.length&&!l.a.some(u=>C[u.id].token||(C[u.id].c||0)<=2))return false;  // only eat cheap fodder
       return true;
     });
@@ -1572,9 +1766,9 @@ function aiPlaceUnits(){
     if(d.brood&&unitsOnBoard("a")>=d.brood){drawFor("a",1);log(FNAME[S.af]+"'s "+d.n+" broods and draws a card.");}
     lane.a.forEach(o=>{if(o.ward)u.h+=o.ward;});
     if(u.ward)lane.a.forEach(o=>o.h+=u.ward);
-    if(u.crossward)lane.a.forEach(o=>{if(o.tag===u.crossward)o.h+=u.crosswardv;});
+    if(u.crossward)lane.a.forEach(o=>{if(isT(o,u.crossward))o.h+=u.crosswardv;});
     if(d.bolster&&lane.a.length)lane.a[0].h+=d.bolster;
-    if(d.kicker)A.sun+=S.lanes.some(L=>L.a.some(o=>o.tag===d.kicker))?d.gain:(d.gainbase||0);
+    if(d.kicker)A.sun+=S.lanes.some(L=>L.a.some(o=>isT(o,d.kicker)))?d.gain:(d.gainbase||0);
     if(d.mutate||d.warp){
       const into=randomOfTribe(S.af,d.warp?"!":d.mutate,pick.id,null);
       if(into){const nu=mk(into,"a");if(!fuseInto(lane,"a",nu))lane.a.push(nu);
@@ -1595,7 +1789,10 @@ function aiPlaceUnits(){
       log(FNAME[S.af]+"'s "+d.n+" devours its own "+food.n+".");
     }
     const ue=envOnLand(lane,"a",u);
-    if(!fuseInto(lane,"a",ue))lane.a.push(ue);
+    if(!fuseInto(lane,"a",ue)){
+      /* the AI steps a team-up wall in front when it's tougher than its current front */
+      if(ue.teamup&&lane.a.length&&ue.h>lane.a[0].h)lane.a.unshift(ue);else lane.a.push(ue);}
+    if(ue.wither)lane.a=lane.a.filter(x=>x!==ue);
     if(d.summon)for(let k=0;k<d.summon;k++)addU(lane.a,mk("sprout","a"));
     if(d.gainflat)A.sun+=d.gainflat;
     if(d.conjureplay)conjure("a",d.conjureplay);
@@ -1629,11 +1826,11 @@ function aiTricks(){
       const place=d.envset==="meadow"||d.envset==="echo"||d.envset==="chamber";
       const L=S.lanes.filter(ok).sort((x,y)=>place?((x.flank?1:0)-(y.flank?1:0)||mine(x)-mine(y)):mine(y)-mine(x))[0];
       if(!L||(!place&&!L.a.length)){tskip[tid]=1;continue;}
-      spend();setEnv(L,d.envset,"a");triggerSpite("p");continue;}
+      spend();setEnv(L,d.envset,"a");if(d.envsun)A.sun+=d.envsun;triggerSpite("p");continue;}
     if(d.terraform){
       /* pick the lane where the new ground helps it most: Marsh where it is out-muscled, Thicket where it is out-numbered */
       const L=S.lanes.filter(x=>x.a.length&&x.p.length&&(!x.terr||x.terr.n!==d.terraform)).sort((x,y)=>(y.p.length-y.a.length)-(x.p.length-x.a.length))[0];
-      if(!L){tskip[tid]=1;continue;}spend();setTerrain(L,terrainByName(d.terraform));log(FNAME[S.af]+" casts "+d.n+" — "+L.nm+" becomes "+d.terraform+".",true);triggerSpite("p");continue;}
+      if(!L){tskip[tid]=1;continue;}spend();setTerrain(L,terrainByName(d.terraform),null,null,1);terraformRider(L,"a",d);log(FNAME[S.af]+" casts "+d.n+" — "+L.nm+" becomes "+d.terraform+".",true);triggerSpite("p");continue;}
     if(d.borrow||d.nextdisc){tskip[tid]=1;continue;}   // the AI does not plan tempo tricks
     if(d.pyre){
       const src=S.lanes.filter(x=>x.a.some(u=>u.rattledraw||u.rattledmg||u.rattleblast||u.rattle));
@@ -1840,13 +2037,21 @@ function envTurnStart(){
   S.lanes.forEach(l=>{if(l.env&&l.env.k==="crypt"){const w=envOwnerSide(l);if(w&&l[w].length){log(l.nm+": the Whispering Crypt whispers.");conjure(w,{n:1});}}});
 }
 /* ---- MAP CARDS ---- */
-function setTerrain(l,t,mark,ownerFac){
-  l.terr=Object.assign({},t,mark?{mark}:{},ownerFac?{owner:ownerFac}:{});
+/* Terrain tricks now carry a rider for the caster and cycle themselves. */
+function terraformRider(l,w,d){
+  const side=l[w];
+  if(d.tfhp)side.forEach(u=>u.h+=d.tfhp);
+  if(d.tfatk)side.forEach(u=>u.base+=d.tfatk);
+  drawFor(w,1);
+}
+function setTerrain(l,t,mark,ownerFac,temp){
+  l.terr=Object.assign({},t,mark?{mark}:{},ownerFac?{owner:ownerFac}:{},temp?{temp:1}:{});
 }
 /* Everything that happens when a unit lands, for either side, beyond its body. */
 function onLand(l,w,u,d){
   const th=terrainHp(l); if(th)u.h+=th;
-  if(d.landmark){setTerrain(l,d.landmark,u.uid,w==="p"?S.pf:S.af);log((w==="p"?"You raise":FNAME[S.af]+" raises")+" a landmark: "+l.nm+" becomes "+d.landmark.n+".",true);}
+  if(d.rootgift){l[w].forEach(o=>o.h+=d.rootgift);if(l[w].length)log("   "+d.n+"'s roots spread: your other units here get +0/+"+d.rootgift+".");}
+  if(d.landmark){setTerrain(l,d.landmark,d.landmark.perm?"perm":u.uid,w==="p"?S.pf:S.af);log((w==="p"?"You raise":FNAME[S.af]+" raises")+" a landmark: "+l.nm+" becomes "+d.landmark.n+".",true);}
   if(d.claim){shiftCap(l,w==="p"?d.claim:-d.claim);l.pushed=1;log("   "+d.n+" stakes a claim: "+l.nm+" moves "+d.claim+"% "+(w==="p"?"your":FNAME[S.af]+"'s")+" way.");}
 }
 /* ---- GROWTH: scaling cards change the card in your deck. ---- */
@@ -1863,12 +2068,12 @@ function grow(w,id,a,h,capA,capH){
    What a card costs YOU right now: discounts from your units on the board
    (Thorn Nursery, Spore Matron, Dewcatcher, Hexwright), a pending "next unit costs
    less" (Bloomcall), and Chittering Host's swarm discount. */
-function canSwim(d){return d.tag==="Aquatic"||d.tag==="Ichor"||d.tag==="Minion"||d.token;}
+function canSwim(d){return isT(d,"Aquatic")||isT(d,"Ichor")||isT(d,"Minion")||d.token;}
 function costOf(id,w){
   const d=C[id]; if(!d)return 99; let c=d.c||0;
   if(!S||!S.lanes||!S[w])return c;
   S.lanes.forEach(l=>(l[w]||[]).forEach(u=>{
-    if(u.disc&&((u.disc.tag==="trick"&&d.trick)||(!d.trick&&d.tag===u.disc.tag)))c-=u.disc.n;
+    if(u.disc&&((u.disc.tag==="trick"&&d.trick)||(!d.trick&&isT(d,u.disc.tag))))c-=u.disc.n;
   }));
   if(!d.trick&&!d.junk&&S[w].nextDisc)c-=S[w].nextDisc;
   if(d.swarmcost)c=Math.max(1,c-unitsOnBoard(w));
@@ -1881,7 +2086,7 @@ function conjure(w,spec,exclude){
   /* A conjure never makes a copy of the card that cast it, nor another conjurer
      of the same kind — no chains. */
   const pool=POOL[fac].filter((id,i,a)=>a.indexOf(id)===i&&!C[id].junk&&!C[id].token&&id!==exclude&&!(C[id].trick&&C[id].conjure&&spec.pick==="trick")&&
-    (spec.pick==="trick"?C[id].trick:(spec.pick==="unit"?!C[id].trick:(spec.pick?C[id].tag===spec.pick&&!C[id].trick:true))));
+    (spec.pick==="trick"?C[id].trick:(spec.pick==="unit"?!C[id].trick:(spec.pick?isT(C[id],spec.pick)&&!C[id].trick:true))));
   const got=[];
   for(let k=0;k<(spec.n||1);k++){
     if(S[w].hand.length>=HAND_CAP||!pool.length)break;
@@ -2060,13 +2265,19 @@ function resolveLaneBody(l){
     if(hP&&hA){
       /* ENFILADE: whatever you hold on a captured flank fires sideways into the
          main lane beside it, once per turn, before the lines meet. */
+      /* SNEAK ATTACK: hold the flank beside a deadlocked main lane and your flankers
+         slip round the side and hit the enemy's REAR unit — half their attack while
+         held, all of it once the flank is captured. */
       const enfilade=(side,foe)=>{
-        if(!l.adj||!holdsSector(l.adj,side)||!l[foe].length)return;
-        const held=sectorLanes(l.adj).filter(f=>holdsFlank(f,side));
-        const power=Math.floor(held.reduce((t,f)=>t+f[side].reduce((q,u)=>q+atk(u,f,side),0),0)/2);
+        if(!l.adj||!sectorHeld(l.adj,side)||!l[foe].length)return;
+        const cap=holdsSector(l.adj,side);
+        const held=sectorLanes(l.adj).filter(f=>laneHeld(f,side));
+        const raw=held.reduce((t,f)=>t+f[side].reduce((q,u)=>q+atk(u,f,side),0),0);
+        const power=cap?raw:Math.floor(raw/2);
         if(power<1)return;
-        log("   enfilade from the "+(l.adj==="L"?"left":"right")+" flank rakes "+l.nm+" for "+power+".");
-        strike(l,foe,power).out.forEach(x=>log("      "+x));
+        const t=l[foe][l[foe].length-1];t.h-=power;
+        log("   SNEAK ATTACK from the "+(l.adj==="L"?"left":"right")+" flank: "+t.n+" at the back of "+l.nm+" takes "+power+(t.h<=0?" and falls.":"."),true);
+        cull(l,foe);
       };
       enfilade("p","a"); enfilade("a","p");
       /* SNIPER (Grove): its damage is pulled out of the pool and aimed at the
@@ -2144,6 +2355,12 @@ function resolveLaneBody(l){
       const g=capGain(l,"a");
       if(g>0)shiftCap(l,-g); else log(l.nm+" → "+FNAME[S.af]+"'s line holds but cannot take ground.");
     }
+    /* SURVEY: each turn a surveyor lives, the bar creeps its way, contested or not */
+    ["p","a"].forEach(w=>{const sv=l[w].reduce((t,u)=>t+(u.survey||0),0);if(sv){shiftCap(l,w==="p"?sv:-sv);log("   "+(w==="p"?"your":FNAME[S.af]+"'s")+" surveyor"+(l[w].filter(u=>u.survey).length>1?"s":"")+" chart "+l.nm+": "+sv+"% "+(w==="p"?"your":"their")+" way.");}});
+    /* CUT OFF: a flank force whose neighbouring main lane is HELD by the enemy loses its supply line */
+    if(l.flank){const main=S.lanes.find(x=>!x.flank&&x.adj===l.sector);
+      if(main)["p","a"].forEach(w=>{if(l[w].length&&laneHeld(main,other(w))){l[w].forEach(u=>u.h-=1);
+        log("   "+(w==="p"?"your":FNAME[S.af]+"'s")+" units on "+l.nm+" are CUT OFF ("+main.nm+" is held by the enemy) — each loses 1 health.");cull(l,w);}});}
     l.p.forEach(u=>u.weak=0); l.a.forEach(u=>u.weak=0);   // debuffs last one turn
     if((l.cap||0)!==b){
       l.pushed=1;
@@ -2211,8 +2428,8 @@ function commitTricks(){
         S.p.incomeWhy=incomeParts("p");
         S.p.sun=Math.max(0,income("p")-(S.p.taxNext||0)); S.a.sun=Math.max(0,income("a")-(S.a.taxNext||0));   // reset, not accumulate
         S.p.taxNext=0;S.a.taxNext=0;S.p.nextDisc=0;S.a.nextDisc=0;
-        drawFor("p",1+upLvl("p","draw")+hiveDraw("p"));envTurnStart();
-        drawFor("a",1+upLvl("a","draw")+hiveDraw("a"));
+        drawFor("p",1+upLvl("p","draw")+hiveDraw("p")+(S.map==="wide"?1:0));envTurnStart();
+        drawFor("a",1+upLvl("a","draw")+hiveDraw("a")+(S.map==="wide"?1:0));
         S.beat=null;
         beginTurn();
       },ms+500);
@@ -2228,7 +2445,7 @@ function randomOfTribe(faction,tribe,notId,sameCost){
     const d=C[id];
     if(id===notId||d.junk||d.token||d.trick)return false;
     if(tribe==="!")return d.tag&&d.tag!==C[notId].tag&&d.tag!=="Hybrid";
-    if(tribe)return d.tag===tribe;
+    if(tribe)return isT(d,tribe);
     if(sameCost!=null)return d.c===sameCost;
     return true;
   });
@@ -2248,7 +2465,9 @@ function hardLessons(w){
     else log(FNAME[S.af]+" learns hard lessons: "+names.join(", ")+".");}
 }
 function bankMomentum(loser){
-  S.lanes.forEach(l=>{if(l.terr&&l.terr.mark){const alive=l.p.concat(l.a).some(u=>u.uid===l.terr.mark);l.terrKeep=alive?1:0;
+  S.lanes.forEach(l=>{if(l.terr&&l.terr.mark==="perm"){const ow=terrOwnerSide(l),lost=ow&&laneHeld(l,other(ow));l.terrKeep=lost?0:1;
+      log(l.nm+": "+(lost?"the enemy holds it — the "+l.terr.n+" is trampled.":"the "+l.terr.n+" endures into next round."),true);return;}
+    if(l.terr&&l.terr.mark){const alive=l.p.concat(l.a).some(u=>u.uid===l.terr.mark);l.terrKeep=alive?1:0;
     if(alive)log(l.nm+": the "+l.terr.n+" stands — it carries into next round.",true);}});
   ["p","a"].forEach(w=>{const seen={};S.lanes.forEach(l=>l[w].forEach(u=>{if(C[u.id].growsurvive&&!seen[u.id]){seen[u.id]=1;grow(w,u.id,1,2,5,10);}}));});
   // 1. Veterancy — any card of yours still standing gets permanently better.
@@ -2341,7 +2560,7 @@ function packsLegal(){
 /* Free read: how coherent a pack is. Paid appraisal adds the numbers. */
 function synergyRead(cards){
   const tags={};let bodies=0;
-  cards.forEach(id=>{const d=C[id];if(d.junk||d.trick)return;bodies++;if(d.tag&&d.tag!=="Tribeless")tags[d.tag]=(tags[d.tag]||0)+1;});
+  cards.forEach(id=>{const d=C[id];if(d.junk||d.trick)return;bodies++;tagsOf(d).forEach(t=>{tags[t]=(tags[t]||0)+1;});});
   const top=Math.max.apply(null,[0].concat(Object.keys(tags).map(t=>tags[t])));
   const tribe=top>=2?Object.keys(tags).find(t=>tags[t]===top):null;
   if(!bodies)return{label:"none — no bodies at all",level:0,tribe:null,top:0};
@@ -2374,7 +2593,7 @@ function appraisalRead(cards,w){
   const tt=Object.keys(tags).sort((a,b)=>tags[b]-tags[a])[0];
   if(tt&&(have[tt]||0)>=3&&tags[tt]>=2)why.push("adds to the "+tt+" you already run");
   else if(tt&&tags[tt]>=3&&(have[tt]||0)<2)why.push("starts a "+tt+" core");
-  const feeders=t=>(have[t]||0)+bodies.filter(id=>C[id].tag===t&&!C[id].aura&&!C[id].scale).length;
+  const feeders=t=>(have[t]||0)+bodies.filter(id=>isT(C[id],t)&&!C[id].aura&&!C[id].scale).length;
   const pay=cards.filter(id=>{const d=C[id],t=d.aura||d.scale;return t&&feeders(t)<2;}).length;
   if(pay)why.push("!"+"has a tribe payoff you can't feed yet");
   if(big>=3||(fresh&&big>=2))why.push("!"+"top-heavy — you can cast only one big card a turn"+(fresh?", and turn 1 gives just 3 sun":""));
@@ -2398,7 +2617,7 @@ function packStats(cards){
 function resonance(who,id){
   /* Duplicates of CHEAP cards resonate. Big bodies and anything built at the
      workshop do not — that was a Rootmass stacking veterancy and resonance. */
-  const d=C[id];if(!d||(d.c||0)>3||id.startsWith("graft_")||d.tag==="Hybrid"||d.tag==="Abomination")return 0;
+  const d=C[id];if(!d||(d.c||0)>3||id.startsWith("graft_")||isT(d,"Hybrid")||isT(d,"Abomination"))return 0;
   const n=S[who].deck.filter(x=>baseId(x)===baseId(id)).length;
   return n>=5?2:(n>=3?1:0);
 }
@@ -2428,6 +2647,7 @@ function buy(i){
   if(S.p.boughtPack){log("You have already taken a pack this round. The other is theirs to discard.");render();return;}
   S.p.boughtPack=true;
   S.p.meta-=cost;S.p.deck.push(...pk.cards);pk.taken=true;
+  if(pk.sticker){const g=giveSticker("p",pk.sticker);if(g){sfx("crate");plog("The pack's bonus sticker: "+g+".",true);}}
   if(mpOn()){
     /* Deferred settlement: the seller is not paid until both depots close. */
     S.p.boughtIdx=i; S.p.paidOut=(S.p.paidOut||0)+pk.price;
@@ -2464,7 +2684,7 @@ function rollAbomination(){
 }
 function canExperiment(deck){
   const c={};
-  deck.forEach(id=>{const t=C[id].tag;if(t&&t!=="Tribeless"&&t!=="Abomination")c[t]=(c[t]||0)+1;});
+  deck.forEach(id=>{tagsOf(C[id]).forEach(t=>{if(t!=="Abomination")c[t]=(c[t]||0)+1;});});
   return Object.keys(c).filter(t=>c[t]>=2);
 }
 function expCost(w){return Math.max(1,EXP_COST-(S[w]&&S[w].hero==="drichor"?2:0));}
@@ -2474,10 +2694,12 @@ function doExperiment(tag){
   S.p.meta-=ec;
   const eaten=[];
   for(let k=0;k<2;k++){
-    const i=S.p.deck.findIndex(id=>C[id].tag===tag);
-    if(i<0)break;eaten.push(C[S.p.deck[i]].n);S.p.deck.splice(i,1);
+    const i=S.p.deck.findIndex(id=>isT(C[id],tag));
+    if(i<0)break;eaten.push(C[S.p.deck[i]].n);(UI.fxIn=UI.fxIn||[]).push(S.p.deck[i]);S.p.deck.splice(i,1);
   }
   const res=rollAbomination();
+  const fin=UI.fxIn||[];UI.fxIn=null;
+  setTimeout(()=>forgeFx(fin,res,"Out of the vats!","A "+C[res].n+" ("+C[res].a+"/"+C[res].h+"). Keep it, or pay "+REROLL_COST+" to roll again."),0);
   S.p.pending={res,eaten:eaten.join(" + ")};
   plog("You feed "+S.p.pending.eaten+" into the vats. Out comes a "+C[res].n+" ("+C[res].a+"/"+C[res].h+").",true);
   render();
@@ -2506,6 +2728,7 @@ function doFuse(id){
   const d=S.p.deck.slice();
   for(let k=0;k<2;k++){let i=d.indexOf(id);if(i<0)i=d.findIndex(x=>baseId(x)===id);d.splice(i,1);}
   d.push(C[id].fuse);S.p.deck=d;
+  setTimeout(()=>forgeFx([id,id],C[id].fuse,"Cross-bred!",C[C[id].fuse].n+" ("+C[C[id].fuse].a+"/"+C[C[id].fuse].h+") — when it's damaged it drops a tier instead of dying."),0);
   plog("You cross-breed two "+C[id].n+"s into a "+C[C[id].fuse].n+" for "+cost+".",true);render();
 }
 /* ---------------------------------------------------------------------------
@@ -2552,6 +2775,35 @@ function setDone(w,k){const fac=w==="p"?S.pf:S.af;const st=stickerSets(fac).find
 function compReady(w,id){const need=C[id].rar==="rare"?4:3;return ((S[w].book||{})[id]||0)>=need-1;}
 function companions(w){const fac=w==="p"?S.pf:S.af;return MINIONS[fac].filter(id=>compReady(w,id));}
 function bookFull(w){const fac=w==="p"?S.pf:S.af;return stickerSets(fac).every(st=>((S[w].book||{})[st.k]||0)>=st.need);}
+/* Each pack in the depot carries one sticker piece for whoever buys it. */
+function giveSticker(w,k){
+  const P=S[w],fac=w==="p"?S.pf:S.af,st=stickerSets(fac).find(x=>x.k===k);if(!st)return null;
+  P.book=P.book||{};
+  if((P.book[k]||0)>=st.need){P.meta+=1;return st.n+" (full → +1 meta)";}
+  P.book[k]=(P.book[k]||0)+1;const have=P.book[k];
+  return st.n+" "+have+"/"+st.need+(have>=st.need?" — COMPLETE":(!st.perk&&have===st.need-1?" — rookie joins":""));
+}
+function tagPacks(packs,buyerW){
+  if(!CFG.stickers)return;
+  const fac=buyerW==="p"?S.pf:S.af,P=S[buyerW],book=P.book||{};
+  const open=stickerSets(fac).filter(st=>(book[st.k]||0)<st.need);
+  if(!open.length)return;
+  const started=open.filter(st=>book[st.k]);
+  packs.forEach(pk=>{if(pk.sticker)return;const pool=(started.length&&Math.random()<0.5)?started:open;pk.sticker=pool[rnd(pool.length)].k;});
+  if(packs.length===2&&packs[0].sticker===packs[1].sticker&&open.length>1){const o=open.filter(x=>x.k!==packs[0].sticker);packs[1].sticker=o[rnd(o.length)].k;}
+}
+function stickerTip(node,st,have,bonus){
+  let effect,rows=[["Progress",have+" / "+st.need+" pieces"]];
+  if(st.perk){const ps=PERKSETS.find(x=>x.k===st.k)||{d:()=>"",max:1};
+    effect=have?"Level "+Math.min(have,ps.max)+": "+ps.d(Math.min(have,ps.max)):"Each piece is a level, and works straight away.";
+    if(have<ps.max)rows.push([bonus?"This piece":"Next piece","Level "+(have+1)+": "+ps.d(have+1)]);else rows.push(["Status","Maxed — extra pieces pay 1 meta."]);
+  } else {const c=C[st.k];
+    effect="Companion: "+c.n+" "+c.a+"/"+c.h+". "+c.t.replace(/^Minion\.\s*/,"");
+    rows.push(["Joins",(st.need-1)+" pieces: as a rookie (−1/−1). "+st.need+": full strength."]);
+    rows.push(["Use","Deploy it free, once a round, from the combat screen."]);}
+  bindInfoTip(node,{title:(st.rare?"★ ":"")+st.n,col:st.perk?"#6A4FB0":"#2E7D4F",kind:st.perk?"Perk sticker set":"Companion sticker set",effect,rows});
+}
+function stickerName(fac,k){const st=stickerSets(fac).find(x=>x.k===k);return st?st.n:k;}
 function openCrate(w){
   const P=S[w], fac=w==="p"?S.pf:S.af;
   if(P.meta<CRATE_COST||bookFull(w))return null;
@@ -2717,8 +2969,29 @@ function upValue(k){
 const GRAFT_COST=5;
 function canGraft(){
   const c={};
-  S.p.deck.forEach(id=>{const t=C[id].tag;if(t&&t!=="Hybrid"&&!id.startsWith("graft_")&&!C[id].trick)c[t]=(c[t]||0)+1;});
+  S.p.deck.forEach(id=>{if(!id.startsWith("graft_")&&!C[id].trick)tagsOf(C[id]).forEach(t=>{if(t!=="Hybrid")c[t]=(c[t]||0)+1;});});
   return Object.keys(c).filter(t=>c[t]>=3&&C["graft_"+t]);
+}
+/* The forge: cards fly in, flash, and one card comes out. Used for grafting,
+   cross-breeding and the vats. */
+function forgeFx(ins,out,verb,sub){
+  if(typeof document.querySelector!=="function")return;
+  const old=$("forge");if(old)old.remove();
+  const f=el("div","forge");f.id="forge";
+  const box=el("div","fbox");f.appendChild(box);
+  box.appendChild(el("div","fverb",verb));
+  const row=el("div","frow");
+  const mini=(id,cls)=>{const d=C[id],c=el("div","fcard "+cls);if(TAGS[d.tag])c.style.borderColor=TAGS[d.tag];
+    c.appendChild(el("b",null,d.n));c.appendChild(el("span","mono",d.trick?"trick":(d.a+"/"+d.h)));return c;};
+  ins.forEach((id,i)=>{const c=mini(id,"fin");c.style.setProperty("--i",i);c.style.setProperty("--n",ins.length);row.appendChild(c);});
+  const flash=el("div","fflash");row.appendChild(flash);
+  const res=mini(out,"fout");row.appendChild(res);
+  box.appendChild(row);
+  const d=C[out];box.appendChild(el("div","fsub",sub||(d.n+" "+d.a+"/"+d.h+" joins your deck.")));
+  const ok=el("button","btn primary","Nice!");ok.type="button";ok.addEventListener("click",()=>f.remove());box.appendChild(ok);
+  f.addEventListener("click",e=>{if(e.target===f)f.remove();});
+  document.body.appendChild(f);
+  setTimeout(()=>sfx("crate"),650);setTimeout(()=>sfx("win"),1150);
 }
 function doGraft(tag){
   if(S.p.meta<GRAFT_COST)return;
@@ -2727,10 +3000,12 @@ function doGraft(tag){
   const eaten=[];
   for(let k=0;k<3;k++){
     /* eat the cheapest non-graft units of the tribe first */
-    let i=-1;S.p.deck.forEach((id,k)=>{if(C[id].tag===tag&&!C[id].trick&&!id.startsWith("graft_")&&(i<0||(C[id].c||0)<(C[S.p.deck[i]].c||0)))i=k;});
-    if(i<0)break;const gone=S.p.deck[i];eaten.push(C[gone].n);S.p.deck.splice(i,1);purgeReserve("p",gone);
+    let i=-1;S.p.deck.forEach((id,k)=>{if(isT(C[id],tag)&&!C[id].trick&&!id.startsWith("graft_")&&(i<0||(C[id].c||0)<(C[S.p.deck[i]].c||0)))i=k;});
+    if(i<0)break;const gone=S.p.deck[i];eaten.push(C[gone].n);(UI.fxIn=UI.fxIn||[]).push(gone);S.p.deck.splice(i,1);purgeReserve("p",gone);
   }
   S.p.deck.push(res);
+  const fin=UI.fxIn||[];UI.fxIn=null;
+  setTimeout(()=>forgeFx(fin,res,"Grafted!","Three "+tag+" cards fused into one "+C[res].n+" ("+C[res].a+"/"+C[res].h+"). Fewer cards in your deck, but a much bigger body."),0);
   plog("You graft "+eaten.join(" + ")+" into a "+C[res].n+" for "+GRAFT_COST+". Three cards became one.",true);
   render();
 }
@@ -2768,7 +3043,7 @@ function aiWorkshop(){
       if(!opts.length||A.meta-EXP_COST<RESERVE)break;
       const tag=opts[rnd(opts.length)];
       A.meta-=EXP_COST;
-      for(let k=0;k<2;k++){const i=A.deck.findIndex(id=>C[id].tag===tag);if(i>=0)A.deck.splice(i,1);}
+      for(let k=0;k<2;k++){const i=A.deck.findIndex(id=>isT(C[id],tag));if(i>=0)A.deck.splice(i,1);}
       let res=rollAbomination();
       // it will pay to reroll a dud if it can afford to
       while(res==="abom_runt"&&A.meta>=REROLL_COST){A.meta-=REROLL_COST;res=rollAbomination();}
@@ -2800,10 +3075,10 @@ function aiWorkshop(){
   }
   /* Graft cheap chaff into one big body when it has plenty of a tribe. */
   if(A.meta>=RESERVE+GRAFT_COST){
-    const c={};A.deck.forEach(id=>{const d=C[id];if(d.tag&&!d.trick&&!d.token&&!id.startsWith("graft_")&&d.tag!=="Hybrid"&&(d.c||0)<=2)c[d.tag]=(c[d.tag]||0)+1;});
+    const c={};A.deck.forEach(id=>{const d=C[id];if(!d.trick&&!d.token&&!id.startsWith("graft_")&&(d.c||0)<=2)tagsOf(d).forEach(t=>{if(t!=="Hybrid")c[t]=(c[t]||0)+1;});});
     const t=Object.keys(c).find(t=>c[t]>=4&&C["graft_"+t]);
     if(t){A.meta-=GRAFT_COST;
-      for(let k=0;k<3;k++){let i=-1;A.deck.forEach((id,j)=>{if(C[id].tag===t&&!C[id].trick&&!id.startsWith("graft_")&&(C[id].c||0)<=2&&(i<0||(C[id].c||0)<(C[A.deck[i]].c||0)))i=j;});if(i>=0)A.deck.splice(i,1);}
+      for(let k=0;k<3;k++){let i=-1;A.deck.forEach((id,j)=>{if(isT(C[id],t)&&!C[id].trick&&!id.startsWith("graft_")&&(C[id].c||0)<=2&&(i<0||(C[id].c||0)<(C[A.deck[i]].c||0)))i=j;});if(i>=0)A.deck.splice(i,1);}
       A.deck.push("graft_"+t);}
   }
   let crates=0;
@@ -2874,7 +3149,7 @@ function canTarget(hi,l){
   if(d.devour&&!l.p.length)return false;
   if(d.infest&&!l.a.length)return false;    // a parasite needs a host
   if(l.terr&&l.terr.water&&!d.infest&&!canSwim(d))return false;   // pool lane
-  if(!d.infest&&!(d.fusion===undefined&&l.p.some(u=>u.fbase))&&!laneRoom(l.p))return false;   // lane cap (growing out of a base takes no new slot)
+  if(!d.infest&&!d.teamup&&!(d.fusion===undefined&&l.p.some(u=>u.fbase))&&!laneRoom(l.p))return false;   // lane cap (growing out of a base takes no new slot)
   if(d.flank&&!l.flank)return false;
   if(d.cond==="losing"&&(l.cap||0)>-40)return false;   // only where Blight is ahead
   return true;
@@ -2900,8 +3175,8 @@ function playCard(hi,li){
       if(d.drawt){drawFor("p",d.drawt);plog("   you draw "+d.drawt+".");}
       if(d.conjure)conjure("p",d.conjure);
     }
-    else if(d.envset){setEnv(l,d.envset,"p");}
-    else if(d.terraform){setTerrain(l,terrainByName(d.terraform));log("You cast "+d.n+" — "+l.nm+" becomes "+d.terraform+" for the rest of the round.",true);}
+    else if(d.envset){setEnv(l,d.envset,"p");if(d.envsun){S.p.sun+=d.envsun;log("   +"+d.envsun+" sun back.");}}
+    else if(d.terraform){setTerrain(l,terrainByName(d.terraform),null,null,1);terraformRider(l,"p",d);log("You cast "+d.n+" — "+l.nm+" becomes "+d.terraform+" for the rest of the round"+(d.tfhp?", your units there get +"+d.tfhp+" health":"")+(d.tfatk?", your units there get +"+d.tfatk+" attack":"")+", and you draw a card.",true);}
     else if(d.conjure){log("You cast "+d.n+".");conjure("p",d.conjure,id);}
     else if(d.surge){let n=0;S.lanes.forEach(L=>{if(L.p.length>=d.surge){addU(L.p,mk("sprout","p"));n++;}});log("You cast "+d.n+" — "+n+" lane"+(n===1?"":"s")+" sprout.",true);}
     else if(d.swarmbuff){const n=Math.floor(unitsOnBoard("p")/2);l.p.forEach(u=>u.weak=(u.weak||0)-n);log("You cast "+d.n+" — your units in "+l.nm+" get +"+n+" attack this turn.",true);}
@@ -2988,10 +3263,10 @@ function playCard(hi,li){
     if(d.brood&&unitsOnBoard("p")>=d.brood){drawFor("p",1);log(d.n+" broods — your swarm draws you a card.");}
     l.p.forEach(o=>{if(o.ward)u.h+=o.ward;});               // existing Worldroot shelters the newcomer
     if(u.ward){l.p.forEach(o=>o.h+=u.ward);log(d.n+" shelters the lane for +"+u.ward+" health each.");}
-    if(u.crossward){let k=0;l.p.forEach(o=>{if(o.tag===u.crossward){o.h+=u.crosswardv;k++;}});
+    if(u.crossward){let k=0;l.p.forEach(o=>{if(isT(o,u.crossward)){o.h+=u.crosswardv;k++;}});
       if(k)log(d.n+" reinforces "+k+" "+u.crossward+" unit"+(k>1?"s":"")+" for +"+u.crosswardv+" health.");}
     if(d.bolster&&l.p.length){l.p[0].h+=d.bolster;log(d.n+" braces "+l.p[0].n+" for +"+d.bolster+" health.");}
-    if(d.kicker){const hit=S.lanes.some(L=>L.p.some(o=>o.tag===d.kicker));const g=hit?d.gain:(d.gainbase||0);if(g){S.p.sun+=g;log(d.n+(hit?" finds a "+d.kicker+" ally":"")+" — +"+g+" sun.");}}
+    if(d.kicker){const hit=S.lanes.some(L=>L.p.some(o=>isT(o,d.kicker)));const g=hit?d.gain:(d.gainbase||0);if(g){S.p.sun+=g;log(d.n+(hit?" finds a "+d.kicker+" ally":"")+" — +"+g+" sun.");}}
     if(d.mutate||d.warp){
       const fac=S.pf;
       const into=randomOfTribe(fac,d.warp?"!":d.mutate,id,null);
@@ -3017,8 +3292,10 @@ function playCard(hi,li){
       }
     }
     const ue=envOnLand(l,"p",u);
-    if(!fuseInto(l,"p",ue))l.p.push(ue);
-    log("You play "+d.n+" to "+l.nm+".");
+    if(!fuseInto(l,"p",ue)){if(ue.teamup&&S.tuFront&&l.p.length){l.p.unshift(ue);log("   TEAM-UP: "+d.n+" steps in front.");}else l.p.push(ue);}
+    S.tuFront=false;
+    if(ue.wither){l.p=l.p.filter(x=>x!==ue);}
+    log("You play "+d.n+" to "+l.nm+"."+(ue.wither?" The glowberries spread — and the patch withers.":""));
     if(d.summon)for(let k=0;k<d.summon;k++)addU(l.p,mk("sprout","p"));
     if(d.summon)log("   "+d.summon+" Sprouts spill out alongside it.");
     if(d.gainflat){S.p.sun+=d.gainflat;log("   "+u.n+" yields "+d.gainflat+" resource.");}
@@ -3154,7 +3431,7 @@ function mpPack(){
       mk:S.pf==="grove"?l.mk:6-l.mk, cap:S.pf==="grove"?(l.cap||0):-(l.cap||0),
       p:S.pf==="grove"?l.p:l.a, a:S.pf==="grove"?l.a:l.p,
       /* garrisons are seat-relative too: store them Grove-first like everything else */
-      terr:l.terr||null,env:l.env||null,
+      terr:l.terr||null,env:l.env||null,terrKeep:l.terrKeep||0,
       gp:(S.pf==="grove"?l.gp:l.ga)||null, ga:(S.pf==="grove"?l.ga:l.gp)||null})),
     seats:o, log:S.log.slice(-60), mood:S.a.mood||0
   };
@@ -3180,7 +3457,7 @@ function mpUnpack(raw){
   S2.log=(d.log||[]).slice();
   S2.logN=S2.log.reduce((m,e)=>Math.max(m,e.n||0),0);
   S2.lanes=d.lanes.map(l=>({
-    id:l.id,nm:l.nm,flank:l.flank,sector:l.sector||undefined,adj:l.adj||undefined,pushed:0,terr:l.terr,env:l.env||null,baseTerr:l.baseTerr||null,
+    id:l.id,nm:l.nm,flank:l.flank,sector:l.sector||undefined,adj:l.adj||undefined,pushed:0,terr:l.terr,terrKeep:l.terrKeep||0,env:l.env||null,baseTerr:l.baseTerr||null,
     mk:mine==="grove"?l.mk:6-l.mk, cap:l.cap==null?((mine==="grove"?l.mk:6-l.mk)-3)*40:(mine==="grove"?l.cap:-l.cap),
     /* lanes are stored Grove-side-first; flip them if I am the Blight seat */
     p:mine==="grove"?l.p:l.a, a:mine==="grove"?l.a:l.p,
@@ -3357,6 +3634,7 @@ async function mpSubmitStock(auto){
   S.p.submitted=true;
   log("Your packs are stocked and priced.",true);
   render();
+  tagPacks(S.p.packs,"a");
   await mpSend("stock",{packs:S.p.packs,offer:S.p.offer||null,state:mpSeatBlob()});
   mpTryResolve("stock");
 }
@@ -3454,8 +3732,8 @@ function mpResolveTurnBody(){
   S.p.incomeWhy=incomeParts("p");S.a.incomeWhy=incomeParts("a");
   S.p.sun=Math.max(0,income("p")-(S.p.taxNext||0));S.a.sun=Math.max(0,income("a")-(S.a.taxNext||0));
   S.p.taxNext=0;S.a.taxNext=0;S.p.nextDisc=0;S.a.nextDisc=0;
-  drawFor("p",1+upLvl("p","draw")+hiveDraw("p"));envTurnStart();
-  drawFor("a",1+upLvl("a","draw")+hiveDraw("a"));
+  drawFor("p",1+upLvl("p","draw")+hiveDraw("p")+(S.map==="wide"?1:0));envTurnStart();
+  drawFor("a",1+upLvl("a","draw")+hiveDraw("a")+(S.map==="wide"?1:0));
   S.lanes.forEach(l=>{l.pushed=0;});
   S.p.discarded=false;S.a.discarded=false;S.p.minionUsed=false;S.a.minionUsed=false;S.selMinion=null;
   S.mpStep=1; S.sub="place";
@@ -3534,14 +3812,14 @@ function bindTip(node,id,side,live){
   const d=C[id];
   node.classList.add("hoverable");
   node.addEventListener("mouseenter",e=>{
-    TIP.innerHTML="";
+    TIP.innerHTML="";TIP.classList.remove("big");
     TIP.appendChild(el("div","tn",d.n));
     const res=d.s==="blight"?"spore":"sun";
     const L=typeof live==="function"?live():null;
     TIP.appendChild(el("div","tm",d.junk?"no cost · does nothing":
       (d.c+" "+res+(d.trick?" · trick":" · "+(L?L.a:d.a)+" attack / "+(L?L.h:d.h)+" health"+(L&&L.changed&&(L.a!==d.a||L.h!==d.h)?"  (card: "+d.a+"/"+d.h+")":"")))));
     if(L&&L.notes&&L.notes.length)TIP.appendChild(el("div","tt tl",L.notes.join(" · ")));
-    TIP.appendChild(el("div","tg",d.junk?"Dead weight":(d.trick?"Trick":d.tag)));
+    TIP.appendChild(el("div","tg",d.junk?"Dead weight":(d.trick?"Trick":tagLabel(d))));
     TIP.appendChild(el("div","tt",d.t));
     const tr=traitsIn(d.t);
     if(tr.length){const kd=el("div","tkw");tr.forEach(k=>{const r=el("div");r.appendChild(el("b",null,k.full+": "));r.appendChild(document.createTextNode(k.v));kd.appendChild(r);});TIP.appendChild(kd);}
@@ -3560,10 +3838,43 @@ function bindTip(node,id,side,live){
   node.addEventListener("mouseleave",()=>{TIP.hidden=true;});
   node.addEventListener("mouseenter",()=>{TIP.owner=node;});
 }
+/* Big, plain tooltip for lane terrain and environments. */
+function bindInfoTip(node,o){
+  node.style.cursor="help";
+  node.addEventListener("mouseenter",e=>{
+    TIP.innerHTML="";TIP.classList.add("big");
+    const hd=el("div","ihead");hd.style.background=o.col||"var(--ink3)";hd.textContent=o.title;TIP.appendChild(hd);
+    if(o.kind)TIP.appendChild(el("div","ikind",o.kind));
+    TIP.appendChild(el("div","ieff",o.effect));
+    (o.rows||[]).forEach(([k,v])=>{const r=el("div","irow");r.appendChild(el("b",null,k));r.appendChild(el("span",null,v));TIP.appendChild(r);});
+    TIP.hidden=false;TIP.owner=node;place(e);
+  });
+  node.addEventListener("mousemove",place);
+  node.addEventListener("mouseleave",()=>{TIP.hidden=true;TIP.classList.remove("big");});
+}
+const TERR_ICON={"Thicket":"🌿","Open Ground":"⚔","Marsh":"💧","Ruins":"🧱","Bramble Wall":"🌵","Water":"🌊","High Ground":"⛰"};
+const ENV_ICON={meadow:"🌻",echo:"🔁",gallery:"🏹",chamber:"🧪",crypt:"🕯",chute:"🦴"};
+function terrIcon(t){return TERR_ICON[t.n]||(t.water?"🌊":t.capMul?"⛰":t.owner?"🏛":"◆");}
+const TERR_PLAIN={
+  "Thicket":{eff:"Every unit here takes 1 LESS damage each fight.",who:"Both sides. Good for small units that would otherwise die."},
+  "Open Ground":{eff:"Every unit here deals +1 ATTACK.",who:"Both sides. Good for whoever has more units here."},
+  "Marsh":{eff:"Every unit here deals 1 LESS attack.",who:"Both sides. Good for walls; bad for attackers."},
+  "Ruins":{eff:"Units played here get +2 HEALTH.",who:"Both sides."},
+  "Bramble Wall":{eff:"Every unit here takes 2 LESS damage each fight.",who:"Both sides. Lanes get very hard to break."}
+};
+function terrTip(tb,t){
+  const pl=TERR_PLAIN[t.n]||{eff:t.d,who:t.owner?"Only "+FNAME[t.owner]+".":"Both sides."};
+  bindInfoTip(tb,{title:t.n+(t.owner?" · "+FNAME[t.owner]:""),col:t.col,kind:t.owner?"Landmark terrain":"Terrain",effect:t.owner?t.d:pl.eff,
+    rows:[["Affects",t.owner?"Its owner, "+FNAME[t.owner]+".":pl.who],["Lasts",t.mark==="perm"?"Every round — until the enemy HOLDS this lane at the end of a round.":t.mark?"Stays next round if its landmark survives.":(t.temp?"Until the round ends.":"This round (flanks re-roll terrain every round).")]]});
+}
+function envTip(eb,e){
+  bindInfoTip(eb,{title:"✦ "+e.n,col:e.col,kind:"Environment · belongs to "+FNAME[e.owner],effect:e.d.replace(/its owner('s)?/g,m=>m.includes("'s")?FNAME[e.owner]+"'s":FNAME[e.owner]).replace(/\bthem\b/,FNAME[e.owner]),
+    rows:[["Affects","Only "+FNAME[e.owner]+(e.owner===S.pf?" (you)":" (your opponent)")+"."],["Lasts","Until another environment replaces it."]]});
+}
 /* A re-render removes the hovered element without a mouseleave, which used to
    strand the tooltip on screen. Hide it on every render, on scroll and clicks,
    and whenever the pointer is no longer over the element that opened it. */
-function hideTip(){if(TIP)TIP.hidden=true;}
+function hideTip(){if(TIP){TIP.hidden=true;TIP.classList.remove("big");}}
 if(typeof document.addEventListener==="function"){
   document.addEventListener("mousemove",e=>{if(TIP.hidden)return;const o=TIP.owner;
     if(!o||!o.isConnected||!(o===e.target||o.contains(e.target)))TIP.hidden=true;},true);
@@ -3587,7 +3898,8 @@ function cardEl(id,o){
     if(L&&(L.a!==d.a||L.h!==d.h)){st.style.color="var(--grove)";st.style.fontWeight="600";st.title="Card: "+d.a+"/"+d.h;}
     b.appendChild(st);
   }
-  b.appendChild(el("div","tag",d.junk?"Dead weight":(d.trick?"Trick":d.tag)));
+  b.appendChild(el("div","tag",d.junk?"Dead weight":(d.trick?"Trick":tagLabel(d))));
+  if(d.tag2&&TAGS[d.tag2]&&!d.trick)b.classList.add("multi"),b.style.setProperty&&b.style.setProperty("--t2",TAGS[d.tag2]);
   const tx=el("div","txt");const tf=textWithTraits(d.t);if(tf)tx.appendChild(tf);else tx.textContent=d.t;b.appendChild(tx);
   if(o.onClick)b.addEventListener("click",o.onClick);
   return b;
@@ -3621,13 +3933,20 @@ function renderFront(){
 }
 /* Drag a card from your hand straight onto a lane. Legal lanes light up while you drag. */
 const DRAG={hi:null};
+/* Team-up units ask whether to step in front of or behind the allies already there. */
+function tryPlay(hi,li){
+  const id=S.p.hand[hi],d=C[id],l=S.lanes[li];
+  if(d&&d.teamup&&!d.trick&&l.p.length&&!l.p.some(u=>u.fbase)){S.tuAsk={hi,li};S.sel=hi;return render();}
+  S.tuAsk=null;act(()=>playCard(hi,li));
+}
 /* Parasites are loud: a purple ring, and a badge that says whose they are and what they do. */
 function infBadge(x,u){
+  /* compact: the purple ring plus a worm icon; the details live in the unit's tooltip */
   const ps=u.infest||[];if(!ps.length)return;
   x.classList.add("infested");
   const mine=ps.filter(pz=>pz.owner===S.pf).length, dot=ps.reduce((t,pz)=>t+(pz.dot||0),0), drain=ps.reduce((t,pz)=>t+(pz.drain||0),0);
   const bits=[];if(dot)bits.push("−"+dot+"♥/turn");if(drain)bits.push("+"+drain+" "+FRES[ps[0].owner]+" to "+(ps[0].owner===S.pf?"you":"them"));
-  const b=el("div","infbadge","🪱 Infested"+(ps.length>1?" ×"+ps.length:"")+(bits.length?" · "+bits.join(" · "):""));
+  const b=el("span","infbadge","🪱"+(ps.length>1?"×"+ps.length:"")+(dot?" −"+dot+"♥":""));
   b.title=ps.map(pz=>C[pz.id].n+" ("+(pz.owner===S.pf?"yours":"theirs")+")").join(", ")+". When this unit dies, "+(ps.length>1?"they burst":"it bursts")+" out as "+(mine===ps.length?"YOUR":mine?"new":"THEIR")+" unit"+(ps.length>1?"s":"")+" in this lane.";
   x.appendChild(b);
 }
@@ -3652,23 +3971,32 @@ function renderBoard(ct,interactive){
     if(interactive){
       d.addEventListener("dragover",e=>{if(DRAG.hi!=null&&canTarget(DRAG.hi,l)){e.preventDefault();d.classList.add("dragover");}});
       d.addEventListener("dragleave",()=>d.classList.remove("dragover"));
-      d.addEventListener("drop",e=>{e.preventDefault();const hi=DRAG.hi;dragClear();if(hi!=null&&canTarget(hi,l)){S.sel=null;act(()=>playCard(hi,li));}});
+      d.addEventListener("drop",e=>{e.preventDefault();const hi=DRAG.hi;dragClear();if(hi!=null&&canTarget(hi,l)){S.sel=null;tryPlay(hi,li);}});
     }
-    if(interactive&&S.sel!=null&&canTarget(S.sel,l)){d.classList.add("targetable");d.addEventListener("click",()=>act(()=>playCard(S.sel,li)));}
+    if(interactive&&S.sel!=null&&canTarget(S.sel,l)){d.classList.add("targetable");d.addEventListener("click",()=>tryPlay(S.sel,li));}
+    if(interactive&&S.tuAsk&&S.tuAsk.li===li){
+      const ask=el("div","tuask");ask.appendChild(el("b",null,"TEAM-UP — where does it go?"));
+      const mkb=(txt,front)=>{const b=el("button","btn "+(front?"primary":"ghost"),txt);b.type="button";
+        b.addEventListener("click",ev=>{ev.stopPropagation();const a=S.tuAsk;S.tuAsk=null;if(front==null)return render();S.tuFront=front;act(()=>playCard(a.hi,a.li));});return b;};
+      ask.appendChild(mkb("▲ In front",true));ask.appendChild(mkb("▼ Behind",false));ask.appendChild(mkb("Cancel",null));
+      ask.addEventListener("click",ev=>ev.stopPropagation());d.appendChild(ask);
+    }
     else if(interactive&&S.selHero&&canSuper(l,"p")){d.classList.add("targetable");d.addEventListener("click",()=>act(()=>useSuper("p",li)));}
     else if(interactive&&S.selMinion!=null&&canDeploy(l)){d.classList.add("targetable");d.addEventListener("click",()=>act(()=>deployMinion(li)));}
     const nm=el("div","lane-name",l.nm);
     if(l.mk>=4)nm.classList.add("held-"+S.pf); else if(l.mk<=2)nm.classList.add("held-"+S.af);
+    /* terrain and environments: the lane is tinted, and a small icon sits in its name bar */
+    const icons=el("span","lane-icons");let nIco=0;const setv=(k,v)=>{if(d.style.setProperty)d.style.setProperty(k,v);};
     if(l.terr){
-      const tb=el("span","terrbadge",l.terr.n+(l.terr.owner?" ("+FNAME[l.terr.owner]+")":""));
-      tb.style.background=l.terr.col||"var(--ink3)";tb.title=l.terr.d+(l.terr.mark?" Stays next round if its landmark survives.":"");
-      nm.appendChild(tb);d.style.boxShadow="inset 0 3px 0 "+(l.terr.col||"transparent");
+      const ti=el("span","lico",terrIcon(l.terr));ti.style.background=l.terr.col||"var(--ink3)";terrTip(ti,l.terr);icons.appendChild(ti);nIco++;
+      setv("--tcol",l.terr.col||"transparent");d.classList.add("tinted");
     }
     if(l.env){
-      const eb=el("span","terrbadge envbadge","✦ "+l.env.n+" ("+FNAME[l.env.owner]+")");
-      eb.style.background=l.env.col;eb.title=l.env.d+" Lasts until another environment replaces it.";
-      nm.appendChild(eb);d.style.backgroundImage="linear-gradient(to bottom,"+l.env.col+"22,transparent 40%)";
+      const ei=el("span","lico env",ENV_ICON[l.env.k]||"✦");ei.style.background=l.env.col;envTip(ei,l.env);icons.appendChild(ei);nIco++;
+      setv("--ecol",l.env.col);d.classList.add("enved");
+      if(l.env.owner===S.pf)d.classList.add("env-mine");else d.classList.add("env-theirs");
     }
+    if(nIco)nm.appendChild(icons);
     d.appendChild(nm);
     const top=el("div","lane-side top fs-"+S.af);
     l.a.forEach(u=>{
@@ -3706,7 +4034,7 @@ function renderBoard(ct,interactive){
       bindTip(x,u.id,false,()=>unitStats(u,l,"p"));
       x.appendChild(el("div","nm",u.n));infBadge(x,u);
       const st=el("div","st");const ea=atk(u,l,"p");
-      if(u.vet){const v=el("span","buff"," \u2605"+u.vet);x.appendChild(v);}
+      if(u.vet)st.appendChild(el("span","vet","★"+u.vet));
       st.appendChild(el("span","sa","⚔"+ea));
       if(ea>u.base){const s=el("span","buff","▲");st.appendChild(s);}
       st.appendChild(document.createTextNode(" "));st.appendChild(el("span","sh","♥"+u.h));
@@ -3750,9 +4078,11 @@ function renderStage(){
     st.appendChild(b);
   }
   if(S.phase==="pick")return renderPick(st);
-  if(S.over)return renderOver(st);
+  st.appendChild(el("div","rotatetip","Tip: turn your phone sideways for a bigger board."));
+  if(S.over){renderOver(st);const ps=st.querySelectorAll(":scope>.panel");if(ps.length)ps[ps.length-1].classList.add("phase");return;}
   renderTodo(st);
   ({stock:renderStock,market:renderMarket,combat:renderCombat,roundend:renderRoundEnd})[S.phase](st);
+  const ps=st.querySelectorAll(":scope>.panel");if(ps.length)ps[ps.length-1].classList.add("phase");
 }
 /* ============ SOUND ============
    Sound effects from the "uisfx" library — public domain (CC0 1.0), embedded so
@@ -3789,6 +4119,16 @@ function renderSoundPane(){
     SOUND_CUES.forEach(([k,l])=>{const b=el("button","fchip",l);b.type="button";b.addEventListener("click",()=>{const was=SFX.theme;SFX.theme=t;sfx(k,true);SFX.theme=was;});cues.appendChild(b);});
     box.appendChild(cues);n.appendChild(box);
   });
+  renderDevPane(n);
+}
+function renderDevPane(n){
+  const d=el("div","sndtheme");d.style.marginTop="14px";
+  d.appendChild(el("b",null,"Developer settings"));
+  const r=el("div","btnrow");r.appendChild(el("span","setname","Show the full game log"));
+  [["on","On"],["off","Off"]].forEach(([k,l])=>{const b=el("button","fchip"+((DEV.log?"on":"off")===k?" on":""),l);b.type="button";
+    b.addEventListener("click",()=>{DEV.log=k==="on";try{localStorage.setItem("gb-dev-log",DEV.log?"1":"0");}catch(e){}renderSoundPane();render();});r.appendChild(b);});
+  d.appendChild(r);d.appendChild(el("div","tiny muted","A line-by-line record of every action. Handy for testing and bug reports; the \"What just happened\" box shows the important part anyway."));
+  n.appendChild(d);
 }
 function paintSoundBtn(){const sb=$("soundBtn");if(sb){sb.textContent=SFX.on?"Sound on":"Sound off";sb.classList.toggle("on",SFX.on);}}
 /* ============ TUTORIAL (scripted) ============
@@ -3824,7 +4164,7 @@ const TUT_STEPS=[
   {t:"Cheap sun",x:"Play SUNFLARE (1 sun) anywhere. It refunds 1 sun — or 3 if you have a ROOT unit on the board. Your Roots (Seedpod, Gallnut) died, so it's just 1 this time. Cheap units in empty lanes still push the capture bar.",need:{play:["sunflare",-1]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===4&&!S.beat},
   {t:"End turn",x:"Press End turn.",need:{end:1},sel:".panel-head button.btn.primary",when:()=>S.phase==="combat"&&S.turn===4&&!S.beat},
   {t:"Last turn — your call",x:"Final turn of the round — you're free now. Main 2 is empty: a unit there pushes it. Play whatever you like (or nothing), then press End turn. A capture bar at 20%+ on your side means you HOLD that lane.",need:{free:1},when:()=>S.phase==="combat"&&S.turn===5&&!S.beat},
-  {t:"Round over!",x:"Whoever held more main lanes moved the front. Units clear between rounds, but your deck keeps what you bought — and cards that survived got permanently stronger (Veterancy ★). From here the match is yours to play freely. Open How to play (top right) any time. Good luck!",need:{next:1,last:1},when:()=>S.phase==="roundend"}
+  {t:"Round over!",x:"Whoever held more main lanes moved the front. Units clear between rounds, but your deck keeps what you bought — and cards that survived got permanently stronger (Veterancy ★). From next round, the depot's Workshop lets you COMBINE cards — graft three of one tribe into one big card. From here the match is yours to play freely. Open How to play (top right) any time. Good luck!",need:{next:1,last:1},when:()=>S.phase==="roundend"}
 ];
 function tutStep(){return TUT.on?TUT_STEPS[TUT.i]:null;}
 function tutNeed(){const st=tutStep();return st?st.need:null;}
@@ -3927,7 +4267,7 @@ function renderPick(st){
     const b=el("button","fchip"+(MAP_CHOICE===k?" on":""),MAPS[k].n);b.type="button";
     b.addEventListener("click",()=>{MAP_CHOICE=k;render();});mr.appendChild(b);
   });
-  mr.appendChild(el("span","tiny muted",MAP_CHOICE==="wide"?"Three flank lanes a side and five mains.":"One flank a side, three mains."));
+  mr.appendChild(el("span","tiny muted",MAP_CHOICE==="wide"?"Three flank lanes a side and five mains. Bigger hands: +2 opening cards, +1 draw and +2 sun every turn.":"One flank a side, three mains."));
   top.appendChild(mr);
   const er=el("div","btnrow");er.style.marginTop="8px";
   er.appendChild(el("span","eyebrow","Battlefield"));
@@ -4025,14 +4365,11 @@ function renderStock(st){
   mpEnsureDraft();
   const p=el("div","panel"),h=el("div","panel-head"),hl=el("div");
   hl.appendChild(el("h2","","Supply the "+FNAME[S.af]));
-  hl.appendChild(el("div","tiny muted",
-    "A shelf of "+POOL_SIZE+" "+FNAME[S.af].toUpperCase()+" cards. Each pack goes out with exactly "+
-    PACK_SIZE_REQ+" of them — "+DRAW_SIZE+" in all — and the rest are never offered. Prices are fixed at "+
-    packPrice()+" this round and rise as the war goes on, so the only lever you have is what goes in."));
+  hl.appendChild(el("div","tiny muted","Build two packs of "+PACK_SIZE_REQ+" from their shelf — they buy one. Prices are fixed ("+packPrice()+" this round), so what goes in is your only lever."));
   h.appendChild(hl);p.appendChild(h);
 
   /* ---- the two packs ---- */
-  const pk=el("div","packs");
+  const pk=el("div","packs stack");
   S.p.packs.forEach((pack,pi)=>{
     const box=el("div","pack"+(pack.cards.length>=MIN_PACK?" solid":"")+(S.hold?" dropzone":""));
     box.addEventListener("dragover",e=>{e.preventDefault();box.classList.add("over");});
@@ -4065,10 +4402,10 @@ function renderStock(st){
     if(pack.cards.length){
       const syn=synergyRead(pack.cards), stt=packStats(pack.cards);
       const rd=el("div","read");
-      rd.appendChild(el("div",null,curveRead(pack.cards)));
+      const crv=el("div",null,curveRead(pack.cards));rd.appendChild(crv);
       const ar=appraisalRead(pack.cards,"a");
-      rd.appendChild(el("div","tiny muted","↑ they see this for free. Appraising tells them it's worth "+ar.grade.toUpperCase()+" to their deck"+
-        (syn.tribe?", leaning "+syn.tribe:"")+(ar.why.length?" — "+ar.why.join("; "):"")+"."));
+      crv.appendChild(el("span","apv"," · to them: "+ar.grade.toUpperCase()));
+      rd.title="If they appraise it: worth "+ar.grade.toUpperCase()+" to them"+(syn.tribe?", leaning "+syn.tribe:"")+(ar.why.length?"\n• "+ar.why.join("\n• "):"");rd.style.cursor="help";
       box.appendChild(rd);
     } else box.appendChild(el("div","tiny muted","Drag cards here, or click a shelf card then this pack."));
     pk.appendChild(box);
@@ -4086,7 +4423,7 @@ function renderStock(st){
   const FILTERS=[["all","All",()=>true],["unit","Units",id=>!C[id].trick&&!C[id].junk],["trick","Tricks",id=>C[id].trick],
     ["junk","Dead weight",id=>C[id].junk],["c1","Cost 1–2",id=>!C[id].junk&&(C[id].c||0)<=2],
     ["c3","Cost 3–4",id=>(C[id].c||0)>=3&&(C[id].c||0)<=4],["c5","Cost 5+",id=>(C[id].c||0)>=5]];
-  TAG_ORDER.forEach(t=>{if(S.p.draft.some(id=>C[id].tag===t))FILTERS.push(["tag:"+t,t,id=>C[id].tag===t]);});
+  TAG_ORDER.forEach(t=>{if(S.p.draft.some(id=>isT(C[id],t)))FILTERS.push(["tag:"+t,t,id=>isT(C[id],t)]);});
   const fb=el("div","fbar");
   FILTERS.forEach(([k,lab,fn])=>{
     const n=S.p.draft.filter(fn).length; if(!n&&k!=="all")return;
@@ -4115,36 +4452,31 @@ function renderStock(st){
       try{e.dataTransfer.setData("text/plain",String(i));}catch(x){}});
     bindTip(c,id,true);cs.appendChild(c);
   });
-  dw.appendChild(cs);dw.appendChild(el("div","tiny muted shelfnote","Hover a card to read what it does."));p.appendChild(dw);
+  dw.appendChild(cs);dw.appendChild(el("div","tiny muted shelfnote","Hover a card to read what it does. Drag or click cards into a pack."));
 
-  /* ---- the upgrade you list for them ---- */
-  p.appendChild(el("hr","sep"));
-  const uw=el("div");
-  uw.appendChild(el("div","eyebrow","List one upgrade in their depot — required"));
-  uw.appendChild(el("div","tiny muted","You must offer them one. You choose WHICH and set the PRICE (half its value to double). If they buy it, the meta comes to you — so pick the one that helps them least, and price it where the edge costs them the most."));
-  const ur=el("div","ups");ur.style.marginTop="8px";
+  /* ---- the upgrade you list for them (required) ---- */
+  const uw=el("div","pack solid");
+  uw.appendChild(el("div","minihead","List one upgrade for them — required"));
+  const ur=el("div","offerrow");
   UPGRADES.filter(u=>!upLvl("a",u.k)).forEach(u=>{
     const sel=S.p.offer&&S.p.offer.k===u.k;
-    const b=el("button","upcard"+(sel?" on":""));b.type="button";
-    const top=el("div","row");
-    top.appendChild(el("span","nm",u.n));
-    top.appendChild(el("span","cost",String(sel?S.p.offer.price:u.base)));
-    b.appendChild(top);b.appendChild(el("div","txt",u.d));
-    b.addEventListener("click",e=>{if(e.target.closest(".stepper"))return;S.p.offer=sel?null:{k:u.k,price:u.base};render();});
-    if(sel){
-      const lo=Math.max(3,Math.floor(u.base/2)), hi=u.base*2;
-      const stp=el("div","stepper");
-      const dn=el("button",null,"−");dn.type="button";dn.disabled=S.p.offer.price<=lo;
-      dn.addEventListener("click",e=>{e.stopPropagation();S.p.offer.price=Math.max(lo,S.p.offer.price-1);render();});
-      const up=el("button",null,"+");up.type="button";up.disabled=S.p.offer.price>=hi;
-      up.addEventListener("click",e=>{e.stopPropagation();S.p.offer.price=Math.min(hi,S.p.offer.price+1);render();});
-      stp.appendChild(dn);stp.appendChild(el("span","mono",S.p.offer.price+" meta"));stp.appendChild(up);
-      stp.appendChild(el("span","tiny muted",lo+"–"+hi));
-      b.appendChild(stp);
-    }
-    ur.appendChild(b);
+    const b=el("button","fchip"+(sel?" on":""),u.n+" · "+(sel?S.p.offer.price:u.base));b.type="button";b.title=u.d;
+    b.addEventListener("click",()=>{S.p.offer=sel?null:{k:u.k,price:u.base};render();});ur.appendChild(b);
   });
-  uw.appendChild(ur);p.appendChild(uw);
+  uw.appendChild(ur);
+  if(S.p.offer){
+    const u=UPGRADES.find(x=>x.k===S.p.offer.k);
+    const lo=Math.max(3,Math.floor(u.base/2)), hi=u.base*2;
+    const stp=el("div","btnrow");
+    uw.appendChild(el("div","tiny",u.d));
+    const dn=el("button","btn ghost","−");dn.type="button";dn.disabled=S.p.offer.price<=lo;
+    dn.addEventListener("click",()=>{S.p.offer.price=Math.max(lo,S.p.offer.price-1);render();});
+    const up=el("button","btn ghost","+");up.type="button";up.disabled=S.p.offer.price>=hi;
+    up.addEventListener("click",()=>{S.p.offer.price=Math.min(hi,S.p.offer.price+1);render();});
+    stp.appendChild(dn);stp.appendChild(el("b","mono",S.p.offer.price+" meta"));stp.appendChild(up);
+    stp.appendChild(el("span","tiny muted","price "+lo+"–"+hi+" · you get the meta if they buy"));
+    uw.appendChild(stp);
+  } else uw.appendChild(el("div","tiny muted","Pick the one that helps them least. You set the price; if they buy it, the meta is yours."));
 
   const row=el("div","btnrow");row.style.marginTop="14px";
   const goB=el("button","btn primary",mpOn()?(S.p.submitted?"Waiting for "+FNAME[S.af]+"…":"Lock in your packs"):"Open the market");
@@ -4153,13 +4485,22 @@ function renderStock(st){
   goB.addEventListener("click",()=>mpOn()?mpSubmitStock():startMarket());
   row.appendChild(goB);
   if(!packsLegal())row.appendChild(el("span","tiny muted",
-    "Each pack needs exactly "+PACK_SIZE_REQ+" cards and at least one unit — you can't sell a pack of pure tricks."));
-  else if(!stockReady())row.appendChild(el("span","tiny muted","Now list one upgrade for them above — it's required."));
+    "Each pack needs "+PACK_SIZE_REQ+" cards, at least one a unit."));
+  else if(!stockReady())row.appendChild(el("span","tiny muted","Now list one upgrade for them (left) — it's required."));
   else if(!mpOn())row.appendChild(el("span","tiny muted",(()=>{
     const want=needWord(S.a.deck);
     return FNAME[S.af]+" holds "+S.a.meta+" meta"+(want?", and is short on "+want:"")+".";
   })()));
-  p.appendChild(row);st.appendChild(p);
+  const cols=el("div","phasecols");
+  const cL=el("div","pcol scroll"),cR=el("div","pcol shelfcol");
+  uw.classList.add("dzone","z-up");cols.classList.add("stockcols");
+  cL.appendChild(pk);
+  cR.appendChild(dw);dw.style.display="flex";dw.style.flexDirection="column";dw.style.minHeight="0";dw.style.flex="1";
+  /* the upgrade listing goes wherever there is room: beside empty packs, or under a thinned-out shelf */
+  cL.appendChild(uw);
+  row.style.marginTop="0";row.style.flexDirection="row-reverse";row.style.maxWidth="560px";row.style.justifyContent="flex-start";h.appendChild(row);
+  p.replaceChildren(h,cols);cols.appendChild(cL);cols.appendChild(cR);
+  st.appendChild(p);
 }
 
 /* Fill a pack straight off the shelf without dragging ten cards one at a time. */
@@ -4172,7 +4513,7 @@ function quickPlace(pi,mode){
   if(mode==="trick")pick=pick.filter(o=>C[o.id].trick);
   else if(mode==="unit")pick=pick.filter(o=>!C[o.id].trick&&!C[o.id].junk);
   else if(mode==="junk")pick=pick.filter(o=>C[o.id].junk);
-  else if(mode.indexOf("tag:")===0)pick=pick.filter(o=>C[o.id].tag===mode.slice(4));
+  else if(mode.indexOf("tag:")===0)pick=pick.filter(o=>isT(C[o.id],mode.slice(4)));
   if(mode==="cheap")pick.sort((x,y)=>(C[x.id].c||0)-(C[y.id].c||0));
   else if(mode==="dear")pick.sort((x,y)=>(C[y.id].c||0)-(C[x.id].c||0));
   const take=pick.slice(0,room).map(o=>o.id);
@@ -4190,10 +4531,10 @@ function renderMarket(st){
   const mh=el("div","handhead");mh.appendChild(el("h2","",FNAME[S.af]+"'s depot"));
   const mp=el("span","respill meta");mp.appendChild(document.createTextNode("◆"));mp.appendChild(el("b",null,String(S.p.meta)));mp.appendChild(document.createTextNode("meta to spend"));mh.appendChild(mp);
   hl.appendChild(mh);
-  hl.appendChild(el("div","tiny muted",FNAME[S.pf]+" cards, chosen for you by the enemy. Buying is the only way to get cards — your deck starts empty. What you pay goes into their pocket."));
+  hl.appendChild(el("div","tiny muted","Buy ONE pack of "+FNAME[S.pf]+" cards they chose for you. What you pay goes to them."));
   h.appendChild(hl);p.appendChild(h);
 
-  const pk=el("div","packs");
+  const pk=el("div","packs stack");
   S.a.packs.forEach((pack,pi)=>{
     const box=el("div","pack solid"),ph=el("div","pack-head");
     ph.appendChild(el("h3","","Pack "+(pi===0?"A":"B")));
@@ -4203,9 +4544,16 @@ function renderMarket(st){
        dead weight); a paid appraisal reads its SYNERGY and its main tribe. */
     const stt=packStats(pack.cards), syn=synergyRead(pack.cards);
     const sr=el("div","slotrow");
-    pack.cards.forEach(()=>sr.appendChild(el("div","hidden-card","face down")));
+    sr.classList.add("fdrow");pack.cards.forEach(()=>sr.appendChild(el("div","hidden-card","?")));
     box.appendChild(sr);
     box.appendChild(el("div","read",curveRead(pack.cards)));
+    if(pack.sticker){const st=stickerSets(S.pf).find(x=>x.k===pack.sticker);
+      if(st){const have=((S.p.book||{})[st.k]||0);const sb=el("div","stickbonus");
+        sb.appendChild(el("span","stk","★ Bonus sticker"));
+        sb.appendChild(el("b",null,st.n));
+        sb.appendChild(el("span",null,have+"/"+st.need+(have+1>=st.need?" → completes it!":(!st.perk&&have+1===st.need-1?" → rookie joins":""))));
+        stickerTip(sb,st,have,true);
+        box.appendChild(sb);}}
     if(S.a.appraised[pi]){
       const ar=appraisalRead(pack.cards);
       const r=el("div","read");
@@ -4293,15 +4641,25 @@ function renderMarket(st){
   /* graft — both factions */
   const gw=el("div");gw.style.marginTop="12px";
   gw.appendChild(el("div","eyebrow","Graft · "+GRAFT_COST+" meta · three cards of one tribe become one big body"));
+  const how=el("div","howto");
+  how.appendChild(el("div",null,"How it works: pick a tribe you have 3+ units of. Your 3 CHEAPEST units of that tribe leave your deck, and one big card of that tribe takes their place. Your deck gets smaller and stronger — you draw your best cards more often."));
+  gw.appendChild(how);
   const grow=el("div","btnrow");grow.style.marginTop="6px";
   const gopts=canGraft();
-  if(gopts.length)gopts.forEach(t=>{const r=C["graft_"+t];const b=el("button","btn ghost","Graft 3 "+t+" → "+r.n+" "+r.a+"/"+r.h+" · "+GRAFT_COST);b.type="button";
-    b.disabled=S.p.meta<GRAFT_COST||(mpOn()&&S.p.submitted);b.addEventListener("click",()=>doGraft(t));bindTip(b,"graft_"+t);grow.appendChild(b);});
+  if(gopts.length)gopts.forEach(t=>{const r=C["graft_"+t];
+    const ins=S.p.deck.map((id,i)=>({id,i})).filter(o=>isT(C[o.id],t)&&!C[o.id].trick&&!o.id.startsWith("graft_")).sort((a,b)=>(C[a.id].c||0)-(C[b.id].c||0)).slice(0,3);
+    const rec=el("div","recipe");
+    ins.forEach((o,k)=>{if(k)rec.appendChild(el("span","rop","+"));const c=el("span","rchip",C[o.id].n+" "+C[o.id].a+"/"+C[o.id].h);bindTip(c,o.id,true);rec.appendChild(c);});
+    rec.appendChild(el("span","rop","→"));
+    const out=el("span","rchip rout",r.n+" "+r.a+"/"+r.h);bindTip(out,"graft_"+t,true);rec.appendChild(out);
+    const b=el("button","btn primary","Graft · "+GRAFT_COST+" meta");b.type="button";
+    b.disabled=S.p.meta<GRAFT_COST||(mpOn()&&S.p.submitted);b.addEventListener("click",()=>doGraft(t));rec.appendChild(b);
+    grow.appendChild(rec);});
   else grow.appendChild(el("span","tiny muted","You need three units sharing a tribe."));
   gw.appendChild(grow);fw.appendChild(gw);
   const tw=el("div");tw.style.marginTop="14px";
   const sur=tonicSurcharge("p");
-  tw.appendChild(el("div","eyebrow","Tonics · pick ONE of three this round"+(sur?" · +"+sur+" for the "+(S.p.tonicsBought||0)+" you already bought":"")));
+  tw.appendChild(el("div","eyebrow","🧴 Tonics · one per round · changes ONE card"+(sur?" · +"+sur+" (bought "+(S.p.tonicsBought||0)+")":"")));
   const trow=el("div","ups");trow.style.marginTop="8px";
   (S.p.tonics||[]).forEach(off=>{
     const t=tonicDef(off.k);
@@ -4316,7 +4674,7 @@ function renderMarket(st){
     trow.appendChild(b);
   });
   tw.appendChild(trow);
-  tw.appendChild(el("div","tiny muted","Click a tonic to see it and buy it — then pick the ONE card it goes on. A fresh three every round; one per round."));
+  tw.title="Click a tonic to see it and buy it — then pick the ONE card it goes on. A fresh three every round; one per round.";
   if(CFG.tonics)fw.appendChild(tw);
   /* sticker book */
   const cw=el("div");cw.style.marginTop="14px";
@@ -4330,6 +4688,7 @@ function renderMarket(st){
   crow.appendChild(el("span","tiny muted","Perk pieces work at once, a level each. Companions join as rookies one piece short of complete, and deploy free once a round. A piece for a full set pays 1 meta back."));
   cw.appendChild(crow);
   if(S.p.lastCrate)cw.appendChild(el("div","read","Last crate: "+S.p.lastCrate.join(" · ")));
+  if(S.p.lastCrate)cw.insertBefore(cw.lastChild,crow.nextSibling);
   const bk=el("div","ups");bk.style.marginTop="8px";
   stickerSets(S.pf).forEach(st=>{
     const have=(S.p.book||{})[st.k]||0, done=have>=st.need;
@@ -4343,7 +4702,7 @@ function renderMarket(st){
     if(st.perk){const ps=PERKSETS.find(x=>x.k===st.k);txt=have?("Level "+Math.min(have,ps.max)+": "+ps.d(Math.min(have,ps.max))):("Each piece is a level. At 1: "+ps.d(1));}
     else txt=(done?"Companion":ready?"Rookie companion (−1/−1)":"Companion at "+(st.need-1)+" pieces")+" · "+C[st.k].a+"/"+C[st.k].h+". "+C[st.k].t.replace(/^Minion\.\s*/,"");
     b.appendChild(el("div","txt",txt));
-    if(!st.perk)bindTip(b,st.k,true);
+    stickerTip(b,st,have);
     bk.appendChild(b);
   });
   cw.appendChild(bk);
@@ -4353,7 +4712,7 @@ function renderMarket(st){
 
   const uw=el("div");
   const disc=flankDiscount();
-  uw.appendChild(el("div","eyebrow","The upgrade they listed for you"+(disc?" · flank control saves "+disc:"")));
+  uw.appendChild(el("div","eyebrow","⬆ Upgrade they listed for you"+(disc?" · flanks save "+disc:"")));
   const off=S.a.offer;
   if(!off){uw.appendChild(el("div","tiny muted","They listed nothing this round."));}
   else{
@@ -4363,14 +4722,14 @@ function renderMarket(st){
     ph.appendChild(el("h3","",u.n));
     ph.appendChild(el("span","mono tiny",cost+" meta"));
     box.appendChild(ph);
-    box.appendChild(el("div","read",u.d+" Permanent, and it can only ever be bought once."));
+    box.appendChild(el("div","tiny",u.d+" Permanent, one-time."));
     const r=el("div","btnrow");
     if(off.taken||upLvl("p",off.k))r.appendChild(el("span","tiny muted","Acquired."));
     else{
       const b=el("button","btn","Buy · "+cost);b.type="button";
       b.disabled=S.p.meta<cost;b.addEventListener("click",buyUp);
       r.appendChild(b);
-      r.appendChild(el("span","tiny muted","They chose this one for you. Ask why."));
+      r.appendChild(el("span","tiny muted","They picked it for you. Ask why."));
     }
     box.appendChild(r);uw.appendChild(box);
   }
@@ -4394,7 +4753,42 @@ function renderMarket(st){
   if(mpOn())go.disabled=S.p.submitted;
   go.addEventListener("click",()=>mpOn()?mpSubmitMarket():startCombat());row.appendChild(go);
 
-  p.appendChild(row);st.appendChild(p);
+  /* regroup: packs on the left; extras as a menu on the right */
+  const wn2=p.querySelector(".penalty");
+  if(wn2){wn2.className="penalty slim";const sp=wn2.querySelector("span");if(sp){wn2.title=sp.textContent.trim();sp.remove();}}
+  tw.style.marginTop="0";
+  const trow2=tw.querySelector(".ups");if(trow2)trow2.className="tonicrow";
+  uw.querySelectorAll(".pack").forEach(b=>{b.style.marginTop="4px";});
+  if(cw.parentNode&&cw.remove)cw.remove();
+  UI.nodes={workshop:fw,stickers:cw};
+  const cL=el("div","pcol scroll"),cR=el("div","pcol scroll");
+  cL.appendChild(pk);
+  row.style.marginTop="0";
+  const hr2=el("div","headact");hr2.appendChild(row);if(wn2)hr2.appendChild(wn2);h.appendChild(hr2);
+  if(CFG.tonics){tw.classList.add("dzone","z-tonic");cR.appendChild(tw);}
+  uw.classList.add("dzone","z-up");cR.appendChild(uw);
+  const mb=el("div","menubtns");
+  const mbtn=(title,sub,fn,dis,cls)=>{const b=el("button","menubtn "+(cls||""));b.type="button";b.appendChild(el("b",null,title));b.appendChild(el("span",null,sub));b.disabled=!!dis;b.addEventListener("click",fn);mb.appendChild(b);return b;};
+  const nWork=(S.pf==="grove"?canFuse().length:canExperiment(S.p.deck).length)+canGraft().length;
+  const wkBtn=mbtn((S.pf==="grove"?"🧬 Workshop":"🧪 The vats"),nWork?"★ "+nWork+" ready — combine cards":"combine cards into bigger ones",()=>{try{localStorage.setItem("gb-hint-work","1");}catch(e){}openModal({kind:"workshop"});},false,"m-work");
+  if(nWork){wkBtn.classList.add("ready");
+    let seen=false;try{seen=!!localStorage.getItem("gb-hint-work");}catch(e){}
+    if(!seen&&!(TUT.on&&S.tut)){const tip=el("div","worktip");tip.appendChild(el("b",null,"New: you can combine cards!"));
+      tip.appendChild(el("span",null," You have enough cards of one kind to "+(canGraft().length?"GRAFT three into one big card":"combine them")+". Open the "+(S.pf==="grove"?"Workshop":"vats")+" to see the recipe."));mb.appendChild(tip);}}
+  let stkBtn=null;
+  if(CFG.stickers){const cb2=mbtn("🎁 Buy a crate",bookFull("p")?"book complete":CRATE_COST+" meta · 3 random pieces",()=>{const g=openCrate("p");if(g)openModal({kind:"stickers"});else render();},S.p.meta<CRATE_COST||bookFull("p")||(mpOn()&&S.p.submitted),"m-crate");}
+  if(CFG.stickers)stkBtn=mbtn("⭐ Sticker book","crate "+CRATE_COST+" meta · "+(bookFull("p")?"complete":"3 pieces"),()=>openModal({kind:"stickers"}),false,"m-stick");
+  if(CFG.stickers){
+    const sets=stickerSets(S.pf),bk=S.p.book||{};
+    const done=sets.filter(x=>(bk[x.k]||0)>=x.need).length,started=sets.filter(x=>bk[x.k]).length;
+    if(stkBtn&&stkBtn.querySelector){const sp=stkBtn.querySelector("span");if(sp)sp.textContent=done+" done · "+started+" started · crate "+CRATE_COST;}
+  }
+  mbtn("✂ Cut cards",S.p.freeThin?"1 free cut":"next cut "+thinCost()+" meta",()=>openModal({kind:"thin"}),mpOn()&&S.p.submitted,"m-cut");
+  const mw=el("div");mb.style.marginTop="0";mw.appendChild(mb);
+  cR.appendChild(mw);
+  const cols=el("div","phasecols");cols.appendChild(cL);cols.appendChild(cR);
+  p.replaceChildren(h,cols);
+  st.appendChild(p);
 }
 
 function renderCombat(st){
@@ -4456,10 +4850,12 @@ function renderCombat(st){
   if(waiting)S.sel=null;
   if(S.feed&&S.feed.length){
     const fd=el("div","feed");
-    const host=isBattle()&&$("railFeed")&&!$("railL").classList.contains("collapsed")?$("railFeed"):p;
+    const host=isBattle()&&$("railFeed")&&!$("railL").classList.contains("collapsed")&&!document.body.classList.contains("narrowui")?$("railFeed"):p;
     fd.appendChild(el("div","fh","What just happened"));
     const fresh=ANIM.feedPlayed!==S.feed; ANIM.feedPlayed=S.feed;
-    S.feed.forEach((e,i)=>{const ln=el("p",(e.hl?"hl ":"")+(fresh?"":"static"),fmtLog(e));if(fresh)ln.style.animationDelay=(i*110)+"ms";fd.appendChild(ln);});
+    const lines=S.feed.slice(host===p?-3:-9);
+    lines.forEach((e,i)=>{const ln=el("p",(e.hl?"hl ":"")+(fresh?"":"static"),fmtLog(e));if(fresh)ln.style.animationDelay=(i*300)+"ms";fd.appendChild(ln);});
+    if(S.feed.length>lines.length)fd.title="Earlier: "+S.feed.slice(0,S.feed.length-lines.length).map(fmtLog).join(" / ");
     host.appendChild(fd);
   }
   renderBoard(p,!S.beat&&!waiting&&!ANIM.stage);
@@ -4473,7 +4869,7 @@ function renderCombat(st){
   hw.appendChild(hhd);
   if(S.p.incomeWhy&&S.p.incomeWhy.length)hw.appendChild(el("div","tiny muted","This turn's "+FRES[S.pf]+": "+S.p.incomeWhy.map(([k,v])=>(v>0?"+":"")+v+" "+k).join(" · ")+
     ""));
-  const cs=el("div","cards");cs.style.marginTop="8px";
+  const cs=el("div","cards combat-hand");cs.style.marginTop="8px";
   S.p.hand.forEach((id,i)=>{
     const d=C[id];
     const wrongPhase=d.trick?!trickPhase:(sub==="tricks");
@@ -4546,17 +4942,32 @@ function renderRoundEnd(st){
   p.appendChild(row);st.appendChild(p);
 }
 function renderOver(st){
-  const p=el("div","panel");
-  p.appendChild(el("h2","",(S.over==="p"?FNAME[S.pf]:FNAME[S.af])+" takes Neighborville"));
-  const b=el("div","banner "+(S.over==="p"?"gr":"bl"));
-  b.textContent=(S.over==="p"?"You pushed the front off their end in ":"You were pushed out of Neighborville in ")+S.round+" rounds.";
-  b.style.marginBlock="12px";p.appendChild(b);
-  const row=el("div","btnrow");
-  const go=el("button","btn","New match as "+FNAME[S.pf]);go.type="button";
-  go.addEventListener("click",()=>{const f=S.pf;S=freshState(f,S.map,S.env,S.cfg);startStock();});
-  const sw=el("button","btn ghost","Switch to "+FNAME[S.af]);sw.type="button";
-  sw.addEventListener("click",()=>{const f=S.af;S=freshState(f,S.map,S.env,S.cfg);startStock();});
-  row.appendChild(go);row.appendChild(sw);p.appendChild(row);st.appendChild(p);
+  const win=S.over==="p";
+  const p=el("div","panel overpanel "+(win?"won":"lost"));
+  if(win&&!REDUCED){const cf=el("div","confetti");for(let i=0;i<46;i++){const c=el("i");c.style.left=(Math.random()*100)+"%";c.style.animationDelay=(Math.random()*2.5)+"s";c.style.animationDuration=(2.6+Math.random()*2)+"s";
+    c.style.background=["#F2C14E","#2E7D4F","#DC8A57","#6A4FB0","#4A86B8"][i%5];c.style.transform="rotate("+(Math.random()*360)+"deg)";cf.appendChild(c);}p.appendChild(cf);}
+  const inner=el("div","overin");
+  inner.appendChild(el("div","overicon",win?"🏆":"🥀"));
+  inner.appendChild(el("h1","overtitle",win?"Victory!":"Defeat"));
+  inner.appendChild(el("p","oversub",win?("You pushed the front off their end. "+FNAME[S.pf]+" takes Neighborville."):(FNAME[S.af]+" drove you out of Neighborville.")));
+  const vets=Object.keys(S.p.vet||{}).filter(k=>S.p.vet[k]>0).length;
+  const sets=CFG.stickers?stickerSets(S.pf).filter(x=>((S.p.book||{})[x.k]||0)>=x.need).length:0;
+  const stats=[["Rounds",S.round],["Your deck",S.p.deck.length+" cards"],["Veteran cards",vets],["Cards cut",S.p.cutsTotal||0],["Sticker sets done",sets],["Meta left",S.p.meta]];
+  const g=el("div","overstats");stats.forEach(([k,v])=>{const c=el("div");c.appendChild(el("b",null,String(v)));c.appendChild(el("span",null,k));g.appendChild(c);});
+  inner.appendChild(g);
+  const row=el("div","btnrow");row.style.justifyContent="center";
+  if(!mpOn()){
+    const go=el("button","btn primary","Play again as "+FNAME[S.pf]);go.type="button";
+    go.addEventListener("click",()=>{const f=S.pf;S=freshState(f,S.map,S.env,S.cfg);startStock();});
+    const sw=el("button","btn ghost","Switch to "+FNAME[S.af]);sw.type="button";
+    sw.addEventListener("click",()=>{const f=S.af;S=freshState(f,S.map,S.env,S.cfg);startStock();});
+    row.appendChild(go);row.appendChild(sw);
+  }
+  const mm=el("button","btn ghost","Main menu");mm.type="button";
+  mm.addEventListener("click",()=>{if(mpOn()){try{location.href=location.pathname;}catch(e){}return;}S=freshState("grove");S.phase="pick";render();});
+  row.appendChild(mm);inner.appendChild(row);
+  p.appendChild(inner);st.appendChild(p);
+  if(!ANIM.overPlayed){ANIM.overPlayed=1;setTimeout(()=>sfx(win?"win":"lose",true),300);}
 }
 function renderDeck(){
   const d=$("decklist");d.innerHTML="";
@@ -4638,6 +5049,9 @@ const KEYWORDS=[
   {g:"Shared terms",b:"",items:[
     ["Aura / Scaling","Buffs its tribe in the lane / grows per tribe member you control. Both have 0 attack alone."],
     ["Tribeless","No tribe: nothing buffs it and it needs nothing."],
+    ["Multi-tribe","Belongs to two tribes (like Bloomspike: Thorn · Flower) and counts as both for auras, scaling, grafting and synergy."],
+    ["Team-up","Can step IN FRONT of an ally when played (you choose front or behind), and never counts toward the lane cap."],
+    ["Survey","Each turn it survives, its lane's capture moves a little your way — even while contested."],
     ["Cross-tribe","Wants a different tribe beside it."],
     ["Window","Playable only on early turns, or only from turn 4."],
     ["Token","A summoned Sprout. Counts half when capturing."],
@@ -4649,9 +5063,11 @@ const KEYWORDS=[
     ["PERMANENTLY","Always means the card in your deck. Every other buff lasts until the round ends."]]},
   {g:"Lanes & the front",b:"",items:[
     ["Capture %","Units alone in a lane push its bar by their total attack × total health each turn (two 2/2s = 4×4 = 16%). Flanks move 1.6× faster."],
-    ["Held (20%)","Counts toward winning the round, and pays resource."],
+    ["Held (20%)","Counts toward winning the round."],
     ["Flank sector","Hold a flank (or 2 of a wide sector's 3) at the end of a round: +3 meta each, and if main lanes are level, whoever holds more sectors wins the round."],
-    ["Captured (60%)","Leaves a garrison for next round; a captured flank rakes the main lane beside it."],
+    ["Captured (60%)","Leaves a garrison for next round; a captured flank's sneak attack hits at full strength."],
+    ["Sneak attack","Hold a flank (20%+) and your units there hit the enemy's REAR unit in the main lane beside it each turn it is contested — half their attack, or all of it once the flank is captured."],
+    ["Cut off","If the enemy holds the main lane next to your flank, your units on that flank lose 1 health every turn."],
     ["Backs to the wall","+1 attack in a lane the enemy holds, +2 once it's captured."],
     ["Terrain","Flanks roll new terrain every round. Thicket: −1 damage taken. Bramble Wall: −2 damage taken. Open Ground: +1 attack. Marsh: −1 attack. Ruins: units played there get +2 health. Terrain affects BOTH sides."],
     ["Environment","A trick that turns a lane into a special place that only helps its caster — double strike, strikethrough, conjuring, sun on arrival, transformation, copying. One per lane; lasts until another replaces it, even across rounds."],
@@ -4915,45 +5331,69 @@ function render(){
   if(ANIM.lock){ANIM.pending=true;return;}
   renderNow();
 }
-/* Battle layout: on a wide screen the fight gets the middle of the page and
-   everything else moves into side menus you can fold away. */
+/* Fit layout: the page is exactly the window. A ~1280×760 design is zoomed to fill it
+   (up on big screens, down on small ones, never below a legible floor), the fight and the
+   shop get the middle, and the front, the log and your deck live in side menus. */
+/* Developer options — off by default, tucked into the Sound & settings tab. */
+const DEV={log:(()=>{try{return localStorage.getItem("gb-dev-log")==="1";}catch(e){return false;}})()};
 function railPref(k,def){try{const v=localStorage.getItem("gb-rail-"+k);return v==null?def:v==="1";}catch(e){return def;}}
 function setRailPref(k,v){try{localStorage.setItem("gb-rail-"+k,v?"1":"0");}catch(e){}}
-function isBattle(){try{return (S.phase==="combat"||S.phase==="roundend")&&!S.over&&window.innerWidth>=1100;}catch(e){return false;}}
+const FIT={z:1,key:null,W:0};
+function isBattle(){return FIT.on&&S&&S.phase!=="pick";}
 let layoutWired=false;
+function fitZoom(){
+  const W=window.innerWidth,H=window.innerHeight;
+  let z=W<760?W/470:Math.min(W/1280,H/760);
+  return Math.max(0.82,Math.min(1.7,z));
+}
+function setZoom(z){
+  const wrap=document.querySelector(".wrap"),W=window.innerWidth,H=window.innerHeight;
+  FIT.z=z;wrap.style.zoom=z;wrap.style.width=(W/z)+"px";wrap.style.height=(H/z)+"px";
+  FIT.W=W/z;document.body.classList.toggle("narrowui",FIT.W<1080);
+}
+function fitOverflow(){
+  const st=$("stage");if(!st)return false;
+  const ph=st.querySelector(":scope>.panel.phase");
+  if(ph&&ph.scrollHeight>ph.clientHeight+2)return true;
+  if(ph&&[...ph.querySelectorAll(".pcol.scroll")].some(c=>c.scrollHeight>c.clientHeight+2))return true;
+  return st.scrollHeight>st.clientHeight+2&&!document.body.classList.contains("pick");
+}
+function fitNow(){
+  if(!FIT.on)return;
+  const key=window.innerWidth+"x"+window.innerHeight+"/"+S.phase+"/"+(S.over?1:0);
+  if(key!==FIT.key){FIT.key=key;setZoom(fitZoom());}
+  /* shrink a little if this screen still overflows — but never below the floor */
+  for(let k=0;k<8&&fitOverflow()&&FIT.z>0.83;k++)setZoom(Math.max(0.82,FIT.z-0.04));
+}
 function applyLayout(){
   if(typeof document.querySelector!=="function")return;
-  const battle=isBattle(),body=document.body,wrap=document.querySelector(".wrap");
+  const body=document.body,wrap=document.querySelector(".wrap");
   const L=$("railL"),Rr=$("railR"),stage=$("stage"),front=document.querySelector(".front"),logP=$("logPanel"),deckP=$("deckPanel");
   if(!L||!Rr||!wrap||!stage)return;
-  if(!layoutWired){layoutWired=true;window.addEventListener("resize",()=>{const b=isBattle();if(b!==body.classList.contains("battle"))render();});}
-  body.classList.toggle("battle",battle);
-  if(battle){
-    const openL=railPref("L",true),openR=railPref("R",window.innerWidth>=1600);
-    const build=(rail,side,open,label,kids)=>{
-      rail.classList.toggle("collapsed",!open);
-      let tog=rail.querySelector(".railtog"),body2=rail.querySelector(".railbody");
-      if(!tog){tog=document.createElement("button");tog.type="button";tog.className="railtog";rail.appendChild(tog);
-        body2=document.createElement("div");body2.className="railbody";rail.appendChild(body2);
-        tog.addEventListener("click",()=>{const now=rail.classList.contains("collapsed");setRailPref(side,now);render();});}
-      tog.textContent=open?(side==="L"?"◀ Hide ":"Hide ▶ ")+label:(side==="L"?"▶ ":"◀ ")+label;
-      kids.forEach(k=>{if(k&&k.parentNode!==body2)body2.appendChild(k);});
-    };
-    let feed=$("railFeed");if(!feed){feed=document.createElement("div");feed.id="railFeed";}
-    feed.innerHTML="";
-    build(L,"L",openL,"Front & log",[front,feed,logP]);
-    build(Rr,"R",openR,"Your deck",[deckP]);
-    /* keep the order inside the left rail: front, what just happened, log */
-    const lb=L.querySelector(".railbody");[front,feed,logP].forEach(k=>lb.appendChild(k));
-  } else {
-    wrap.insertBefore(front,stage);
-    if(logP.parentNode!==wrap||logP.previousElementSibling!==stage)wrap.insertBefore(logP,stage.nextSibling);
-    if(deckP.parentNode!==wrap)wrap.insertBefore(deckP,logP.nextSibling);
-    const f=$("railFeed");if(f)f.innerHTML="";
-  }
+  if(!layoutWired){layoutWired=true;FIT.on=true;
+    let t=null;window.addEventListener("resize",()=>{clearTimeout(t);t=setTimeout(()=>{FIT.key=null;render();},60);});}
+  body.classList.add("fit");
+  if(!FIT.key)setZoom(fitZoom());
+  body.classList.toggle("pick",S.phase==="pick"&&!S.over);
+  const narrow=FIT.W<1080;
+  const openL=railPref("L2"+(narrow?"n":""),!narrow&&FIT.W>=1500),openR=railPref("R2"+(narrow?"n":""),!narrow);
+  const build=(rail,side,open,label,kids)=>{
+    rail.classList.toggle("collapsed",!open);
+    let tog=rail.querySelector(".railtog"),body2=rail.querySelector(".railbody");
+    if(!tog){tog=document.createElement("button");tog.type="button";tog.className="railtog";rail.appendChild(tog);
+      body2=document.createElement("div");body2.className="railbody";rail.appendChild(body2);
+      tog.addEventListener("click",()=>{const now=rail.classList.contains("collapsed");setRailPref(side+"2"+(FIT.W<1080?"n":""),now);render();});}
+    tog.textContent=open?(side==="L"?"◀ Hide ":"Hide ▶ ")+label:(side==="L"?"▶ ":"◀ ")+label;
+    kids.forEach(k=>{if(k)body2.appendChild(k);});
+  };
+  let feed=$("railFeed");if(!feed){feed=document.createElement("div");feed.id="railFeed";}
+  feed.innerHTML="";
+  logP.hidden=!DEV.log;
+  build(L,"L",openL,DEV.log?"Front & log":"The front",[front,feed,logP]);
+  build(Rr,"R",openR,"Your deck",[deckP]);
 }
 /* ---- menus that open over the page: tonics, cutting, your deck ---- */
-const UI={modal:null,lastTonic:null};
+const UI={modal:null,lastTonic:null,nodes:null};
 function openModal(m){UI.modal=m;UI.lastTonic=null;render();}
 function closeModal(){UI.modal=null;render();}
 function deckGroups(w){
@@ -5018,6 +5458,10 @@ function renderModal(){
       body.appendChild(grid);
       const ok=el("button","btn primary","Done");ok.type="button";ok.addEventListener("click",closeModal);body.appendChild(ok);
     }
+  } else if(mm.kind==="workshop"||mm.kind==="stickers"){
+    head.appendChild(el("h2",null,mm.kind==="workshop"?(S.pf==="grove"?"Workshop":"The vats"):"Sticker book"));
+    const nd=UI.nodes&&UI.nodes[mm.kind];if(nd)body.appendChild(nd);
+    const ok=el("button","btn primary","Done");ok.type="button";ok.addEventListener("click",closeModal);body.appendChild(ok);
   } else if(mm.kind==="thin"){
     head.appendChild(el("h2",null,"Cut cards"));
     const cost=thinCost(),free=S.p.freeThin>0;
@@ -5039,6 +5483,7 @@ function renderNow(){
   wireDrawer();hideTip();applyLayout();
   try{if(typeof document.querySelectorAll==="function")setTimeout(renderTutorial,0);}catch(e){}
   renderRes();renderFront();renderStage();renderDeck();renderLog();renderRosters();renderKeywords();renderModal();
+  try{fitNow();}catch(e){}
   try{window.claude&&window.claude.hot&&window.claude.hot.snapshot&&window.claude.hot.snapshot(S);}catch(e){}
 }
 function start(d){
