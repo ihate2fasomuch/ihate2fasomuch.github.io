@@ -18,6 +18,8 @@
   --blight:#A8502A; --blightSoft:#F2DCCE; --blightEdge:#C98058;
   --neutral:#9A9784; --warn:#8A6A10; --warnSoft:#F0E4BE;
   --shadow:0 1px 2px rgba(34,38,31,.10), 0 4px 14px rgba(34,38,31,.06);
+  --gUnit:#D3E7B0; --bUnit:#F4CBB0; --gSide:rgba(110,165,60,.13); --bSide:rgba(195,95,50,.12);
+  --atkC:#B8452B; --hpC:#2F7A3A; --sunC:#C98A00; --sunSoft:#FBEFC8; --metaC:#6A4FB0; --metaSoft:#E9E2F7;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -27,6 +29,8 @@
     --blight:#DC8A57; --blightSoft:#38261D; --blightEdge:#9E5B33;
     --neutral:#7A8073; --warn:#C9A44A; --warnSoft:#332C16;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.28);
+    --gUnit:#34472A; --bUnit:#4E2F22; --gSide:rgba(140,190,90,.10); --bSide:rgba(220,130,80,.10);
+    --atkC:#F08A6E; --hpC:#8FD08A; --sunC:#F2C14E; --sunSoft:#3A3218; --metaC:#B7A2F0; --metaSoft:#2C2640;
   }
 }
 :root[data-theme="dark"]{
@@ -36,17 +40,19 @@
   --blight:#DC8A57; --blightSoft:#38261D; --blightEdge:#9E5B33;
   --neutral:#7A8073; --warn:#C9A44A; --warnSoft:#332C16;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.28);
+  --gUnit:#34472A; --bUnit:#4E2F22; --gSide:rgba(140,190,90,.10); --bSide:rgba(220,130,80,.10);
+  --atkC:#F08A6E; --hpC:#8FD08A; --sunC:#F2C14E; --sunSoft:#3A3218; --metaC:#B7A2F0; --metaSoft:#2C2640;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);
-  font-family:"Archivo",system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.45;
+  font-family:"Archivo",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.45;
   padding-inline:16px;padding-block:18px 40px;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 h1,h2,h3{font-family:"Bitter",Georgia,serif;margin:0;text-wrap:balance;letter-spacing:-.01em}
-h1{font-size:23px;font-weight:700} h2{font-size:16px;font-weight:600} h3{font-size:13px;font-weight:600}
+h1{font-size:26.5px;font-weight:700} h2{font-size:18.5px;font-weight:600} h3{font-size:15px;font-weight:600}
 .mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
-.eyebrow{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);font-weight:600}
-.muted{color:var(--ink2)} .tiny{font-size:11.5px}
+.eyebrow{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.muted{color:var(--ink2)} .tiny{font-size:13px}
 header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .hd-left{display:flex;flex-direction:column;gap:2px}
 .front{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:14px 16px;box-shadow:var(--shadow)}
@@ -61,11 +67,11 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
   border-left:7px solid transparent;border-right:7px solid transparent;border-top:12px solid var(--ink);
   transition:left .5s cubic-bezier(.3,.8,.3,1)}
 .zone-labels{display:flex;margin-top:4px}
-.zone-labels span{flex:1;text-align:center;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.zone-labels span{flex:1;text-align:center;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
 .res{display:flex;gap:8px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:var(--surface);border-radius:3px;padding:6px 10px;display:flex;gap:7px;align-items:baseline}
-.chip b{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
-.chip .lab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.chip b{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.chip .lab{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600}
 .chip.gr b{color:var(--grove)} .chip.bl b{color:var(--blight)}
 .chip.bl{background:var(--blightSoft);border-color:var(--blightEdge)}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:16px;box-shadow:var(--shadow)}
@@ -75,13 +81,13 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
 .board.sec3{grid-template-columns:repeat(3,1fr)}
 .flankrow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .sector{border:1px dashed var(--line);border-radius:4px;padding:6px}
-.sector-name{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600;margin:0 0 5px 2px}
+.sector-name{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600;margin:0 0 5px 2px}
 @media (max-width:720px){.flankrow{grid-template-columns:1fr}}
 .lane{background:var(--surface2);border:1px solid var(--line);border-radius:3px;display:flex;flex-direction:column;min-height:230px;overflow:hidden}
 .lane.flank{background:var(--sunken)}
 .lane.targetable{cursor:pointer;outline:1px dashed var(--grove);outline-offset:-3px}
 .lane.targetable:hover{background:var(--groveSoft)}
-.lane-name{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-align:center;
+.lane-name{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-align:center;
   padding:5px 2px;font-weight:600;border-bottom:1px solid var(--line)}
 .lane-side{flex:1;padding:5px;display:flex;flex-direction:column;gap:4px;justify-content:flex-end}
 .lane-side.top{justify-content:flex-start}
@@ -91,7 +97,7 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
 .capbar .fill.gr{background:var(--grove)} .capbar .fill.bl{background:var(--blight)}
 .capbar .tick{position:absolute;top:0;bottom:0;width:1px;background:var(--line)}
 .capbar .tick.mid{background:var(--ink2);opacity:.6}
-.caplbl{font-size:10.5px;text-align:center;margin-top:3px;font-variant-numeric:tabular-nums;color:var(--ink2)}
+.caplbl{font-size:12px;text-align:center;margin-top:3px;font-variant-numeric:tabular-nums;color:var(--ink2)}
 .caplbl b{font-weight:600} .caplbl .gr{color:var(--grove)} .caplbl .bl{color:var(--blight)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--sunken);border:1px solid var(--line)}
 .dot.on{background:var(--neutral);border-color:var(--neutral)}
@@ -106,16 +112,19 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
 .lane.clash .lane-side .unit:first-child{animation:fx-lunge-down .35s ease-in-out}
 .lane.clash .lane-side:not(.top) .unit:first-child{animation-name:fx-lunge-up}
 .lane.fxlane{box-shadow:inset 0 0 0 2px var(--warn,#C9A227)}
-.fxnum{position:absolute;right:4px;top:-6px;font:700 15px "IBM Plex Mono",monospace;pointer-events:none;
+.whylist{margin:4px 0 0;padding-left:18px}.whylist li{margin:1px 0}
+.lane.resolving{box-shadow:0 0 0 3px var(--accent,#2E7D4F);position:relative;z-index:1;transition:opacity .25s}
+.lane.waitlane{opacity:.45;transition:opacity .25s}
+.fxnum{position:absolute;right:4px;top:-6px;font:700 17px "IBM Plex Mono",monospace;pointer-events:none;
   animation:fx-float 1.1s ease-out forwards;text-shadow:0 1px 0 var(--surface)}
 .fxnum.dmg{color:#C0392B} .fxnum.heal{color:var(--grove)} .fxnum.atk{color:#B7791F}
-.fxcap{position:absolute;left:50%;top:-12px;transform:translateX(-50%);font:700 12px "IBM Plex Mono",monospace;
+.fxcap{position:absolute;left:50%;top:-12px;transform:translateX(-50%);font:700 14px "IBM Plex Mono",monospace;
   pointer-events:none;animation:fx-float 1.3s ease-out forwards}
 .marker{position:relative}
 .capbar .fill.tween{transition:left .7s ease-out,width .7s ease-out}
 .feed{max-height:210px;overflow-y:auto;border-left:3px solid var(--ink3);background:var(--surface2);padding:8px 12px;margin-bottom:12px;border-radius:2px;
-  font:12px/1.5 "IBM Plex Mono",monospace;color:var(--ink2)}
-.feed .fh{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600;margin-bottom:3px}
+  font:14px/1.5 "IBM Plex Mono",monospace;color:var(--ink2)}
+.feed .fh{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600;margin-bottom:3px}
 .feed p{margin:0;opacity:0;animation:fx-line .35s ease-out forwards}
 .feed p.hl{color:var(--ink);font-weight:600}
 .feed p.static{opacity:1;animation:none}
@@ -130,8 +139,8 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
 @media (prefers-reduced-motion:reduce){.unit,.fxnum,.fxcap,.feed p,.lane .unit{animation:none!important;opacity:1}.capbar .fill.tween{transition:none}}
 .unit.p{background:var(--groveSoft);border-color:var(--groveEdge)}
 .unit.a{background:var(--blightSoft);border-color:var(--blightEdge)}
-.unit .nm{font-weight:600;font-size:10.5px;line-height:1.15}
-.unit .st{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.unit .nm{font-weight:600;font-size:12px;line-height:1.15}
+.unit .st{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
 .unit .st .buff{color:var(--grove);font-weight:600}
 .unit.a .st .buff{color:var(--blight)}
 .cards{display:flex;gap:8px;flex-wrap:wrap}
@@ -141,15 +150,15 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
 .card:disabled{opacity:.4;cursor:not-allowed}
 .card.picked{border-color:var(--grove);border-width:2px;padding:7px}
 .card .row{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
-.card .nm{font-family:"Bitter",serif;font-weight:600;font-size:12px;line-height:1.15}
-.card .cost{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;color:var(--grove)}
-.card .stats{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink2)}
-.card .txt{font-size:10.5px;color:var(--ink2);line-height:1.3}
-.card .tag{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.card .nm{font-family:"Bitter",serif;font-weight:600;font-size:14px;line-height:1.15}
+.card .cost{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;color:var(--grove)}
+.card .stats{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink2)}
+.card .txt{font-size:12px;color:var(--ink2);line-height:1.3}
+.card .tag{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);font-weight:600}
 .card.trick{background:var(--warnSoft);border-color:var(--warn)} .card.trick .cost{color:var(--warn)}
 button.btn.primary:not(:disabled){background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 3px var(--accentSoft)}
 button.btn.primary:not(:disabled):hover{filter:brightness(1.08)}
-button.btn{font:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:3px;border:1px solid var(--ink);
+button.btn{font:inherit;font-weight:600;font-size:15px;padding:8px 16px;border-radius:3px;border:1px solid var(--ink);
   background:var(--ink);color:var(--ground);cursor:pointer}
 button.btn:hover:not(:disabled){opacity:.87}
 button.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
@@ -164,32 +173,32 @@ button.btn:disabled{opacity:.4;cursor:not-allowed}
 .price button{font:inherit;font-family:"IBM Plex Mono",monospace;width:22px;height:22px;border:1px solid var(--line);
   background:var(--surface);color:var(--ink);border-radius:2px;cursor:pointer;line-height:1}
 .slotrow{display:flex;gap:6px;flex-wrap:wrap;min-height:30px}
-.slot{width:112px;height:26px;border:1px dashed var(--line);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink3)}
+.slot{width:112px;height:26px;border:1px dashed var(--line);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink3)}
 .mini{width:112px;border:1px solid var(--blightEdge);background:var(--blightSoft);border-radius:2px;padding:3px 6px;
-  font-size:10.5px;display:flex;justify-content:space-between;gap:4px;cursor:pointer;font-family:inherit;color:inherit;text-align:left}
+  font-size:12px;display:flex;justify-content:space-between;gap:4px;cursor:pointer;font-family:inherit;color:inherit;text-align:left}
 .mini.gr{border-color:var(--groveEdge);background:var(--groveSoft)}
 .mini .c{font-family:"IBM Plex Mono",monospace;color:var(--ink2)}
-.hidden-card{width:112px;border:1px solid var(--line);background:var(--sunken);border-radius:2px;padding:4px 6px;font-size:10.5px;color:var(--ink3);text-align:center}
-.read{background:var(--sunken);border:1px solid var(--line);border-radius:2px;padding:7px 9px;font-size:11px;color:var(--ink2);line-height:1.4}
+.hidden-card{width:112px;border:1px solid var(--line);background:var(--sunken);border-radius:2px;padding:4px 6px;font-size:12px;color:var(--ink3);text-align:center}
+.read{background:var(--sunken);border:1px solid var(--line);border-radius:2px;padding:7px 9px;font-size:12.5px;color:var(--ink2);line-height:1.4}
 .log{background:var(--sunken);border:1px solid var(--line);border-radius:3px;padding:10px 12px;max-height:170px;
   overflow-y:auto;display:flex;flex-direction:column;gap:3px}
-.log p{margin:0;font-size:11.5px;color:var(--ink2);font-family:"IBM Plex Mono",monospace;line-height:1.4}
+.log p{margin:0;font-size:13px;color:var(--ink2);font-family:"IBM Plex Mono",monospace;line-height:1.4}
 .log p.hl{color:var(--ink);font-weight:600}
 .decklist{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;align-items:start}
 .dsec{display:flex;flex-direction:column;gap:5px}
 .dsec-head{display:flex;align-items:center;gap:6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
 .dswatch{width:9px;height:9px;border-radius:2px;flex:none}
-.dsec-name{font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--ink2)}
-.dsec-n{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3)}
+.dsec-name{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--ink2)}
+.dsec-n{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink3)}
 .drows{display:flex;flex-direction:column;gap:3px}
 .dcard{border:1px solid var(--line);background:var(--surface2);border-radius:2px;padding:3px 7px;
-  font-size:11.5px;display:flex;gap:7px;align-items:baseline}
-.dmul{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink2);font-size:10.5px;min-width:18px}
+  font-size:13px;display:flex;gap:7px;align-items:baseline}
+.dmul{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink2);font-size:12px;min-width:18px}
 .dnm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dcost{font-family:"IBM Plex Mono",monospace;color:var(--ink3);font-size:10.5px}
-.dcard button{all:unset;cursor:pointer;color:var(--blight);font-weight:700;font-size:13px;line-height:1}
+.dcost{font-family:"IBM Plex Mono",monospace;color:var(--ink3);font-size:12px}
+.dcard button{all:unset;cursor:pointer;color:var(--blight);font-weight:700;font-size:15px;line-height:1}
 .dcard.dead{background:var(--sunken);color:var(--ink3);border-style:dashed}
-.banner{border-radius:3px;padding:11px 14px;font-size:13px;border:1px solid}
+.banner{border-radius:3px;padding:11px 14px;font-size:15px;border:1px solid}
 .banner.gr{background:var(--groveSoft);border-color:var(--groveEdge)}
 .banner.bl{background:var(--blightSoft);border-color:var(--blightEdge)}
 .banner.wn{background:var(--warnSoft);border-color:var(--warn)}
@@ -197,28 +206,28 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 .rosters{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .rlist{display:flex;flex-direction:column;gap:4px}
 .rrow{display:grid;grid-template-columns:22px 1fr 44px;gap:8px;align-items:baseline;
-  padding:4px 6px;border-radius:2px;background:var(--surface2);font-size:11.5px}
+  padding:4px 6px;border-radius:2px;background:var(--surface2);font-size:13px}
 .rrow.tr{background:var(--warnSoft)}
 .rrow .rc{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink2);text-align:right}
-.rrow .rs{font-family:"IBM Plex Mono",monospace;color:var(--ink3);font-size:10.5px;text-align:right}
+.rrow .rs{font-family:"IBM Plex Mono",monospace;color:var(--ink3);font-size:12px;text-align:right}
 .rrow .rn{font-weight:600}
-.rrow .rt{display:block;font-weight:400;color:var(--ink2);font-size:10.5px;line-height:1.3}
-.rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--ink2);max-width:70ch}
+.rrow .rt{display:block;font-weight:400;color:var(--ink2);font-size:12px;line-height:1.3}
+.rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14.5px;color:var(--ink2);max-width:70ch}
 .rules b{color:var(--ink)}
-.expl{margin:0 0 10px;font-size:12.5px;color:var(--ink2);max-width:70ch;line-height:1.55}
+.expl{margin:0 0 10px;font-size:14.5px;color:var(--ink2);max-width:70ch;line-height:1.55}
 .expl b{color:var(--ink)}
-.expl-list{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--ink2);max-width:70ch}
+.expl-list{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14.5px;color:var(--ink2);max-width:70ch}
 .expl-list b{color:var(--ink)}
 .expl.callout{background:var(--groveSoft);border-left:3px solid var(--grove);padding:10px 12px;border-radius:2px;margin-bottom:0}
-.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:9px;font-size:12.5px;color:var(--ink2);max-width:76ch}
+.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:9px;font-size:14.5px;color:var(--ink2);max-width:76ch}
 .steps b{color:var(--ink)} .steps li::marker{color:var(--ink3);font-weight:600}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-block:10px}
 .tcard{background:var(--surface2);border:1px solid var(--line);border-radius:3px;padding:10px 12px}
-.tcard h3{font-size:12px;margin-bottom:4px}
-.tcard p{margin:0;font-size:11.5px;color:var(--ink2);line-height:1.45}
+.tcard h3{font-size:14px;margin-bottom:4px}
+.tcard p{margin:0;font-size:13px;color:var(--ink2);line-height:1.45}
 .tcard b{color:var(--ink)}
 .envbadge{outline:1px solid rgba(255,255,255,.5)}
-.terrbadge{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;color:#fff;font-size:9px;letter-spacing:.06em;cursor:help;vertical-align:1px}
+.terrbadge{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;color:#fff;font-size:12px;letter-spacing:.06em;cursor:help;vertical-align:1px}
 .herobar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0 6px;padding:10px 12px;border:1px solid var(--line);border-left:3px solid var(--warn,#C9A227);border-radius:3px;background:var(--surface2)}
 .hd-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .refbtns{display:flex;gap:6px;flex-wrap:wrap}
@@ -227,7 +236,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100vw);background:var(--surface);border-left:1px solid var(--line);z-index:41;display:flex;flex-direction:column;box-shadow:-8px 0 24px rgba(0,0,0,.12)}
 .drawer-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}
 .drawer-tabs{display:flex;gap:4px}
-.dtab{font:inherit;font-size:12.5px;padding:6px 11px;border:1px solid var(--line);border-radius:3px;background:var(--surface2);color:var(--ink2);cursor:pointer}
+.dtab{font:inherit;font-size:14.5px;padding:6px 11px;border:1px solid var(--line);border-radius:3px;background:var(--surface2);color:var(--ink2);cursor:pointer}
 .dtab.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 .drawer-body{overflow-y:auto;padding:14px 16px 30px;flex:1}
 .drawer .guide .gbody{padding-left:30px}
@@ -240,66 +249,66 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 #coach{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);width:min(560px,calc(100vw - 32px));z-index:60;
   background:var(--todo);color:var(--todoInk);border-radius:6px;padding:14px 18px;box-shadow:0 10px 30px rgba(0,0,0,.35);border-top:4px solid var(--todoHi)}
 #coach[hidden]{display:none}
-#coach h3{color:#fff;font-size:16px;margin:2px 0 6px}
-#coach p{margin:0 0 10px;font-size:13.5px;line-height:1.5}
-#coach .coach-step{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--todoHi);font-weight:700}
+#coach h3{color:#fff;font-size:18.5px;margin:2px 0 6px}
+#coach p{margin:0 0 10px;font-size:15.5px;line-height:1.5}
+#coach .coach-step{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--todoHi);font-weight:700}
 #coach .btn.ghost{background:transparent;color:var(--todoInk);border-color:rgba(255,255,255,.4)}
 .coach-target{outline:3px solid var(--todoHi)!important;outline-offset:3px;border-radius:4px;animation:coachpulse 1.4s ease-in-out infinite}
 @keyframes coachpulse{50%{outline-offset:7px}}
 .tutcard{display:flex;justify-content:space-between;align-items:center;gap:16px;border-left:4px solid var(--accent)}
 .todo{background:var(--todo);color:var(--todoInk);border-radius:4px;padding:10px 16px;box-shadow:var(--shadow)}
-.todo-h{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--todoHi);margin-bottom:4px}
-.todo ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px;font-size:13px}
+.todo-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--todoHi);margin-bottom:4px}
+.todo ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px;font-size:15px}
 .todo li.done{opacity:.55;text-decoration:line-through}
 .todo li.now{font-weight:700}
 .todo li.now::marker{color:var(--todoHi)}
 .todo li.opt{opacity:.8;font-style:italic}
 .guide details{border-top:1px solid var(--line)}
 .guide details:first-of-type{border-top:0}
-.guide summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px 2px;font-family:"Bitter",serif;font-weight:600;font-size:14px;color:var(--ink)}
+.guide summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px 2px;font-family:"Bitter",serif;font-weight:600;font-size:16px;color:var(--ink)}
 .guide summary::-webkit-details-marker{display:none}
-.guide summary::after{content:"+";margin-left:auto;color:var(--ink3);font-family:"IBM Plex Mono",monospace;font-size:15px}
+.guide summary::after{content:"+";margin-left:auto;color:var(--ink3);font-family:"IBM Plex Mono",monospace;font-size:17px}
 .guide details[open] summary::after{content:"−"}
-.guide .gn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);font:600 11px "IBM Plex Mono",monospace;color:var(--ink2)}
-.guide .gbody{padding:0 2px 14px 34px;font-size:13px;color:var(--ink2);line-height:1.55;max-width:80ch}
+.guide .gn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);font:600 12.5px "IBM Plex Mono",monospace;color:var(--ink2)}
+.guide .gbody{padding:0 2px 14px 34px;font-size:15px;color:var(--ink2);line-height:1.55;max-width:80ch}
 .guide .gbody p{margin:0 0 9px} .guide .gbody b{color:var(--ink)}
 .guide .gbody .callout{background:var(--groveSoft);border-left:3px solid var(--grove);padding:9px 12px;border-radius:2px}
 .codein.kwsearch{width:220px;text-transform:none;letter-spacing:0;font-family:inherit}
 .kwgroup{margin-top:14px}
 .kwgroup:first-child{margin-top:0}
-.kwgroup h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 3px}
-.kwgroup .kwblurb{font-size:12px;color:var(--ink2);margin:0 0 8px}
+.kwgroup h3{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:0 0 3px}
+.kwgroup .kwblurb{font-size:14px;color:var(--ink2);margin:0 0 8px}
 .kwgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px}
 .kwitem{background:var(--surface2);border:1px solid var(--line);border-radius:3px;padding:8px 10px}
-.kwitem b{display:block;font-family:"Bitter",serif;font-size:12.5px;color:var(--ink);margin-bottom:2px}
-.kwitem span{font-size:12px;color:var(--ink2);line-height:1.45}
+.kwitem b{display:block;font-family:"Bitter",serif;font-size:14.5px;color:var(--ink);margin-bottom:2px}
+.kwitem span{font-size:14px;color:var(--ink2);line-height:1.45}
 .kw{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:7px}
-.kwrow{display:grid;grid-template-columns:96px 1fr;gap:9px;align-items:baseline;font-size:11.5px;
+.kwrow{display:grid;grid-template-columns:96px 1fr;gap:9px;align-items:baseline;font-size:13px;
   background:var(--surface2);border:1px solid var(--line);border-radius:3px;padding:6px 9px}
-.kwrow b{font-family:"Bitter",serif;font-size:11.5px}
+.kwrow b{font-family:"Bitter",serif;font-size:13px}
 .kwrow span{color:var(--ink2);line-height:1.4}
 @media (max-width:720px){.rosters{grid-template-columns:1fr;gap:14px}}
 #tip{position:fixed;z-index:99;max-width:240px;background:var(--surface);border:1px solid var(--ink);
   border-radius:3px;padding:9px 11px;box-shadow:0 6px 22px rgba(0,0,0,.22);pointer-events:none;
   display:flex;flex-direction:column;gap:4px}
 #tip[hidden]{display:none}
-#tip .tn{font-family:"Bitter",serif;font-weight:600;font-size:13px}
-#tip .tm{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink2)}
-#tip .tt{font-size:11.5px;color:var(--ink2);line-height:1.35}
-#tip .tkw{margin-top:6px;padding-top:6px;border-top:1px solid var(--line);font-size:11px;color:var(--ink2);display:flex;flex-direction:column;gap:3px}
+#tip .tn{font-family:"Bitter",serif;font-weight:600;font-size:15px}
+#tip .tm{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink2)}
+#tip .tt{font-size:13px;color:var(--ink2);line-height:1.35}
+#tip .tkw{margin-top:6px;padding-top:6px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink2);display:flex;flex-direction:column;gap:3px}
 #tip .tkw b{color:var(--ink);font-weight:600}
 .kwref{text-decoration:underline dotted;text-underline-offset:2px;cursor:help}
 #tip .tl{color:var(--grove);font-weight:600;margin:2px 0}
-#tip .tg{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+#tip .tg{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);font-weight:600}
 .hoverable{cursor:help}
 .qp{display:flex;gap:6px;align-items:center}
 .fbar{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.fchip{font:inherit;font-size:11.5px;padding:4px 9px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink2);cursor:pointer}
+.fchip{font:inherit;font-size:13px;padding:4px 9px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink2);cursor:pointer}
 .fchip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 .fchip .n{opacity:.6;margin-left:4px;font-variant-numeric:tabular-nums}
 .stepper{display:flex;align-items:center;gap:6px;margin-top:6px}
 .stepper button{font:inherit;width:24px;height:24px;border:1px solid var(--line);border-radius:3px;background:var(--surface);color:var(--ink);cursor:pointer}
-.qpsel{font:inherit;font-size:11.5px;padding:5px 7px;border:1px solid var(--line);border-radius:3px;
+.qpsel{font:inherit;font-size:13px;padding:5px 7px;border:1px solid var(--line);border-radius:3px;
   background:var(--surface);color:var(--ink);flex:1;min-width:0}
 .codein{font:inherit;font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.12em;
   padding:7px 10px;border:1px solid var(--line);border-radius:3px;background:var(--surface);color:var(--ink);width:150px}
@@ -308,21 +317,21 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 .odds{background:var(--sunken);border:1px solid var(--line);border-radius:3px;padding:10px 12px}
 .oddsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px;margin-top:8px}
 .oddsrow{display:grid;grid-template-columns:38px 1fr auto;gap:8px;align-items:baseline;
-  background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:4px 7px;font-size:11.5px}
+  background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:4px 7px;font-size:13px}
 .oddsrow .op{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--blight);text-align:right}
 .oddsrow .on{font-weight:600}
-.oddsrow .os{font-family:"IBM Plex Mono",monospace;color:var(--ink2);font-size:10.5px}
+.oddsrow .os{font-family:"IBM Plex Mono",monospace;color:var(--ink2);font-size:12px}
 .ups{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
 .upcard{border:1px solid var(--line);background:var(--surface2);border-radius:3px;padding:8px 10px;
   display:flex;flex-direction:column;gap:4px;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .upcard:hover:not(:disabled){border-color:var(--grove)}
 .upcard:disabled{opacity:.42;cursor:not-allowed}
-.upcard .nm{font-family:"Bitter",serif;font-weight:600;font-size:12.5px}
+.upcard .nm{font-family:"Bitter",serif;font-weight:600;font-size:14.5px}
 .upcard .cost{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--grove)}
 .decklist .deckinfo{grid-column:1 / -1}
 .upcard.part{border-color:var(--groveEdge)}
 .upcard .row{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-.upcard .txt{font-size:10.5px;color:var(--ink2);line-height:1.3}
+.upcard .txt{font-size:12px;color:var(--ink2);line-height:1.3}
 .upcard.on{border-color:var(--grove);border-width:2px;background:var(--groveSoft);padding:7px 9px}
 .pack.dropzone{outline:1px dashed var(--grove);outline-offset:3px}
 .pack.over{background:var(--groveSoft);outline-style:solid}
@@ -332,21 +341,21 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 .rgroup{display:flex;align-items:center;gap:6px;margin-top:10px;padding-bottom:3px;border-bottom:1px solid var(--line)}
 .rgroup:first-child{margin-top:0}
 .settings{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
-.settings summary{cursor:pointer;font-size:12.5px;color:var(--ink2);font-weight:600}
+.settings summary{cursor:pointer;font-size:14.5px;color:var(--ink2);font-weight:600}
 .setgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px 18px;margin:10px 0}
 .setrow{display:flex;align-items:center;gap:10px;justify-content:space-between}
-.setname{font-size:12px;color:var(--ink2)}
+.setname{font-size:14px;color:var(--ink2)}
 .modegrid{display:grid;grid-template-columns:3fr 2fr;gap:16px}
 @media (max-width:860px){.modegrid{grid-template-columns:1fr}}
 .panel.mode{display:flex;flex-direction:column;gap:6px}
-.modetag{align-self:flex-start;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--surface);background:var(--ink);padding:3px 8px;border-radius:999px}
+.modetag{align-self:flex-start;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--surface);background:var(--ink);padding:3px 8px;border-radius:999px}
 .sidecard .btn{align-self:flex-start;margin-top:6px}
 .sidepick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-block:14px}
 .sidecard{border:1px solid var(--line);border-radius:4px;padding:14px;text-align:left;font:inherit;color:inherit;
   display:flex;flex-direction:column;gap:6px;background:var(--surface2)}
 .sidecard:hover{border-color:var(--ink)}
-.sidecard h3{font-size:15px}
-.sidecard .txt{font-size:11.5px;color:var(--ink2);line-height:1.4}
+.sidecard h3{font-size:17px}
+.sidecard .txt{font-size:13px;color:var(--ink2);line-height:1.4}
 @media (max-width:720px){.sidepick{grid-template-columns:1fr}}
 @keyframes drop{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
 @keyframes flare{0%{box-shadow:inset 0 0 0 2px var(--warn)}100%{box-shadow:none}}
@@ -354,11 +363,134 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 .marker.pushed{animation:flare .9s ease-out}
 @media (max-width:720px){
   .board{gap:3px} .lane{min-height:185px}
-  .unit .nm{font-size:8.5px} .unit .st{font-size:8.5px} .lane-name{font-size:8px}
+  .unit .nm{font-size:12px} .unit .st{font-size:12px} .lane-name{font-size:12px}
   .packs{grid-template-columns:1fr} .card{width:calc(50% - 4px)} .mini,.slot,.hidden-card{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 :focus-visible{outline:2px solid var(--grove);outline-offset:2px}
+
+/* ---- p48: resources you can find at a glance ---- */
+header{position:sticky;top:0;z-index:30;background:var(--ground);padding-block:8px;margin-block:-8px}
+.chip.big{padding:7px 14px;border-width:2px;align-items:center}
+.chip.big b{font-size:26px;line-height:1}
+.chip.big .ico{font-size:20px;line-height:1}
+.chip.sun{background:var(--sunSoft);border-color:var(--sunC)} .chip.sun b,.chip.sun .ico{color:var(--sunC)}
+.chip.meta{background:var(--metaSoft);border-color:var(--metaC)} .chip.meta b,.chip.meta .ico{color:var(--metaC)}
+.chip.big .lab{color:var(--ink);font-size:12px}
+.respill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;border:2px solid;font-weight:700;font-size:16px;vertical-align:middle}
+.respill b{font-family:"IBM Plex Mono",monospace;font-size:22px;line-height:1}
+.respill.sun{background:var(--sunSoft);border-color:var(--sunC);color:var(--sunC)}
+.respill.meta{background:var(--metaSoft);border-color:var(--metaC);color:var(--metaC)}
+.handhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+/* ---- p48: bigger packs, smaller shelf ---- */
+.slotrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;min-height:52px}
+.slot,.mini,.hidden-card{width:auto;min-height:52px;height:auto}
+.mini{flex-direction:column;justify-content:space-between;align-items:stretch;padding:6px 8px;font-size:14px;border-left-width:4px}
+.mini .mn{font-weight:600;line-height:1.15}
+.mini .ms{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink2)}
+.hidden-card{display:flex;align-items:center;justify-content:center;font-size:13px}
+.pack{padding:16px;gap:12px}
+.pack-head h3{font-size:18px}
+.card.compact{width:118px;padding:6px 7px;gap:1px}
+.card.compact .txt{display:none}
+.card.compact .nm{font-size:13.5px}
+.shelfnote{margin-top:4px}
+/* ---- p48: colour in the fight ---- */
+.card:not(.trick):not(.compact){border-top-width:4px}
+.card.compact:not(.trick){border-left-width:4px}
+.lane-side.fs-grove{background:var(--gSide)} .lane-side.fs-blight{background:var(--bSide)}
+.lane-name.held-grove{background:var(--gUnit);color:var(--ink)} .lane-name.held-blight{background:var(--bUnit);color:var(--ink)}
+.capbar{height:12px;border-radius:6px}
+.unit{padding:6px 8px;border-width:1px;border-left-width:5px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.unit.fg{background:var(--gUnit);border-color:var(--groveEdge)}
+.unit.fb{background:var(--bUnit);border-color:var(--blightEdge)}
+.unit .nm{font-size:13px}
+.unit .st{font-size:13px;font-weight:600;color:var(--ink)}
+.unit .st .sa{color:var(--atkC)} .unit .st .sh{color:var(--hpC)}
+.lane.droptarget{outline:3px dashed var(--accent);outline-offset:-4px;background:var(--accentSoft)}
+.lane.dragover{outline-style:solid;background:var(--accentSoft)}
+.card.dragging{opacity:.4}
+
+.penalty{margin-top:10px;padding:10px 14px;border:2px solid #C0392B;border-left-width:6px;border-radius:4px;background:rgba(192,57,43,.08);color:var(--ink);font-size:14px}
+.penalty b{color:#C0392B}
+button.btn.primary.warnbtn:not(:disabled){background:#B03A2E;border-color:#B03A2E;box-shadow:0 0 0 3px rgba(176,58,46,.25)}
+.unit.infested{outline:2px dashed #8E44AD;outline-offset:1px;animation:fx-infest 2.4s ease-in-out infinite}
+.infbadge{margin-top:3px;font-size:12px;font-weight:700;color:#fff;background:#7D3C98;border-radius:3px;padding:1px 5px;align-self:flex-start;cursor:help}
+@keyframes fx-infest{0%,100%{box-shadow:0 0 0 0 rgba(142,68,173,0)}50%{box-shadow:0 0 0 4px rgba(142,68,173,.35)}}
+
+/* ---- p50: battle layout — the whole fight on one screen, side menus left and right ---- */
+.rail{display:none}
+body.battle .wrap{max-width:1900px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:12px}
+body.battle header{grid-column:1 / -1;grid-row:1}
+body.battle #railL{grid-column:1;grid-row:2}
+body.battle #stage{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:10px;min-width:0}
+body.battle #railR{grid-column:3;grid-row:2}
+body.battle .rail{display:flex;flex-direction:column;gap:10px;position:sticky;top:58px;max-height:calc(100vh - 72px);overflow-y:auto;width:310px}
+body.battle .rail.collapsed{width:46px;overflow:visible}
+body.battle .rail.collapsed .railbody{display:none}
+.railtog{font:inherit;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--surface);color:var(--ink2);border-radius:4px;padding:8px 10px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow)}
+.railtog:hover{border-color:var(--ink)}
+.rail.collapsed .railtog{writing-mode:vertical-rl;text-orientation:mixed;padding:12px 8px;min-height:170px;justify-content:flex-start}
+.rr.collapsed .railtog{transform:none}
+.railbody{display:flex;flex-direction:column;gap:10px}
+body.battle .rail .front{padding:10px 12px}
+body.battle .rail .zone-labels span{font-size:10px;letter-spacing:.02em}
+body.battle .rail .front-head{margin-bottom:4px}
+body.battle .rail .panel{padding:12px}
+body.battle .rail .log{max-height:none}
+body.battle .rail .feed{max-height:none;margin:0}
+body.battle{padding-block:10px 12px}
+body.battle header{padding-block:6px;margin-block:-6px 0;flex-wrap:nowrap;align-items:center}
+body.battle .hd-left{flex-direction:row;align-items:baseline;gap:10px;flex:none}
+body.battle h1{font-size:18px;white-space:nowrap}
+body.battle .hd-right{flex-direction:row;align-items:center;flex-wrap:nowrap;justify-content:flex-end;gap:10px;min-width:0}
+body.battle .res{flex-wrap:nowrap;gap:5px}
+body.battle .chip .lab{font-size:11px;letter-spacing:.05em}
+body.battle .chip{white-space:nowrap;align-items:center}
+@media (max-width:1440px){body.battle .hd-left .eyebrow{font-size:11px}body.battle .chip .lab{font-size:10px;letter-spacing:.02em}body.battle .chip{padding:4px 7px;gap:5px}body.battle .chip.big{padding:4px 9px}}
+body.battle .chip b{font-size:15px}
+body.battle .refbtns{flex-wrap:nowrap;gap:4px}
+body.battle .refbtns .fchip{font-size:12.5px;padding:4px 8px;white-space:nowrap}
+@media (max-width:1500px){body.battle h1{display:none}}
+body.battle .chip{padding:4px 9px}
+body.battle .chip.big{padding:4px 12px}
+body.battle .chip.big b{font-size:22px}
+body.battle .todo{padding:7px 14px}
+body.battle .todo-h{display:inline;margin:0 10px 0 0}
+body.battle .todo ol{display:inline;padding:0;list-style:none}
+body.battle .todo li{display:inline}
+body.battle .todo li:not(.now){display:none}
+body.battle #stage .panel{padding:12px 14px}
+body.battle #stage .panel-head{margin-bottom:8px}
+body.battle #stage .banner{display:none}
+body.battle #stage hr.sep{display:none}
+body.battle .lane{min-height:186px}
+body.battle .lane-side{padding:4px}
+body.battle #stage .cards{margin-top:6px!important;gap:6px}
+body.battle #stage .cards .card{width:148px;padding:6px 8px}
+body.battle #stage .cards .card .txt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+body.battle .handhead{margin-top:10px}
+
+/* ---- p51: menus ---- */
+#modal{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:16px}
+.mshade{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+.mbox{position:relative;background:var(--surface);border:1px solid var(--ink);border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.35);width:min(920px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column}
+.mhead{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.mhead h2{margin-right:auto;font-size:20px}
+.mbody{padding:14px 16px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.mdesc{margin:0;font-size:16px}
+.mstep{margin:0;font-size:15px;font-weight:600}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.dtile{font:inherit;text-align:left;border:1px solid var(--line);border-left:5px solid var(--ink3);border-radius:4px;background:var(--surface2);padding:7px 9px;cursor:pointer;display:flex;flex-direction:column;gap:2px;color:var(--ink)}
+.dtile:hover:not(.off){border-color:var(--accent);background:var(--accentSoft)}
+.dtile .row{display:flex;justify-content:space-between;gap:6px;font-size:14px}
+.dtile.off{opacity:.45;cursor:not-allowed}
+.dtile.hl{outline:3px solid var(--accent);background:var(--accentSoft)}
+.dtile.dead{background:var(--sunken)}
+.dmods{font-size:12px;font-weight:700;color:var(--metaC)}
+.mbody>.btn{align-self:flex-start}
+.upcard:not(:disabled){cursor:pointer}
+.upcard:not(:disabled):hover{border-color:var(--accent)}
 </style>
 
 <div class="wrap">
@@ -378,6 +510,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
     </div>
   </header>
 
+  <aside id="railL" class="rail rl" aria-label="Battle info"></aside>
   <div class="front">
     <div class="front-head">
       <div><span class="eyebrow">The Front</span>
@@ -391,16 +524,17 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 
   <div id="stage"></div>
 
-  <div class="panel">
+  <div class="panel" id="logPanel">
     <div class="panel-head"><h2>Log</h2><span class="tiny muted" id="phaseLabel"></span></div>
     <div class="log" id="log"></div>
   </div>
 
-  <div class="panel">
+  <div class="panel" id="deckPanel">
     <div class="panel-head"><h2>Your deck</h2>
       <span class="tiny muted"><span id="deckCount" class="mono">0</span> cards · everything here came from a pack</span></div>
     <div class="decklist" id="decklist"></div>
   </div>
+  <aside id="railR" class="rail rr" aria-label="Your deck"></aside>
 
 
 </div>
@@ -447,7 +581,14 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
           <div class="tcard"><h3>Mistime a window</h3><p>Turn-1-only and turn-4+ cards are bricks in the wrong deck.</p></div>
           <div class="tcard"><h3>Split a pair</h3><p>Cross-tribe cards want a partner tribe. Sell one half.</p></div>
         </div>
-        <p>They are doing the same to you. Each pack shows its <b>tricks, average cost and dead weight</b> for free; <b>appraising</b> (2 meta) adds a rough synergy read and the tribe it leans toward.</p>
+        <p>They are doing the same to you. Each pack shows its <b>curve</b> for free (how many cheap, mid and big cards, tricks and dead weight). <b>Appraising</b> (2 meta) tells you what it's worth <b>to your deck</b> — high, fair or low — and why.</p>
+        <p><b>What makes a pack good?</b> Not just synergy, and not just high cost:</p>
+        <div class="grid2">
+          <div class="tcard"><h3>Big cards</h3><p>More power per card you draw — but you cast one a turn, and early turns give only 3–4 sun.</p></div>
+          <div class="tcard"><h3>Cheap cards</h3><p>More stats per sun, and they go wide: a lane's push is total attack × total health. Your 3rd card each turn draws a card (<b>Flurry</b>). They also climb highest on veterancy.</p></div>
+          <div class="tcard"><h3>Fit</h3><p>A pack that fills what your deck lacks beats a stronger pack of more of the same.</p></div>
+          <div class="tcard"><h3>Red flags</h3><p>0-attack bodies, payoffs with no tribe to feed them, turn-window cards, dead weight.</p></div>
+        </div>
       </div>
     </details>
 
@@ -457,7 +598,9 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
           <li><b>The first mover commits units</b> without seeing the other side. Normally that is Blight.</li>
           <li><b>The second mover answers</b> with units <em>and</em> tricks, seeing everything.</li>
           <li><b>The first mover casts tricks last.</b> Committing blind is the cost; the last word is the reward.</li>
+          <li><b>The fight plays out one lane at a time</b>, left to right.</li>
         </ol>
+        <p><b>Flurry:</b> the third card you play in a turn draws you a card (once a turn).</p>
         <p>If the front is pushed deep into one side's home, <b>that</b> side takes the first-mover role.</p>
         <p><b>The exchange:</b> in each lane, all your units' attack adds up and hits their <b>front</b> unit; overkill carries to the next one. Both sides hit at once. So a tough unit in front shields everything behind it.</p>
         <p>Once per turn you may <b>scrap</b> a card from your hand for 2 resource.</p>
@@ -466,7 +609,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 
     <details><summary><span class="gn">5</span>Capturing lanes</summary>
       <div class="gbody">
-        <p>Each lane has a <b>capture bar</b>. If only your units are left standing in a lane, each one pushes the bar by <b>attack × health</b> per turn (a 2/2 pushes 4%, a 6/6 pushes 36%). Lanes with units from both sides don't move.</p>
+        <p>Each lane has a <b>capture bar</b>. If only your units are left standing in a lane, they push the bar by their <b>total attack × total health</b> per turn. A lone 2/2 pushes 4%; two 2/2s push 4×4 = 16%, the same as one 4/4. Going wide counts. Lanes with units from both sides don't move.</p>
         <div class="grid2">
           <div class="tcard"><h3>20% — held</h3><p>Counts toward winning the round and pays resource.</p></div>
           <div class="tcard"><h3>60% — captured</h3><p>Your strongest unit there stays as a garrison next round. A captured flank also rakes the main lane beside it and speeds your capture there.</p></div>
@@ -504,6 +647,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
         <p>Units clear between rounds. Three things carry:</p>
         <div class="grid2">
           <div class="tcard"><h3>Veterancy ★</h3><p>A card still standing at round end PERMANENTLY gets +1/+1 — up to +3 for cheap cards, +2 for 3–4 costs, +1 for big and workshop cards.</p></div>
+          <div class="tcard"><h3>Hard lessons ★</h3><p>The side that LOSES the round also promotes its two hardest-hitting cards that fell (most attack thrown), +1/+1 each, same caps.</p></div>
           <div class="tcard"><h3>Garrison</h3><p>Your strongest unit in each captured lane starts next round there.</p></div>
           <div class="tcard"><h3>Reserve</h3><p>Up to three unplayed cards stay in your hand.</p></div>
         </div>
@@ -534,7 +678,14 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
 "use strict";
 
 /* ============ cards ============ */
-const C = {
+/* A tonic changes ONE copy. That copy gets its own id ("thornling~k3x9") so it
+   can carry its own tonics, veterancy and growth; the card table fills variant
+   entries in on first use, so every seat and every saved state can read them. */
+function baseId(id){const i=typeof id==="string"?id.indexOf("~"):-1;return i>0?id.slice(0,i):id;}
+function cardTable(o){return new Proxy(o,{get(t,k){
+  if(typeof k==="string"&&!(k in t)){const i=k.indexOf("~");if(i>0&&t[k.slice(0,i)])t[k]=Object.assign({},t[k.slice(0,i)],{vof:k.slice(0,i)});}
+  return t[k];}});}
+const C = cardTable({
 /* ===========================================================================
    GROVE — entrenchment, reaction and compounding growth.
    Grove units answer being hit: they harden, they draw, they spawn, they
@@ -756,7 +907,7 @@ const C = {
   rubble:{n:"Rubble",s:"both",c:0,junk:true,t:"Dead weight. Does nothing, ever — but you can at least scrap it for resource."},
   tangle:{n:"Tangle",s:"both",c:0,junk:true,t:"Dead weight that cannot even be scrapped. It just sits in your hand.",noscrap:true},
   blightedsoil:{n:"Blighted Soil",s:"both",c:0,junk:true,t:"Dead weight. Scrapping it gives you nothing at all.",noscrapvalue:true}
-};
+});
 const TAG_ORDER=["Thorn","Root","Flower","Aquatic","Rot","Spore","Bone","Ichor","Tribeless","Hybrid","Abomination","Minion"];
 const TAGS={Thorn:"#7A8F3C",Root:"#6B7A52",Flower:"#A8643C",Aquatic:"#3F7A82",
             Rot:"#9B5230",Spore:"#7A6438",Bone:"#8A8270",Ichor:"#6B4A78",
@@ -891,10 +1042,19 @@ function freshState(side,map,env,cfg){
     log:[], sel:null
   };
 }
-function log(msg,hl,priv){S.logN=(S.logN||0)+1;S.log.push({msg,hl,n:S.logN,by:S.pf,priv:!!priv}); if(S.log.length>70)S.log.shift();}
+function log(msg,hl,priv){S.logN=(S.logN||0)+1;const e={msg,hl,n:S.logN,by:S.pf,priv:!!priv};if(S.logLane!=null)e.li=S.logLane;S.log.push(e); if(S.log.length>90)S.log.shift();}
 /* Your own shopping, workshop and draws are YOUR business. In multiplayer the log
    is shared, so these lines are marked private and the other seat never sees them. */
 function plog(msg,hl){log(msg,hl,true);}
+/* FLURRY: the third card you play in a turn draws you a card (once a turn).
+   Cheap cards run out of cards before they run out of sun; this pays them back. */
+const FLURRY_AT=3;
+function flurry(w){
+  const key=S.round+"/"+S.turn, P=S[w];
+  if(P.flT!==key){P.flT=key;P.plays=0;}
+  P.plays=(P.plays||0)+1;
+  if(P.plays===FLURRY_AT){drawFor(w,1);if(w==="p")log("Flurry — your third card this turn draws you a card.");else log(FNAME[S.af]+"'s Flurry draws it a card.");}
+}
 function visibleLog(){return S.log.filter(e=>!e.priv||!e.by||e.by===S.pf);}
 /* In multiplayer the log is shared, so a line the OTHER seat wrote says "you"
    about them. Re-word those lines for the reader. */
@@ -992,8 +1152,14 @@ function shiftCap(l,d){
 }
 /* Pressure = attack × current health, per surviving unit. A 1/1 barely leans on
    a lane; a 6/6 leans on it thirty-six times as hard. Summoned tokens count half. */
+/* Pressure = the line's TOTAL attack × its TOTAL health. Two 2/2s lean on a lane
+   exactly as hard as one 4/4 (4×4=16), so going wide with cheap bodies is as good
+   per stat as one big card — and cheap cards carry more stats per sun. Summoned
+   tokens count half. */
 function pressure(l,side){
-  return l[side].reduce((t,u)=>t+Math.max(0,atk(u,l,side))*Math.max(0,u.h)*(C[u.id].token?0.5:1),0);
+  let A=0,H=0;
+  l[side].forEach(u=>{const k=C[u.id].token?0.5:1;A+=Math.max(0,atk(u,l,side))*k;H+=Math.max(0,u.h)*k;});
+  return A*H;
 }
 function capGain(l,side){
   let g=pressure(l,side)*(l.flank?1.6:1.0);
@@ -1155,8 +1321,8 @@ function needWord(deck){
 }
 /* Value of a pack TO A PARTICULAR DECK. Power first, then what that deck is
    missing, then whether the deck can actually support the payoff cards in it. */
-function valuePack(cards,deck){
-  deck=deck||S.a.deck;
+function valuePack(cards,deck,opt){
+  deck=deck||S.a.deck;const noGap=opt&&opt.noGap;
   const nd=deckNeeds(deck), have=nd.prof.tribes;
   const tags={};
   let v=0;
@@ -1164,7 +1330,7 @@ function valuePack(cards,deck){
     const d=C[id];
     v+=cardPower(id);
     if(!d.junk){
-      const gap=nd[bucketOf(d)];
+      const gap=noGap?0:nd[bucketOf(d)];
       if(gap>0)v+=Math.min(3,gap*0.9);      // fills a hole
       else if(gap<-2)v-=1.2;                // already drowning in these
       if(d.tag)tags[d.tag]=(tags[d.tag]||0)+1;
@@ -1394,7 +1560,7 @@ function aiPlaceUnits(){
     });
     if(!cands.length){skip[pick.id]=1;continue;}   // keep the card; just not this turn
     const lane=cands.slice().sort((x,y)=>scoreFor(y,pick.id)-scoreFor(x,pick.id))[0];
-    A.sun-=costOf(pick.id,"a"); A.hand.splice(pick.i,1);
+    A.sun-=costOf(pick.id,"a"); A.hand.splice(pick.i,1); flurry("a");
     if(A.cheap){const k=A.cheap.indexOf(pick.id);if(k>=0)A.cheap.splice(k,1);} if(A.nextDisc)A.nextDisc=0;
     if(d.infest){
       /* infest the hardest-hitting enemy front unit it can reach */
@@ -1447,7 +1613,7 @@ function aiTricks(){
     const idx=A.hand.findIndex(id=>C[id].trick&&costOf(id,"a")<=A.sun&&!tskip[id]);
     if(idx<0)break;
     const d=C[A.hand[idx]], dc=costOf(A.hand[idx],"a"), tid=A.hand[idx];
-    const spend=()=>{A.sun-=dc;A.hand.splice(idx,1);};
+    const spend=()=>{A.sun-=dc;A.hand.splice(idx,1);flurry("a");};
     if(d.conjure&&!d.pyre){if(A.hand.length>=HAND_CAP-1){tskip[tid]=1;continue;}spend();log(FNAME[S.af]+" casts "+d.n+".");conjure("a",d.conjure,tid);triggerSpite("p");continue;}
     if(d.surge){const ls=S.lanes.filter(L=>L.a.length>=d.surge);if(!ls.length){tskip[tid]=1;continue;}spend();ls.forEach(L=>addU(L.a,mk("sprout","a")));log(FNAME[S.af]+" casts "+d.n+" — "+ls.length+" lanes sprout.",true);triggerSpite("p");continue;}
     if(d.swarmbuff||d.pact){const L=S.lanes.filter(x=>x.a.length&&x.p.length).sort((x,y)=>y.a.length-x.a.length)[0];
@@ -1473,7 +1639,7 @@ function aiTricks(){
       const src=S.lanes.filter(x=>x.a.some(u=>u.rattledraw||u.rattledmg||u.rattleblast||u.rattle));
       const l=src[0]||S.lanes.filter(x=>x.a.length)[0];
       if(!l)break;
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       const score=u=>(u.rattleblast||0)*2+(u.rattledmg||0)+(u.rattledraw||0);
       const food=l.a.slice().sort((x,y)=>score(y)-score(x))[0];
       l.a=l.a.filter(x=>x!==food);
@@ -1487,7 +1653,7 @@ function aiTricks(){
     if(d.sweep||d.sweepdebuff){
       const l=S.lanes.filter(x=>x.p.length).sort((x,y)=>y.p.length-x.p.length)[0];
       if(!l)break;
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       if(d.sweep){l.p.forEach(u=>u.h-=d.sweep);cull(l,"p");
         if(d.sweepside){const li=S.lanes.indexOf(l);[li-1,li+1].forEach(k=>{const L=S.lanes[k];if(!L)return;L.p.forEach(u=>u.h-=d.sweepside);cull(L,"p");});}}
       else l.p.forEach(u=>u.weak=(u.weak||0)+d.sweepdebuff);
@@ -1497,14 +1663,14 @@ function aiTricks(){
     if(d.laneward){
       const l=S.lanes.filter(x=>x.a.length).sort((x,y)=>y.a.length-x.a.length)[0];
       if(!l)break;
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       l.a.forEach(u=>u.h+=d.laneward);
       log(FNAME[S.af]+" casts "+d.n+" — its line in "+l.nm+" hardens.");
       triggerSpite("p");continue;
     }
     if(d.sprouts){
       const l=S.lanes.slice().sort((x,y)=>y.a.length-x.a.length)[0];
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       if(d.spread){
         const lanes=S.lanes.slice().sort((x,y)=>x.a.length-y.a.length).slice(0,d.sprouts);
         lanes.forEach(L=>addU(L.a,mk("sprout","a")));
@@ -1517,12 +1683,12 @@ function aiTricks(){
     }
     if(d.swarmdraw){
       const n=swarmLanes("a",d.swarmdraw); if(n<1)break;
-      A.sun-=dc;A.hand.splice(idx,1);drawFor("a",n);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");drawFor("a",n);
       log(FNAME[S.af]+" casts "+d.n+" and draws "+n+".");
       triggerSpite("p");continue;
     }
     if(d.drawt){
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       drawFor("a",d.drawt);
       log(FNAME[S.af]+" casts "+d.n+" and draws "+d.drawt+".");
       triggerSpite("p");continue;
@@ -1531,7 +1697,7 @@ function aiTricks(){
       const best=S.lanes.map(l=>({l,t:l.p.filter(u=>u.h<=d.slayer).sort((x,y)=>atk(y,l,"p")-atk(x,l,"p"))[0]}))
         .filter(o=>o.t).sort((x,y)=>atk(y.t,y.l,"p")-atk(x.t,x.l,"p"))[0];
       if(!best)break;
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       log(FNAME[S.af]+" casts "+d.n+" — "+best.t.n+" is destroyed outright.",true);
       best.t.h=0;cull(best.l,"p");
       triggerSpite("p");continue;
@@ -1540,7 +1706,7 @@ function aiTricks(){
       const src=S.lanes.filter(l=>l.a.length);
       if(!src.length)break;
       const l=src.sort((x,y)=>y.a.length-x.a.length)[0], t=l.a[0];
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       t.base+=d.buff[0];t.h+=d.buff[1];
       log(FNAME[S.af]+" casts "+d.n+" — "+t.n+" grows to "+t.base+"/"+t.h+".");
       triggerSpite("p");continue;
@@ -1549,7 +1715,7 @@ function aiTricks(){
       const src=S.lanes.filter(l=>l.p.length);
       if(!src.length)break;
       const l=src.sort((x,y)=>atk(y.p[0],y,"p")-atk(x.p[0],x,"p"))[0], t=l.p[0];
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       t.weak=(t.weak||0)+d.debuff;
       log(FNAME[S.af]+" casts "+d.n+" — "+t.n+" is weakened by "+d.debuff+".");
       triggerSpite("p");continue;
@@ -1558,7 +1724,7 @@ function aiTricks(){
       const src=S.lanes.filter(l=>l.p.length>1);
       if(!src.length)break;
       const l=src[0], t=l.p.shift();l.p.push(t);
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       log(FNAME[S.af]+" casts "+d.n+" — "+t.n+" is shoved to the back of "+l.nm+".");
       triggerSpite("p");continue;
     }
@@ -1566,7 +1732,7 @@ function aiTricks(){
       const src=S.lanes.filter(l=>l.a.length&&l.p.length);
       if(!src.length)break;
       const l=src[0];
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       for(let k=0;k<1;k++){
         if(!l.p.length)break;
         const power=l.a.reduce((s,u)=>s+atk(u,l,"a")+(d.strikebonus||0),0);
@@ -1578,7 +1744,7 @@ function aiTricks(){
     if(d.shove){
       const fl=S.lanes.filter(l=>l.flank&&l.mk>1).sort((x,y)=>x.mk-y.mk)[0];
       if(!fl)break;
-      A.sun-=dc;A.hand.splice(idx,1);
+      A.sun-=dc;A.hand.splice(idx,1);flurry("a");
       shiftCap(fl,-25);fl.pushed=1;
       log(FNAME[S.af]+" casts "+d.n+" — "+fl.nm+" slides 25% their way ("+capLabel(fl)+").");
       triggerSpite("p");continue;
@@ -1591,7 +1757,7 @@ function aiTricks(){
       return v(y)-v(x);
     });
     const l=targets[0], t=pickTarget(l);
-    A.sun-=dc; A.hand.splice(idx,1);
+    A.sun-=dc; A.hand.splice(idx,1);flurry("a");
     log(FNAME[S.af]+" casts "+d.n+" in "+l.nm+" on "+t.n+(d.back?" (back line)":"")+".");
     applyDmg(t,d.dmg,l,"p"); cull(l,"p");
     triggerSpite("p");
@@ -1753,7 +1919,7 @@ function applyInfest(l,side,d,id){
   const f=d.infest;
   host.leech=(host.leech||0)+(f.leech||0);
   host.infest=(host.infest||[]).concat([{id,owner:side==="p"?S.pf:S.af,dot:f.dot||0,drain:f.drain||0,draw:f.draw||0,sprouts:f.sprouts||0}]);
-  log((side==="p"?"You infest ":FNAME[S.af]+" infests ")+host.n+" with a "+d.n+".",true);
+  log((side==="p"?"You infest ":FNAME[S.af]+" infests ")+host.n+" with a "+d.n+" — it's marked 🪱 on the board"+((f.dot||0)?", loses "+f.dot+" health every turn":"")+((f.drain||0)?", feeds "+f.drain+" "+FRES[side==="p"?S.pf:S.af]+" a turn":"")+", and bursts out when the host dies.",true);
   return true;
 }
 /* A host died: every parasite in it bursts out on its owner's side. */
@@ -1880,7 +2046,15 @@ function triggerSpite(side){
   }));
 }
 function resolve(){
-  S.lanes.forEach(l=>{
+  S.resolveTick=(S.resolveTick||0)+1;
+  S.lanes.forEach(resolveLane);
+}
+function resolveLane(l){
+  const li=S.lanes.indexOf(l); S.logLane=li;
+  try{resolveLaneBody(l);}finally{S.logLane=null;}
+}
+function resolveLaneBody(l){
+  {
     l.pushed=0;
     const hP=l.p.length,hA=l.a.length;
     if(hP&&hA){
@@ -1912,6 +2086,7 @@ function resolve(){
       const pAtk=l.p.reduce((s,u)=>s+(u.sniper?0:atk(u,l,"p")),0);
       const aAtk=l.a.reduce((s,u)=>s+(u.sniper?0:atk(u,l,"a")),0);
       log(l.nm+": you throw "+pAtk+" attack, "+FNAME[S.af]+" throws "+aAtk+".");
+      creditAtk(l,"p",pAtk);creditAtk(l,"a",aAtk);
       const onA=strike(l,"a",pAtk), onP=strike(l,"p",aAtk);
       /* ENVIRONMENT: double strike and strikethrough for the lane's owner */
       const eo=envOwnerSide(l);
@@ -1978,7 +2153,7 @@ function resolve(){
       log(l.nm+" → "+who+" "+Math.abs(d)+"% · now "+capLabel(l)+band+".",Math.abs(d)>=20||l.mk!==bmk);
     }
     else if(l.p.length&&l.a.length)log(l.nm+" → both lines hold. No push.");
-  });
+  }
 }
 /* Begin a turn. If the AI moves first, it commits its units before you act. */
 function beginTurn(){
@@ -2059,7 +2234,20 @@ function randomOfTribe(faction,tribe,notId,sameCost){
   });
   return pool.length?pool[rnd(pool.length)]:null;
 }
-function bankMomentum(){
+/* Attack each card threw this round — the side that loses the round promotes its
+   hardest fighters even if they fell. */
+function creditAtk(l,side,amt){if(!amt)return;const P=S[side];P.rdmg=P.rdmg||{};
+  const units=l[side].filter(u=>!u.sniper&&!C[u.id].token);units.forEach(u=>{const a=atk(u,l,side);if(a>0)P.rdmg[u.id]=(P.rdmg[u.id]||0)+a;});}
+function hardLessons(w){
+  const P=S[w],tally=P.rdmg||{},names=[];
+  const survived={};S.lanes.forEach(l=>l[w].forEach(u=>survived[u.id]=1));
+  const ids=Object.keys(tally).filter(id=>C[id]&&!C[id].token&&!survived[id]&&P.deck.includes(id)&&vet(w,id)<vetCap(id))
+    .sort((x,y)=>tally[y]-tally[x]).slice(0,2);
+  ids.forEach(id=>{P.vet[id]=vet(w,id)+1;names.push(C[id].n+" +"+P.vet[id]);});
+  if(names.length){if(w==="p")log("Hard lessons: "+names.join(", ")+" — your hardest fighters fell but learned. Permanently stronger.",true);
+    else log(FNAME[S.af]+" learns hard lessons: "+names.join(", ")+".");}
+}
+function bankMomentum(loser){
   S.lanes.forEach(l=>{if(l.terr&&l.terr.mark){const alive=l.p.concat(l.a).some(u=>u.uid===l.terr.mark);l.terrKeep=alive?1:0;
     if(alive)log(l.nm+": the "+l.terr.n+" stands — it carries into next round.",true);}});
   ["p","a"].forEach(w=>{const seen={};S.lanes.forEach(l=>l[w].forEach(u=>{if(C[u.id].growsurvive&&!seen[u.id]){seen[u.id]=1;grow(w,u.id,1,2,5,10);}}));});
@@ -2076,6 +2264,9 @@ function bankMomentum(){
     });
     if(w==="p"&&names.length)log("Veterans: "+names.join(", ")+" — permanently stronger in your deck.",true);
   });
+  // 1b. Hard lessons — the side that lost the round also promotes its two hardest fighters that fell.
+  if(loser)hardLessons(loser);
+  S.p.rdmg={};S.a.rdmg={};
   // 2. Garrison — in a lane you have FULLY captured, your strongest survivor digs in.
   S.lanes.forEach(l=>{
     l.gp=null;l.ga=null;
@@ -2103,12 +2294,12 @@ function bankMomentum(){
   if(S.p.carry.length)log("You keep "+S.p.carry.length+" card"+(S.p.carry.length>1?"s":"")+" in reserve.");
 }
 function endRound(){
-  bankMomentum();
   const pm=mainsHeld("p"), am=mainsHeld("a");
   let w=null; if(pm>am)w="p"; else if(am>pm)w="a";
   /* Flanks break ties: level on mains, the side holding more flank sectors takes it. */
   const pf=flanksHeld("p"), af=flanksHeld("a");
   if(!w&&pf!==af){w=pf>af?"p":"a";log("Main lanes are level — the flanks decide it ("+pf+"–"+af+").",true);}
+  bankMomentum(w==="p"?"a":(w==="a"?"p":null));
   // Margin matters: a clean sweep moves the front twice as far as a 2–1 grind.
   const margin=Math.abs(pm-am);
   const step=(margin>=3?2:1)*(S.round>=12?2:1);
@@ -2139,6 +2330,10 @@ function dropInto(dest){          // dest: 0 | 1 | "draft"
   S.hold=null;render();
 }
 function placedCount(){return S.p.packs.reduce((n,pk)=>n+pk.cards.length,0);}
+/* Listing an upgrade for the other side is part of stocking — not optional. */
+function offerNeeded(){return UPGRADES.some(u=>!upLvl("a",u.k));}
+function stockReady(){return packsLegal()&&(!!S.p.offer||!offerNeeded());}
+function autoOffer(){if(S.p.offer||!offerNeeded())return;const av=UPGRADES.filter(u=>!upLvl("a",u.k));const u=av[rnd(av.length)];S.p.offer={k:u.k,price:u.base};}
 function packsLegal(){
   return S.p.packs.every(p=>
     p.cards.length===PACK_SIZE_REQ && p.cards.some(id=>!C[id].trick&&!C[id].junk));
@@ -2154,6 +2349,43 @@ function synergyRead(cards){
   if(top>=2)return{label:"some",level:1,tribe,top};
   return{label:"little to none",level:0,tribe:null,top};
 }
+/* The free read: the SHAPE of a pack. Curve buckets instead of an average, because
+   "higher average cost" is not the same as "better". */
+function curveRead(cards){
+  let ch=0,mi=0,bg=0,tr=0,jk=0;
+  cards.forEach(id=>{const d=C[id];if(d.junk)jk++;else if(d.trick)tr++;else if((d.c||0)<=2)ch++;else if(d.c<=4)mi++;else bg++;});
+  const bits=[ch+" cheap (1–2)",mi+" mid (3–4)",bg+" big (5+)",tr+" trick"+(tr===1?"":"s")];
+  if(jk)bits.push(jk+" dead weight");
+  return bits.join(" · ");
+}
+/* The paid read: what this pack is worth to YOUR deck, in words, with the reasons. */
+function appraisalRead(cards,w){
+  const deck=S[w||"p"].deck,fresh=deck.length<6,v=valuePack(cards,deck,fresh?{noGap:1}:null),nd=deckNeeds(deck),have=nd.prof.tribes;
+  const hi=fresh?13:8,lo=fresh?0:-5;
+  const grade=v>=hi?"high":(v>=lo?"fair":"low");
+  const why=[];
+  const bodies=cards.filter(id=>!C[id].trick&&!C[id].junk);
+  const cheap=bodies.filter(id=>(C[id].c||0)<=2).length,big=bodies.filter(id=>(C[id].c||0)>=5).length;
+  const names={cheap:"cheap bodies",mid:"midrange bodies",top:"big finishers",tricks:"tricks"};
+  const cnt={cheap:0,mid:0,top:0,tricks:0};cards.forEach(id=>{const d=C[id];if(!d.junk)cnt[bucketOf(d)]++;});
+  if(!fresh)Object.keys(names).forEach(k=>{if(nd[k]>=2&&cnt[k]>=2)why.push("fills a gap — your deck is short on "+names[k]);
+    else if(nd[k]<=-3&&cnt[k]>=3)why.push("!"+"more "+names[k]+" — you already have plenty");});
+  const tags={};bodies.forEach(id=>{const t=C[id].tag;if(t&&t!=="Tribeless")tags[t]=(tags[t]||0)+1;});
+  const tt=Object.keys(tags).sort((a,b)=>tags[b]-tags[a])[0];
+  if(tt&&(have[tt]||0)>=3&&tags[tt]>=2)why.push("adds to the "+tt+" you already run");
+  else if(tt&&tags[tt]>=3&&(have[tt]||0)<2)why.push("starts a "+tt+" core");
+  const feeders=t=>(have[t]||0)+bodies.filter(id=>C[id].tag===t&&!C[id].aura&&!C[id].scale).length;
+  const pay=cards.filter(id=>{const d=C[id],t=d.aura||d.scale;return t&&feeders(t)<2;}).length;
+  if(pay)why.push("!"+"has a tribe payoff you can't feed yet");
+  if(big>=3||(fresh&&big>=2))why.push("!"+"top-heavy — you can cast only one big card a turn"+(fresh?", and turn 1 gives just 3 sun":""));
+  if(cheap>=5)why.push("lots of cheap plays — goes wide and triggers Flurry");
+  const punch=bodies.reduce((t,id)=>t+(C[id].a||0),0);
+  const zero=bodies.filter(id=>!(C[id].a>0)).length;
+  if(zero>=2)why.push("!"+zero+" bodies with 0 attack — they can't take ground on their own");
+  else if(bodies.length>=2&&punch<bodies.length*1.3)why.push("!"+"very little attack");
+  const red=why.filter(x=>x[0]==="!").map(x=>x.slice(1)),good=why.filter(x=>x[0]!=="!");
+  return {grade,why:red.concat(good).slice(0,4)};
+}
 function packStats(cards){
   const tricks=cards.filter(id=>C[id].trick).length;
   const junk=cards.filter(id=>C[id].junk).length;
@@ -2167,7 +2399,7 @@ function resonance(who,id){
   /* Duplicates of CHEAP cards resonate. Big bodies and anything built at the
      workshop do not — that was a Rootmass stacking veterancy and resonance. */
   const d=C[id];if(!d||(d.c||0)>3||id.startsWith("graft_")||d.tag==="Hybrid"||d.tag==="Abomination")return 0;
-  const n=S[who].deck.filter(x=>x===id).length;
+  const n=S[who].deck.filter(x=>baseId(x)===baseId(id)).length;
   return n>=5?2:(n>=3?1:0);
 }
 function unassign(pi,ci){const pk=S.p.packs[pi];S.p.draft.push(pk.cards[ci]);pk.cards.splice(ci,1);render();}
@@ -2265,13 +2497,15 @@ function keepExperiment(){
   S.p.pending=null;render();
 }
 function canFuse(){
-  const c={};S.p.deck.forEach(id=>{if(C[id].fuse)c[id]=(c[id]||0)+1;});
+  const c={};S.p.deck.forEach(id=>{if(C[id].fuse)c[baseId(id)]=(c[baseId(id)]||0)+1;});
   return Object.keys(c).filter(id=>c[id]>=2);
 }
 function doFuse(id){
   const cost=fuseCost(id);
   if(S.p.meta<cost)return;S.p.meta-=cost;
-  const d=S.p.deck.slice();d.splice(d.indexOf(id),1);d.splice(d.indexOf(id),1);d.push(C[id].fuse);S.p.deck=d;
+  const d=S.p.deck.slice();
+  for(let k=0;k<2;k++){let i=d.indexOf(id);if(i<0)i=d.findIndex(x=>baseId(x)===id);d.splice(i,1);}
+  d.push(C[id].fuse);S.p.deck=d;
   plog("You cross-breed two "+C[id].n+"s into a "+C[C[id].fuse].n+" for "+cost+".",true);render();
 }
 /* ---------------------------------------------------------------------------
@@ -2281,14 +2515,14 @@ function doFuse(id){
    duplicated or given an ability instead of being culled.
    --------------------------------------------------------------------------- */
 const TONICS=[
-  {k:"vigour",  n:"Vigour",      d:"+2/+2 to one card in your deck, forever.",            cost:5,  mod:{a:2,h:2}},
-  {k:"temper",  n:"Tempering",   d:"+0/+5 to one card in your deck, forever.",            cost:5,  mod:{a:0,h:5}},
-  {k:"whet",    n:"Whetting",    d:"+4/+0 to one card in your deck, forever.",            cost:6,  mod:{a:4,h:0}},
-  {k:"carapace",n:"Carapace",    d:"That card gains SHIELD 2 — it ignores the first 2 damage every turn.", cost:7, mod:{shield:2}},
-  {k:"ferocity",n:"Ferocity",    d:"That card gains SLAY 2 — it grows permanently each time it kills.",    cost:7, mod:{slay:2}},
-  {k:"awaken",  n:"Awakening",   d:"That card gains: on play, draw a card.",              cost:8,  mod:{draw:1}},
-  {k:"mitosis", n:"Mitosis",     d:"Put a second copy of that card into your deck.",      cost:9,  dup:true},
-  {k:"distil",  n:"Distillation",d:"Destroy that card and take 3 meta for it.",           cost:0,  distil:3},
+  {k:"vigour",  n:"Vigour",      d:"+2/+2 to ONE copy of a card in your deck, forever.",            cost:5,  mod:{a:2,h:2}},
+  {k:"temper",  n:"Tempering",   d:"+0/+5 to ONE copy of a card in your deck, forever.",            cost:5,  mod:{a:0,h:5}},
+  {k:"whet",    n:"Whetting",    d:"+4/+0 to ONE copy of a card in your deck, forever.",            cost:6,  mod:{a:4,h:0}},
+  {k:"carapace",n:"Carapace",    d:"One copy gains SHIELD 2 — it ignores the first 2 damage every turn.", cost:7, mod:{shield:2}},
+  {k:"ferocity",n:"Ferocity",    d:"One copy gains SLAY 2 — it grows permanently each time it kills.",    cost:7, mod:{slay:2}},
+  {k:"awaken",  n:"Awakening",   d:"One copy gains: on play, draw a card.",              cost:8,  mod:{draw:1}},
+  {k:"mitosis", n:"Mitosis",     d:"Copy one card (tonics and all) into your deck.",      cost:9,  dup:true},
+  {k:"distil",  n:"Distillation",d:"Destroy one card and take 3 meta for it.",           cost:0,  distil:3},
   {k:"purge",   n:"Purge",       d:"Remove EVERY piece of dead weight from your deck — 1 more meta per piece.", cost:3, purge:true}
 ];
 /* ---- Sticker book (after Garden Warfare's sticker packs) --------------------
@@ -2382,7 +2616,19 @@ function purgeReserve(who,id){
   if(S[who].hand)S[who].hand=S[who].hand.filter(c=>c!==id);
 }
 function tonicPrice(t){return t.purge?tonicCost(t,"p")+S.p.deck.filter(id=>C[id].junk).length:tonicCost(t,"p");}
-function applyTonic(k,cardId){
+/* Split one copy off into its own variant so a tonic touches only that copy. */
+function splitCopy(w,i){
+  const P=S[w],src=P.deck[i];if(src==null)return null;
+  const isVar=src!==baseId(src), copies=P.deck.filter(x=>x===src).length;
+  if(isVar&&copies===1)return src;
+  const vid=baseId(src)+"~"+newUid();
+  P.vet=P.vet||{};if(P.vet[src])P.vet[vid]=P.vet[src];
+  P.mods=P.mods||{};if(P.mods[src])P.mods[vid]=Object.assign({},P.mods[src]);
+  P.grow=P.grow||{};if(P.grow[src])P.grow[vid]=Object.assign({},P.grow[src]);
+  P.tonicCount=P.tonicCount||{};if(P.tonicCount[src])P.tonicCount[vid]=P.tonicCount[src];
+  P.deck[i]=vid;return vid;
+}
+function applyTonic(k,cardId,deckIdx){
   const t=tonicDef(k); if(!t)return;
   const off=(S.p.tonics||[]).find(o=>o.k===k);
   const price=tonicPrice(t);
@@ -2396,6 +2642,8 @@ function applyTonic(k,cardId){
     return render();
   }
   if(!cardId)return;
+  if(deckIdx==null)deckIdx=S.p.deck.indexOf(cardId);
+  if(deckIdx<0)return;
   const TONIC_CAP=2;
   if(t.mod){
     const cur=cardMods("p",cardId), room=tonicRoom(cardId,cur);
@@ -2408,11 +2656,11 @@ function applyTonic(k,cardId){
       plog(C[cardId].n+" has already taken two tonics — it will not hold another.");
       return render();
     }
-    S.p.tonicCount[cardId]=(S.p.tonicCount[cardId]||0)+1;
   }
   S.p.meta-=price;off.taken=true;S.p.tonicUsed=true;if(!t.distil)S.p.tonicsBought=(S.p.tonicsBought||0)+1;
+  if(!t.distil&&!t.dup){cardId=splitCopy("p",deckIdx);S.p.tonicCount[cardId]=(S.p.tonicCount[cardId]||0)+1;UI.lastTonic=cardId;}
   if(t.distil){
-    const i=S.p.deck.indexOf(cardId);
+    const i=deckIdx;
     if(i>=0)S.p.deck.splice(i,1);
     purgeReserve("p",cardId);
     S.p.meta+=t.distil;
@@ -2425,7 +2673,7 @@ function applyTonic(k,cardId){
     const m=S.p.mods[cardId]||{};
     for(const key in t.mod)m[key]=(m[key]||0)+t.mod[key];
     S.p.mods[cardId]=m;
-    plog(t.n+" is worked into "+C[cardId].n+" — permanently, in your deck.",true);
+    plog(t.n+" is worked into ONE of your "+C[cardId].n+"s — that copy is changed for good.",true);
   }
   S.p.arming=null;render();
 }
@@ -2636,6 +2884,7 @@ function playCard(hi,li){
   if(!canTarget(hi,l))return;
   tutAfterPlay(id,li);
   S.p.sun-=costOf(id,"p");S.p.hand.splice(hi,1);
+  flurry("p");
   if(S.p.cheap){const k=S.p.cheap.indexOf(id);if(k>=0)S.p.cheap.splice(k,1);}
   if(!d.trick&&S.p.nextDisc)S.p.nextDisc=0;
   if(d.trick)sfx("trick");
@@ -2888,12 +3137,13 @@ function mpPack(){
     submitted:!!S[w].submitted,boughtIdx:S[w].boughtIdx==null?null:S[w].boughtIdx,paidOut:S[w].paidOut||0,
     pending:S[w].pending||null,discarded:!!S[w].discarded,hero:S[w].hero||null,spRound:S[w].spRound||0,gmRound:S[w].gmRound||0,cheap:S[w].cheap||[],grow:S[w].grow||{},incomeWhy:S[w].incomeWhy||null,taxNext:S[w].taxNext||0,nextDisc:S[w].nextDisc||0,stockRound:S[w].stockRound||0,
     book:S[w].book||{},compUsed:S[w].compUsed||{},minionUsed:!!S[w].minionUsed,
-    cutsTotal:S[w].cutsTotal||0,tonicsBought:S[w].tonicsBought||0
+    cutsTotal:S[w].cutsTotal||0,tonicsBought:S[w].tonicsBought||0,
+    rdmg:S[w].rdmg||{},plays:S[w].plays||0,flT:S[w].flT||null
   });
   const o={};
   o[S.pf]=seat("p"); o[S.af]=seat("a");
   return {
-    v:1,code:MP.code,active:S.mpActive,started:true,step:S.mpStep||1,
+    v:1,code:MP.code,active:S.mpActive,started:true,step:S.mpStep||1,rt:S.resolveTick||0,
     phase:S.phase,sub:S.sub,round:S.round,turn:S.turn,over:S.over,
     front:S.pf==='grove'?S.front:FRONT_MAX-S.front,
     hostSide:MP.hostSide||S.pf,
@@ -2918,7 +3168,7 @@ function mpUnpack(raw){
     Object.keys(src).forEach(k=>{S2[w][k]=src[k];});
   };
   load("p",d.seats[mine]); load("a",d.seats[theirs]);
-  S2.phase=d.phase;S2.round=d.round;S2.turn=d.turn;
+  S2.phase=d.phase;S2.round=d.round;S2.turn=d.turn;S2.resolveTick=d.rt||0;
   S2.mpStep=d.step||1;
   S2.sub=S2.phase==="combat"
     ? (S2.mpStep===1?"place":S2.mpStep===2?"respond":"tricks")
@@ -3101,7 +3351,8 @@ function autoCompletePacks(){
 /* --- stock ---------------------------------------------------------------- */
 async function mpSubmitStock(auto){
   if(S.p.submitted)return;
-  if(!auto&&!packsLegal())return;
+  if(!auto&&!stockReady())return;
+  if(auto)autoOffer();
   mpClearTimer();
   S.p.submitted=true;
   log("Your packs are stocked and priced.",true);
@@ -3232,7 +3483,7 @@ function deckStats(id,w){
   const u=mk(id,w), notes=[];
   if(u.vet)notes.push("Veteran ★"+u.vet+" (+"+u.vet+"/+"+u.vet+")");
   const m=cardMods(w,id); const ml=modLabel(m); if(ml)notes.push("Tonics: "+ml);
-  if(u.res)notes.push("Resonance +"+u.res+"/+"+u.res+" (you hold "+S[w].deck.filter(x=>x===id).length+" copies)");
+  if(u.res)notes.push("Resonance +"+u.res+"/+"+u.res+" (you hold "+S[w].deck.filter(x=>baseId(x)===baseId(id)).length+" copies)");
   if(u.growth&&(u.growth.a||u.growth.h))notes.push("Grown +"+u.growth.a+"/+"+u.growth.h);
   return {a:u.base,h:u.h,notes,changed:u.base!==(d.a||0)||u.h!==(d.h||0)||notes.length>0};
 }
@@ -3323,7 +3574,8 @@ if(typeof document.addEventListener==="function"){
 
 function cardEl(id,o){
   o=o||{};const d=C[id];
-  const b=el("button","card"+(d.trick?" trick":"")+(o.picked?" picked":""));b.type="button";
+  const b=el("button","card"+(d.trick?" trick":"")+(o.picked?" picked":"")+(o.compact?" compact":""));b.type="button";
+  if(!d.trick&&!d.junk&&TAGS[d.tag])b.style[o.compact?"borderLeftColor":"borderTopColor"]=TAGS[d.tag];
   if(o.disabled)b.disabled=true;
   const r=el("div","row");r.appendChild(el("span","nm",d.n));
   if(!d.junk){const cc=o.who&&S&&S.phase==="combat"?costOf(id,o.who):d.c;const ce=el("span","cost",String(cc));
@@ -3340,13 +3592,14 @@ function cardEl(id,o){
   if(o.onClick)b.addEventListener("click",o.onClick);
   return b;
 }
+const RES_ICO={grove:"☀",blight:"✺"};
 function renderRes(){
   const r=$("res");r.innerHTML="";
-  const add=(l,v,c)=>{const e=el("div","chip "+(c||""));e.appendChild(el("b",null,String(v)));e.appendChild(el("span","lab",l));r.appendChild(e);};
+  const add=(l,v,c,ico)=>{const e=el("div","chip "+(c||""));if(ico)e.appendChild(el("span","ico",ico));e.appendChild(el("b",null,String(v)));e.appendChild(el("span","lab",l));r.appendChild(e);return e;};
   if(S.phase==="pick")return;
-  add("Your meta",S.p.meta,"gr");
+  if(S.phase==="combat")add("Your "+FRES[S.pf],S.p.sun,"big sun",RES_ICO[S.pf]).title="What you can spend this turn. It refills every turn and does not carry over.";
+  add("Your meta",S.p.meta,"big meta","◆").title="Spent between rounds: packs, appraisals, tonics, crates, the workshop.";
   if(S.phase==="combat"){
-    add(FRES[S.pf],S.p.sun,"gr");
     add("Mains",mainsHeld("p")+"–"+mainsHeld("a"));add("Flanks",flanksHeld("p")+"–"+flanksHeld("a"));
     add("Turn",S.turn+" / "+TURNS);
     add(FNAME[S.af]+" "+FRES[S.af],S.a.sun,"bl");
@@ -3366,6 +3619,21 @@ function renderFront(){
     :(S.front>FRONT_MID?"You are advancing — ":FNAME[S.af]+" is advancing — ")+ZONES[zoneIdx()]);
   $("roundNo").textContent=S.round;
 }
+/* Drag a card from your hand straight onto a lane. Legal lanes light up while you drag. */
+const DRAG={hi:null};
+/* Parasites are loud: a purple ring, and a badge that says whose they are and what they do. */
+function infBadge(x,u){
+  const ps=u.infest||[];if(!ps.length)return;
+  x.classList.add("infested");
+  const mine=ps.filter(pz=>pz.owner===S.pf).length, dot=ps.reduce((t,pz)=>t+(pz.dot||0),0), drain=ps.reduce((t,pz)=>t+(pz.drain||0),0);
+  const bits=[];if(dot)bits.push("−"+dot+"♥/turn");if(drain)bits.push("+"+drain+" "+FRES[ps[0].owner]+" to "+(ps[0].owner===S.pf?"you":"them"));
+  const b=el("div","infbadge","🪱 Infested"+(ps.length>1?" ×"+ps.length:"")+(bits.length?" · "+bits.join(" · "):""));
+  b.title=ps.map(pz=>C[pz.id].n+" ("+(pz.owner===S.pf?"yours":"theirs")+")").join(", ")+". When this unit dies, "+(ps.length>1?"they burst":"it bursts")+" out as "+(mine===ps.length?"YOUR":mine?"new":"THEIR")+" unit"+(ps.length>1?"s":"")+" in this lane.";
+  x.appendChild(b);
+}
+function dragClear(){DRAG.hi=null;if(typeof document.querySelectorAll!=="function")return;
+  document.querySelectorAll(".lane.droptarget,.lane.dragover").forEach(L=>L.classList.remove("droptarget","dragover"));
+  document.querySelectorAll(".card.dragging").forEach(c=>c.classList.remove("dragging"));}
 function renderBoard(ct,interactive){
   const wide=S.lanes.length>5;
   const b=el("div","board"+(wide?" wide":""));
@@ -3381,10 +3649,16 @@ function renderBoard(ct,interactive){
   }
   S.lanes.forEach((l,li)=>{
     const d=el("div","lane"+(l.flank?" flank":""));d.dataset.li=li;
+    if(interactive){
+      d.addEventListener("dragover",e=>{if(DRAG.hi!=null&&canTarget(DRAG.hi,l)){e.preventDefault();d.classList.add("dragover");}});
+      d.addEventListener("dragleave",()=>d.classList.remove("dragover"));
+      d.addEventListener("drop",e=>{e.preventDefault();const hi=DRAG.hi;dragClear();if(hi!=null&&canTarget(hi,l)){S.sel=null;act(()=>playCard(hi,li));}});
+    }
     if(interactive&&S.sel!=null&&canTarget(S.sel,l)){d.classList.add("targetable");d.addEventListener("click",()=>act(()=>playCard(S.sel,li)));}
     else if(interactive&&S.selHero&&canSuper(l,"p")){d.classList.add("targetable");d.addEventListener("click",()=>act(()=>useSuper("p",li)));}
     else if(interactive&&S.selMinion!=null&&canDeploy(l)){d.classList.add("targetable");d.addEventListener("click",()=>act(()=>deployMinion(li)));}
     const nm=el("div","lane-name",l.nm);
+    if(l.mk>=4)nm.classList.add("held-"+S.pf); else if(l.mk<=2)nm.classList.add("held-"+S.af);
     if(l.terr){
       const tb=el("span","terrbadge",l.terr.n+(l.terr.owner?" ("+FNAME[l.terr.owner]+")":""));
       tb.style.background=l.terr.col||"var(--ink3)";tb.title=l.terr.d+(l.terr.mark?" Stays next round if its landmark survives.":"");
@@ -3396,15 +3670,15 @@ function renderBoard(ct,interactive){
       nm.appendChild(eb);d.style.backgroundImage="linear-gradient(to bottom,"+l.env.col+"22,transparent 40%)";
     }
     d.appendChild(nm);
-    const top=el("div","lane-side top");
+    const top=el("div","lane-side top fs-"+S.af);
     l.a.forEach(u=>{
-      const x=el("div","unit a");x.dataset.uid=u.uid||"";
+      const x=el("div","unit a "+(S.af==="grove"?"fg":"fb"));x.dataset.uid=u.uid||"";
       bindTip(x,u.id,false,()=>unitStats(u,l,"a"));
-      x.appendChild(el("div","nm",u.n));
+      x.appendChild(el("div","nm",u.n));infBadge(x,u);
       const st=el("div","st");const ea=atk(u,l,"a");
-      st.appendChild(document.createTextNode(String(ea)));
+      st.appendChild(el("span","sa","⚔"+ea));
       if(ea>u.base){const s=el("span","buff","▲");st.appendChild(s);}
-      st.appendChild(document.createTextNode(" / "+u.h));
+      st.appendChild(document.createTextNode(" "));st.appendChild(el("span","sh","♥"+u.h));
       x.appendChild(st);top.appendChild(x);
     });
     d.appendChild(top);
@@ -3426,16 +3700,16 @@ function renderBoard(ct,interactive){
     else{const bb=el("b",col,Math.abs(c)+"% "+who);lb.appendChild(bb);lb.appendChild(document.createTextNode(state));}
     m.appendChild(lb);
     d.appendChild(m);
-    const bot=el("div","lane-side");
+    const bot=el("div","lane-side fs-"+S.pf);
     l.p.forEach(u=>{
-      const x=el("div","unit p");x.dataset.uid=u.uid||"";
+      const x=el("div","unit p "+(S.pf==="grove"?"fg":"fb"));x.dataset.uid=u.uid||"";
       bindTip(x,u.id,false,()=>unitStats(u,l,"p"));
-      x.appendChild(el("div","nm",u.n));
+      x.appendChild(el("div","nm",u.n));infBadge(x,u);
       const st=el("div","st");const ea=atk(u,l,"p");
       if(u.vet){const v=el("span","buff"," \u2605"+u.vet);x.appendChild(v);}
-      st.appendChild(document.createTextNode(String(ea)));
+      st.appendChild(el("span","sa","⚔"+ea));
       if(ea>u.base){const s=el("span","buff","▲");st.appendChild(s);}
-      st.appendChild(document.createTextNode(" / "+u.h));
+      st.appendChild(document.createTextNode(" "));st.appendChild(el("span","sh","♥"+u.h));
       x.appendChild(st);bot.appendChild(x);
     });
     d.appendChild(bot);
@@ -3531,15 +3805,15 @@ const TUT_AI={1:[["rotling",2]],2:[["gnawer",1],["crawler",2]],3:[["shamblehulk"
 const TUT_STEPS=[
   {t:"Welcome to Grove and Blight",x:"Two sides fight over five lanes. You are GROVE (plants). The twist: you never pick your own cards — your opponent stocks your shop, and you stock theirs. This tutorial plays one scripted round. Press Next.",need:{next:1}},
   {t:"1 · Stock the enemy's shop",x:"This shelf is BLIGHT's cards. You build two packs of 8; Blight will buy ONE. For this tutorial just press the highlighted Random fill button.",need:{fill:1},sel:".fbar .fchip:nth-last-child(2)",when:()=>S.phase==="stock"},
-  {t:"Open the market",x:"Both packs are full. Press the green Open the market button.",need:{open:1},sel:"button.btn.primary",when:()=>S.phase==="stock"},
+  {t:"Open the market",x:"Both packs are full — and Random fill also listed one upgrade for Blight. Listing one is required every round: you pick which and set the price, and if they buy it the meta comes to you. Press the green Open the market button.",need:{open:1},sel:"button.btn.primary",when:()=>S.phase==="stock"},
   {t:"2 · Your shop",x:"Blight stocked two packs of GROVE cards for you. They're face down — the grey line under each is a free hint. Press Appraise on Pack B to learn more (free in the tutorial).",need:{appraise:1},sel:".pack:nth-child(2) .btn.ghost",when:()=>S.phase==="market"},
-  {t:"Spot the trap",x:"Pack B has 'little to none' synergy, and its free hint shows expensive cards and dead weight — a trap: Blight filled it with cards that can't attack alone and cost too much. Buy PACK A instead.",need:{buy:0},sel:".pack:nth-child(1) .btn:not(.ghost)",when:()=>S.phase==="market"},
+  {t:"Spot the trap",x:"Pack B reads only FAIR, and the reasons say why: it's top-heavy (turn 1 gives just 3 sun) and several of its bodies have 0 attack. Pack A's free read shows lots of cheap cards — many plays, and your 3rd card each turn draws a card. Buy PACK A.",need:{buy:0},sel:".pack:nth-child(1) .btn:not(.ghost)",when:()=>S.phase==="market"},
   {t:"Begin the fight",x:"Tonics, sticker crates and the workshop are optional extras — ignore them today. Press Begin combat.",need:{begin:1},sel:"button.btn.primary",when:()=>S.phase==="market"},
   {t:"3 · The battlefield",x:"Five lanes: a FLANK on each edge and three MAIN lanes in the middle. Blight's units are on top, yours go on the bottom. After 5 turns, whoever HOLDS more main lanes wins the round.",need:{next:1},when:()=>S.phase==="combat"&&!S.beat},
   {t:"Blight moves first",x:"Blight commits units first each turn, so you answer seeing everything. It put a Rotling (2/2) in MAIN 2. You have 3 sun. Click THORNLING in your hand, then click MAIN 2.",need:{play:["thornling",2]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===1&&!S.beat},
   {t:"Take free ground",x:"MAIN 3 is empty — anything alone in a lane pushes its capture bar. Play SEEDPOD (1 sun) into MAIN 3.",need:{play:["seedpod",3]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===1&&!S.beat},
   {t:"End your turn",x:"You're out of sun. Press the green End turn button and watch the fight.",need:{end:1},sel:".panel-head button.btn.primary",when:()=>S.phase==="combat"&&S.turn===1&&!S.beat},
-  {t:"What happened?",x:"In each lane, all your attack hits the enemy's FRONT unit. Thornling and Rotling (2 attack each) killed each other. Your Seedpod was alone in Main 3, so it pushed the bar: attack × health = 1 × 2 = 2%. Bigger units push much faster.",need:{next:1},when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
+  {t:"What happened?",x:"In each lane, all your attack hits the enemy's FRONT unit. Thornling and Rotling (2 attack each) killed each other. Your Seedpod was alone in Main 3, so it pushed the bar: total attack × total health = 1 × 2 = 2%. Two units push much harder than one — and bigger units push much faster.",need:{next:1},when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
   {t:"Beat a small unit",x:"Blight added a Gnawer (1/2) in MAIN 1 and a Crawler (1/4) in MAIN 2. You have 4 sun. Play WANDERSEED (3/3) into MAIN 1 — it kills the Gnawer and survives.",need:{play:["wanderseed",1]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
   {t:"Build a wall",x:"Now play GALLNUT (1/4) into MAIN 2. It's tough, and every time it's hit it gains +1 attack (BULWARK). Hover any card to read what it does.",need:{play:["gallnut",2]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
   {t:"End turn",x:"Press End turn.",need:{end:1},sel:".panel-head button.btn.primary",when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
@@ -3592,7 +3866,7 @@ function renderTutorial(){
   if(!st){if(c)c.remove();return;}
   /* state-driven needs complete themselves */
   const n=st.need;
-  if((n.fill&&packsLegal())||(n.open&&S.phase!=="stock")||(n.appraise&&S.a.appraised&&S.a.appraised[1])||(n.buy!==undefined&&S.p.boughtPack)||(n.begin&&S.phase==="combat")){tutAdvance();return renderTutorial();}
+  if((n.fill&&stockReady())||(n.open&&S.phase!=="stock")||(n.appraise&&S.a.appraised&&S.a.appraised[1])||(n.buy!==undefined&&S.p.boughtPack)||(n.begin&&S.phase==="combat")){tutAdvance();return renderTutorial();}
   if(n.free&&S.phase!=="combat"){tutAdvance();return renderTutorial();}
   if(!c){c=document.createElement("div");c.id="coach";document.body.appendChild(c);}
   c.innerHTML="";
@@ -3614,10 +3888,10 @@ function renderTodo(st){
   if(S.phase==="stock"){
     const a=(pn[0]||{cards:[]}).cards.length,b=(pn[1]||{cards:[]}).cards.length;
     items.push(["Fill Pack A and Pack B with "+PACK_SIZE_REQ+" cards each ("+a+"/"+PACK_SIZE_REQ+", "+b+"/"+PACK_SIZE_REQ+") — click a card on the shelf, then click a pack. Or press Random fill.",packsLegal()]);
-    items.push(["List one upgrade for your opponent (optional)",!!S.p.offer,true]);
+    items.push(["List one upgrade for your opponent and set its price (required)",!!S.p.offer||!offerNeeded()]);
     items.push([mpOn()?"Press Lock in your packs":"Press Open the market",mpOn()&&S.p.submitted]);
   } else if(S.phase==="market"){
-    items.push(["Buy ONE of their two packs — press Buy",!!S.p.boughtPack]);
+    items.push(["Buy ONE of their two packs — press Buy. Skipping both puts "+refusalRubble(S.a.packs[0]?S.a.packs[0].price:packPrice(),"p")+" dead Rubble cards in your deck",!!S.p.boughtPack]);
     items.push(["Extras (optional): a tonic, a sticker crate, the workshop, their upgrade",false,true]);
     items.push([mpOn()?"Press Done at the depot":"Press Begin combat",mpOn()&&S.p.submitted]);
   } else if(S.phase==="combat"){
@@ -3773,8 +4047,10 @@ function renderStock(st){
     const sr=el("div","slotrow");
     pack.cards.forEach((id,ci)=>{
       const m=el("button","mini"+(S.hold&&S.hold.from===pi&&S.hold.i===ci?" held":""));m.type="button";
-      m.appendChild(el("span",null,C[id].n));
-      m.appendChild(el("span","c",C[id].junk?"—":String(C[id].c)));
+      const dd=C[id];
+      if(!dd.trick&&!dd.junk&&TAGS[dd.tag])m.style.borderLeftColor=TAGS[dd.tag];
+      m.appendChild(el("span","mn",dd.n));
+      const ms=el("span","ms");ms.appendChild(el("span",null,dd.junk?"dead weight":(dd.trick?"trick":dd.a+"/"+dd.h)));ms.appendChild(el("span","c",dd.junk?"—":String(dd.c)));m.appendChild(ms);
       m.draggable=true;
       m.addEventListener("dragstart",e=>{S.hold={from:pi,i:ci};e.dataTransfer.effectAllowed="move";
         try{e.dataTransfer.setData("text/plain","x");}catch(x){}});
@@ -3783,17 +4059,16 @@ function renderStock(st){
         S.hold={from:pi,i:ci};render();});
       bindTip(m,id,true);sr.appendChild(m);
     });
-    if(pack.cards.length<MIN_PACK)
-      for(let i=pack.cards.length;i<MIN_PACK;i++)sr.appendChild(el("div","slot","needs a card"));
+    for(let i=pack.cards.length;i<PACK_SIZE_REQ;i++)sr.appendChild(el("div","slot","put a card here"));
     box.appendChild(sr);
 
     if(pack.cards.length){
       const syn=synergyRead(pack.cards), stt=packStats(pack.cards);
       const rd=el("div","read");
-      rd.appendChild(el("div",null,stt.tricks+" trick"+(stt.tricks===1?"":"s")+
-        " · average cost "+stt.avg+(stt.junk?" · "+stt.junk+" dead weight":"")));
-      rd.appendChild(el("div","tiny muted","↑ they see this for free. Appraising reveals: synergy "+syn.label+
-        (syn.tribe?", leaning "+syn.tribe:"")+"."));
+      rd.appendChild(el("div",null,curveRead(pack.cards)));
+      const ar=appraisalRead(pack.cards,"a");
+      rd.appendChild(el("div","tiny muted","↑ they see this for free. Appraising tells them it's worth "+ar.grade.toUpperCase()+" to their deck"+
+        (syn.tribe?", leaning "+syn.tribe:"")+(ar.why.length?" — "+ar.why.join("; "):"")+"."));
       box.appendChild(rd);
     } else box.appendChild(el("div","tiny muted","Drag cards here, or click a shelf card then this pack."));
     pk.appendChild(box);
@@ -3819,9 +4094,9 @@ function renderStock(st){
     b.appendChild(el("span","n",String(n)));
     b.addEventListener("click",()=>{S.shelfFilter=k;render();});fb.appendChild(b);
   });
-  const rf=el("button","fchip","⚄ Random fill");rf.type="button";rf.title="Top both packs up to "+PACK_SIZE_REQ+" at random — for quick testing.";
+  const rf=el("button","fchip","⚄ Random fill");rf.type="button";rf.title="Top both packs up to "+PACK_SIZE_REQ+" at random, and list a random upgrade if you haven't.";
   rf.disabled=mpOn()&&S.p.submitted;
-  rf.addEventListener("click",()=>{const n=autoCompletePacks();log("Random fill placed "+n+" card"+(n===1?"":"s")+".");render();});
+  rf.addEventListener("click",()=>{const n=autoCompletePacks();const had=!!S.p.offer;autoOffer();log("Random fill placed "+n+" card"+(n===1?"":"s")+(!had&&S.p.offer?" and listed an upgrade for them":"")+".");render();});
   const cl=el("button","fchip","Empty packs");cl.type="button";
   cl.addEventListener("click",()=>{S.p.packs.forEach(pk=>{S.p.draft.push(...pk.cards);pk.cards=[];});S.hold=null;render();});
   fb.appendChild(rf);fb.appendChild(cl);
@@ -3833,20 +4108,20 @@ function renderStock(st){
   cs.addEventListener("drop",e=>{e.preventDefault();dropInto("draft");});
   cs.addEventListener("click",e=>{if(S.hold&&S.hold.from!=="draft"&&!e.target.closest(".card"))dropInto("draft");});
   S.p.draft.map((id,i)=>({id,i})).filter(o=>shown(o.id)).sort((x,y)=>(C[x.id].c||0)-(C[y.id].c||0)).forEach(({id,i})=>{
-    const c=cardEl(id,{picked:S.hold&&S.hold.from==="draft"&&S.hold.i===i,
+    const c=cardEl(id,{compact:true,picked:S.hold&&S.hold.from==="draft"&&S.hold.i===i,
       onClick:()=>{S.hold=(S.hold&&S.hold.from==="draft"&&S.hold.i===i)?null:{from:"draft",i};render();}});
     c.draggable=true;
     c.addEventListener("dragstart",e=>{S.hold={from:"draft",i};e.dataTransfer.effectAllowed="move";
       try{e.dataTransfer.setData("text/plain",String(i));}catch(x){}});
     bindTip(c,id,true);cs.appendChild(c);
   });
-  dw.appendChild(cs);p.appendChild(dw);
+  dw.appendChild(cs);dw.appendChild(el("div","tiny muted shelfnote","Hover a card to read what it does."));p.appendChild(dw);
 
   /* ---- the upgrade you list for them ---- */
   p.appendChild(el("hr","sep"));
   const uw=el("div");
-  uw.appendChild(el("div","eyebrow","List one upgrade in their depot"));
-  uw.appendChild(el("div","tiny muted","Permanent and one-time. You pick which one they can reach AND set its price — from half its value to double. They can always walk away, so price it at what the edge is worth to them."));
+  uw.appendChild(el("div","eyebrow","List one upgrade in their depot — required"));
+  uw.appendChild(el("div","tiny muted","You must offer them one. You choose WHICH and set the PRICE (half its value to double). If they buy it, the meta comes to you — so pick the one that helps them least, and price it where the edge costs them the most."));
   const ur=el("div","ups");ur.style.marginTop="8px";
   UPGRADES.filter(u=>!upLvl("a",u.k)).forEach(u=>{
     const sel=S.p.offer&&S.p.offer.k===u.k;
@@ -3874,11 +4149,12 @@ function renderStock(st){
   const row=el("div","btnrow");row.style.marginTop="14px";
   const goB=el("button","btn primary",mpOn()?(S.p.submitted?"Waiting for "+FNAME[S.af]+"…":"Lock in your packs"):"Open the market");
   goB.type="button";
-  goB.disabled=!packsLegal()||(mpOn()&&S.p.submitted);
+  goB.disabled=!stockReady()||(mpOn()&&S.p.submitted);
   goB.addEventListener("click",()=>mpOn()?mpSubmitStock():startMarket());
   row.appendChild(goB);
   if(!packsLegal())row.appendChild(el("span","tiny muted",
     "Each pack needs exactly "+PACK_SIZE_REQ+" cards and at least one unit — you can't sell a pack of pure tricks."));
+  else if(!stockReady())row.appendChild(el("span","tiny muted","Now list one upgrade for them above — it's required."));
   else if(!mpOn())row.appendChild(el("span","tiny muted",(()=>{
     const want=needWord(S.a.deck);
     return FNAME[S.af]+" holds "+S.a.meta+" meta"+(want?", and is short on "+want:"")+".";
@@ -3911,7 +4187,9 @@ function quickPlace(pi,mode){
 
 function renderMarket(st){
   const p=el("div","panel"),h=el("div","panel-head"),hl=el("div");
-  hl.appendChild(el("h2","",FNAME[S.af]+"'s depot"));
+  const mh=el("div","handhead");mh.appendChild(el("h2","",FNAME[S.af]+"'s depot"));
+  const mp=el("span","respill meta");mp.appendChild(document.createTextNode("◆"));mp.appendChild(el("b",null,String(S.p.meta)));mp.appendChild(document.createTextNode("meta to spend"));mh.appendChild(mp);
+  hl.appendChild(mh);
   hl.appendChild(el("div","tiny muted",FNAME[S.pf]+" cards, chosen for you by the enemy. Buying is the only way to get cards — your deck starts empty. What you pay goes into their pocket."));
   h.appendChild(hl);p.appendChild(h);
 
@@ -3927,12 +4205,13 @@ function renderMarket(st){
     const sr=el("div","slotrow");
     pack.cards.forEach(()=>sr.appendChild(el("div","hidden-card","face down")));
     box.appendChild(sr);
-    box.appendChild(el("div","read",stt.tricks+" trick"+(stt.tricks===1?"":"s")+" · average cost "+stt.avg+
-      (stt.junk?" · "+stt.junk+" dead weight":" · no dead weight")));
+    box.appendChild(el("div","read",curveRead(pack.cards)));
     if(S.a.appraised[pi]){
+      const ar=appraisalRead(pack.cards);
       const r=el("div","read");
-      r.appendChild(el("b",null,"Synergy: "+syn.label));
-      if(syn.tribe)r.appendChild(document.createTextNode(" — it leans "+syn.tribe+"."));
+      r.appendChild(el("b",null,"Worth to your deck: "+ar.grade));
+      if(syn.tribe)r.appendChild(document.createTextNode(" · leans "+syn.tribe));
+      if(ar.why.length){const ul=el("ul","whylist");ar.why.forEach(x=>ul.appendChild(el("li",null,x)));r.appendChild(ul);}
       box.appendChild(r);
     }
     const row=el("div","btnrow");
@@ -3949,7 +4228,15 @@ function renderMarket(st){
     }
     box.appendChild(row);pk.appendChild(box);
   });
-  p.appendChild(pk);p.appendChild(el("hr","sep"));
+  p.appendChild(pk);
+  if(!S.p.boughtPack){
+    const rr=refusalRubble(S.a.packs[0]?S.a.packs[0].price:packPrice(),"p");
+    const wn=el("div","penalty");
+    wn.appendChild(el("b",null,"⚠ Skip both packs and "+rr+" Rubble go into your deck."));
+    wn.appendChild(el("span",null," Rubble is a dead card: it clogs your draws every round until you pay to cut it. You keep your meta, but you get no new cards."));
+    p.appendChild(wn);
+  }
+  p.appendChild(el("hr","sep"));
 
   const fw=el("div");
   const isGrove=S.pf==="grove";
@@ -4018,23 +4305,18 @@ function renderMarket(st){
   const trow=el("div","ups");trow.style.marginTop="8px";
   (S.p.tonics||[]).forEach(off=>{
     const t=tonicDef(off.k);
-    const b=el("button","upcard"+(S.p.arming===off.k?" on":""));b.type="button";
+    const b=el("button","upcard");b.type="button";
     const tp=tonicPrice(t);
-    b.disabled=off.taken||S.p.meta<tp||(S.p.tonicUsed&&!off.taken);
+    b.disabled=off.taken;
     const top=el("div","row");
     top.appendChild(el("span","nm",t.n+(off.taken?" · used":"")));
     top.appendChild(el("span","cost",String(tp)));
     b.appendChild(top);b.appendChild(el("div","txt",t.d));
-    b.addEventListener("click",()=>{
-      if(t.purge)return applyTonic(t.k,null);
-      S.p.arming=(S.p.arming===off.k?null:off.k);render();
-    });
+    b.addEventListener("click",()=>openModal({kind:"tonic",k:off.k,step:"info"}));
     trow.appendChild(b);
   });
   tw.appendChild(trow);
-  tw.appendChild(el("div","tiny muted",S.p.arming
-    ? "Now click a card in your deck below to apply it."
-    : "A fresh three are offered every round. Each is single-use and permanent."));
+  tw.appendChild(el("div","tiny muted","Click a tonic to see it and buy it — then pick the ONE card it goes on. A fresh three every round; one per round."));
   if(CFG.tonics)fw.appendChild(tw);
   /* sticker book */
   const cw=el("div");cw.style.marginTop="14px";
@@ -4094,15 +4376,24 @@ function renderMarket(st){
   }
   p.appendChild(uw);
 
+  /* your deck: view it, or cut cards, without scrolling */
+  const dk=el("div");dk.style.marginTop="14px";
+  dk.appendChild(el("div","eyebrow","Your deck · "+S.p.deck.length+" cards"));
+  const dkr=el("div","btnrow");dkr.style.marginTop="8px";
+  const vb=el("button","btn ghost","View deck");vb.type="button";vb.addEventListener("click",()=>openModal({kind:"deck"}));dkr.appendChild(vb);
+  const tb=el("button","btn ghost","Cut cards · "+(S.p.freeThin?"1 free":"next "+thinCost()));tb.type="button";
+  tb.disabled=mpOn()&&S.p.submitted;tb.addEventListener("click",()=>openModal({kind:"thin"}));dkr.appendChild(tb);
+  dkr.appendChild(el("span","tiny muted","Cutting removes a card for good. Each cut this round costs 3 more, and every real card you have ever cut adds 1."));
+  dk.appendChild(dkr);p.appendChild(dk);
+
   const row=el("div","btnrow");row.style.marginTop="14px";
-  const go=el("button","btn primary",mpOn()?(S.p.submitted?"Waiting for "+FNAME[S.af]+"…":"Done at the depot")
-    :(S.p.deck.length?"Begin combat":"Begin combat (empty deck)"));
+  const skipR=S.p.boughtPack?0:refusalRubble(S.a.packs[0]?S.a.packs[0].price:packPrice(),"p");
+  const go=el("button","btn primary"+(skipR?" warnbtn":""),mpOn()?(S.p.submitted?"Waiting for "+FNAME[S.af]+"…":(skipR?"Done — skip both packs (+"+skipR+" Rubble)":"Done at the depot"))
+    :(skipR?"Begin combat — skip both packs (+"+skipR+" Rubble)":(S.p.deck.length?"Begin combat":"Begin combat (empty deck)")));
   go.type="button";
   if(mpOn())go.disabled=S.p.submitted;
   go.addEventListener("click",()=>mpOn()?mpSubmitMarket():startCombat());row.appendChild(go);
-  row.appendChild(el("span","tiny muted","Thin from the deck panel below. Next cut costs "+thinCost()+
-    " (+3 per further cut this round, and every real card you cut makes all future cuts +1)."+
-    (S.p.freeThin?" You have 1 free thin.":"")));
+
   p.appendChild(row);st.appendChild(p);
 }
 
@@ -4165,16 +4456,21 @@ function renderCombat(st){
   if(waiting)S.sel=null;
   if(S.feed&&S.feed.length){
     const fd=el("div","feed");
+    const host=isBattle()&&$("railFeed")&&!$("railL").classList.contains("collapsed")?$("railFeed"):p;
     fd.appendChild(el("div","fh","What just happened"));
     const fresh=ANIM.feedPlayed!==S.feed; ANIM.feedPlayed=S.feed;
     S.feed.forEach((e,i)=>{const ln=el("p",(e.hl?"hl ":"")+(fresh?"":"static"),fmtLog(e));if(fresh)ln.style.animationDelay=(i*110)+"ms";fd.appendChild(ln);});
-    p.appendChild(fd);
+    host.appendChild(fd);
   }
   renderBoard(p,!S.beat&&!waiting&&!ANIM.stage);
   p.appendChild(el("hr","sep"));
 
   const hw=el("div");
-  hw.appendChild(el("div","eyebrow","Your hand — "+S.p.sun+" "+FRES[S.pf]+(S.p.hand.length?"":" · empty")+(waiting?" · plan your next step":"")));
+  const hhd=el("div","handhead");
+  hhd.appendChild(el("div","eyebrow","Your hand"+(S.p.hand.length?"":" · empty")+(waiting?" · plan your next step":"")));
+  const pill=el("span","respill sun");pill.appendChild(document.createTextNode(RES_ICO[S.pf]));pill.appendChild(el("b",null,String(S.p.sun)));pill.appendChild(document.createTextNode(FRES[S.pf]+" left"));hhd.appendChild(pill);
+  hhd.appendChild(el("span","tiny muted","Drag a card onto a lane, or click it and then a lane."));
+  hw.appendChild(hhd);
   if(S.p.incomeWhy&&S.p.incomeWhy.length)hw.appendChild(el("div","tiny muted","This turn's "+FRES[S.pf]+": "+S.p.incomeWhy.map(([k,v])=>(v>0?"+":"")+v+" "+k).join(" · ")+
     ""));
   const cs=el("div","cards");cs.style.marginTop="8px";
@@ -4184,6 +4480,13 @@ function renderCombat(st){
     const unplayable=waiting||d.junk||costOf(id,"p")>S.p.sun||wrongPhase;
     const c=cardEl(id,{who:"p",picked:S.sel===i,onClick:waiting?null:()=>{S.selMinion=null;S.sel=S.sel===i?null:i;render();}});
     if(unplayable)c.style.opacity=".5";   // dimmed, but still selectable so you can scrap it
+    else{
+      c.draggable=true;
+      c.addEventListener("dragstart",e=>{DRAG.hi=i;hideTip();c.classList.add("dragging");
+        try{e.dataTransfer.setData("text/plain",String(i));e.dataTransfer.effectAllowed="move";}catch(x){}
+        document.querySelectorAll(".lane[data-li]").forEach(L=>{const l=S.lanes[+L.dataset.li];if(l&&canTarget(i,l))L.classList.add("droptarget");});});
+      c.addEventListener("dragend",dragClear);
+    }
     bindTip(c,id,false,()=>deckStats(id,"p"));cs.appendChild(c);
   });
   if(!S.p.hand.length)cs.appendChild(el("span","tiny muted","Nothing in hand. Buy packs next round — your deck is how you fight."));
@@ -4283,12 +4586,11 @@ function renderDeck(){
       row.style.borderLeft="3px solid "+(TAGS[t]||"var(--line)");
       row.appendChild(el("span","dmul","×"+groups[t][id]));
       const vn=vet("p",id), md=cardMods("p",id), lbl=modLabel(md);
-      if(S.p.arming){row.style.cursor="pointer";row.style.borderColor="var(--grove)";
-        row.addEventListener("click",()=>applyTonic(S.p.arming,id));}
+
       row.appendChild(el("span","dnm",C[id].n+(vn?" \u2605"+vn:"")+(lbl?" · "+lbl:"")));
       row.appendChild(el("span","dcost",C[id].junk?"—":String(C[id].c)));
       bindTip(row,id,false,()=>deckStats(id,"p"));
-      if(canThin&&!S.p.arming){
+      if(false){
         const b=el("button",null,"×");b.type="button";b.title="Cut one";
         b.addEventListener("click",ev=>{ev.stopPropagation();thin(S.p.deck.indexOf(id));});
         row.appendChild(b);
@@ -4346,7 +4648,7 @@ const KEYWORDS=[
     ["Scaling","PERMANENTLY grows the card in your deck each time its condition happens. Starts weak."],
     ["PERMANENTLY","Always means the card in your deck. Every other buff lasts until the round ends."]]},
   {g:"Lanes & the front",b:"",items:[
-    ["Capture %","Units alone in a lane push its bar by attack × health each turn. Flanks move 1.6× faster."],
+    ["Capture %","Units alone in a lane push its bar by their total attack × total health each turn (two 2/2s = 4×4 = 16%). Flanks move 1.6× faster."],
     ["Held (20%)","Counts toward winning the round, and pays resource."],
     ["Flank sector","Hold a flank (or 2 of a wide sector's 3) at the end of a round: +3 meta each, and if main lanes are level, whoever holds more sectors wins the round."],
     ["Captured (60%)","Leaves a garrison for next round; a captured flank rakes the main lane beside it."],
@@ -4461,7 +4763,7 @@ function wireDrawer(){
   document.querySelectorAll(".dtab").forEach(b=>b.addEventListener("click",()=>openDrawer(b.dataset.tab)));
   const c=$("drawerClose");if(c)c.addEventListener("click",closeDrawer);
   const sh=$("drawerShade");if(sh)sh.addEventListener("click",closeDrawer);
-  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeDrawer();if(UI.modal)closeModal();}});
   const rs=$("rsearch");if(rs)rs.addEventListener("input",()=>{RV.q=rs.value;renderRosters();});
   const sb=$("soundBtn");
   if(sb){paintSoundBtn();sb.addEventListener("click",()=>openDrawer("sound"));}
@@ -4478,7 +4780,7 @@ function canAnim(){return typeof document!=="undefined"&&typeof document.querySe
 function snapBoard(){
   const units={};
   (S.lanes||[]).forEach((l,li)=>["p","a"].forEach(w=>l[w].forEach(u=>{if(u.uid)units[u.uid]={li,w,h:u.h,a:atk(u,l,w)};})));
-  return {units,caps:(S.lanes||[]).map(l=>l.cap||0),lanes:JSON.parse(JSON.stringify(S.lanes||[])),logN:S.logN||0,phase:S.phase};
+  return {units,caps:(S.lanes||[]).map(l=>l.cap||0),lanes:JSON.parse(JSON.stringify(S.lanes||[])),logN:S.logN||0,phase:S.phase,rt:S.resolveTick||0};
 }
 function act(fn){
   const pre=snapBoard();
@@ -4489,6 +4791,7 @@ function act(fn){
 function q(sel){try{return document.querySelector(sel);}catch(e){return null;}}
 function fxNum(node,txt,cls){if(!node)return;const f=el("div","fxnum "+cls,txt);node.appendChild(f);}
 function animateFrom(pre){
+  if(canAnim()&&!REDUCED&&(S.resolveTick||0)!==(pre.rt||0)&&(S.phase==="combat"||S.phase==="roundend"))return animateLanes(pre);
   const newLines=visibleLog().filter(e=>(e.n||0)>pre.logN);
   if(newLines.length)S.feed=newLines.slice(-16);
   if(!canAnim()||S.phase!=="combat"&&S.phase!=="roundend"){ANIM.pending=false;renderNow();return 0;}
@@ -4542,14 +4845,200 @@ function animateFrom(pre){
   setTimeout(finish,1500);
   return 1500+700;
 }
+/* Combat plays out ONE LANE AT A TIME: the lane lights up, its fight and its
+   capture bar play, the feed shows only that lane's lines, then the next lane. */
+const LANE_MS={clash:2300,push:1200};
+function animateLanes(pre){
+  const newLines=visibleLog().filter(e=>(e.n||0)>pre.logN);
+  const real=S.lanes, post=snapBoard(), keepBeat=S.beat;
+  const order=[];
+  real.forEach((l,li)=>{
+    const P=pre.lanes[li]||{p:[],a:[]};
+    const lines=newLines.filter(e=>e.li===li);
+    const moved=(post.caps[li]||0)!==(pre.caps[li]||0);
+    const busy=P.p.length||P.a.length||l.p.length||l.a.length;
+    if(busy||moved||lines.length)order.push({li,lines,moved,clash:!!(P.p.length&&P.a.length)});
+  });
+  const other=newLines.filter(e=>e.li==null);
+  const hybrid=(upto,cur)=>real.map((l,j)=>j<upto?l:(j===upto?(cur==="post"?l:pre.lanes[j]):pre.lanes[j]));
+  ANIM.lock=true;ANIM.stage=true;
+  const light=li=>{document.querySelectorAll(".lane[data-li]").forEach(L=>{const k=+L.dataset.li;L.classList.toggle("resolving",k===li);L.classList.toggle("waitlane",k!==li);});};
+  let t=0;
+  order.forEach(o=>{
+    const nm=real[o.li].nm;
+    const unitsHere=Object.keys(pre.units).filter(id=>pre.units[id].li===o.li);
+    const hurt=[],dead=[];
+    unitsHere.forEach(id=>{const a=pre.units[id],b=post.units[id];if(!b||b.li!==o.li){dead.push(id);return;}if(b.h<a.h)hurt.push([id,a.h-b.h,b]);});
+    const bornHere=Object.keys(post.units).filter(id=>post.units[id].li===o.li&&!pre.units[id]);
+    const hasHits=hurt.length||dead.length;
+    /* stage A — the lane before it fights */
+    setTimeout(()=>{
+      S.lanes=hybrid(o.li,"pre");S.feed=o.lines.length?o.lines:[{msg:nm+" — nothing to fight.",n:0}];
+      S.beat="Fighting in "+nm+"…";renderNow();S.lanes=real;light(o.li);
+      if(!hasHits)return;
+      const L=q('.lane[data-li="'+o.li+'"]');if(L&&o.clash)L.classList.add("clash");
+      setTimeout(()=>{
+        if(hurt.length)sfx("hit");if(dead.length)setTimeout(()=>sfx("die"),180);
+        hurt.forEach(([id,d,b])=>{const n=q('.unit[data-uid="'+id+'"]');if(!n)return;n.classList.add("hurt");fxNum(n,"−"+d,"dmg");const st=n.querySelector(".st");if(st)st.textContent=b.a+" / "+b.h;});
+        dead.forEach(id=>{const n=q('.unit[data-uid="'+id+'"]');if(!n)return;n.classList.add("hurt","dying");fxNum(n,"✕","dmg");});
+      },380);
+    },t);
+    const mid=t+(hasHits?1300:350);
+    /* stage B — the lane after: survivors, arrivals, the capture bar moving */
+    setTimeout(()=>{
+      S.lanes=hybrid(o.li,"post");renderNow();S.lanes=real;light(o.li);
+      bornHere.forEach(id=>{const n=q('.unit[data-uid="'+id+'"]');if(n)n.classList.add("enter");});
+      if(o.moved){
+        const bar=q('.capbar[data-li="'+o.li+'"]');
+        if(bar){const f=bar.querySelector(".fill"),from=pre.caps[o.li],to=post.caps[o.li],d=to-from;
+          const set=c=>{if(c>=0){f.style.left="50%";f.style.width=(c/2)+"%";}else{f.style.left=(50+c/2)+"%";f.style.width=(-c/2)+"%";}};
+          set(from);void f.offsetWidth;f.classList.add("tween");set(to);
+          const good=(d>0)===(S.pf==="grove");
+          const tx=el("div","fxcap "+(good?"gr":"bl"),(d>0?"+":"−")+Math.abs(d)+"%");
+          tx.style.color=d>0?(S.pf==="grove"?"var(--grove)":"var(--blight)"):(S.pf==="grove"?"var(--blight)":"var(--grove)");
+          bar.parentNode.appendChild(tx);}
+        setTimeout(()=>sfx("capture"),120);
+      }
+    },mid);
+    t=mid+(o.moved||hasHits?(o.clash?1000:850):350);
+  });
+  setTimeout(()=>{
+    ANIM.stage=false;ANIM.lock=false;ANIM.pending=false;
+    S.lanes=real;S.beat=keepBeat;
+    S.feed=(other.length?other:newLines).slice(-16);
+    renderNow();
+    document.querySelectorAll(".lane.resolving,.lane.waitlane").forEach(L=>L.classList.remove("resolving","waitlane"));
+  },t+100);
+  return t+200;
+}
 function render(){
   if(ANIM.lock){ANIM.pending=true;return;}
   renderNow();
 }
+/* Battle layout: on a wide screen the fight gets the middle of the page and
+   everything else moves into side menus you can fold away. */
+function railPref(k,def){try{const v=localStorage.getItem("gb-rail-"+k);return v==null?def:v==="1";}catch(e){return def;}}
+function setRailPref(k,v){try{localStorage.setItem("gb-rail-"+k,v?"1":"0");}catch(e){}}
+function isBattle(){try{return (S.phase==="combat"||S.phase==="roundend")&&!S.over&&window.innerWidth>=1100;}catch(e){return false;}}
+let layoutWired=false;
+function applyLayout(){
+  if(typeof document.querySelector!=="function")return;
+  const battle=isBattle(),body=document.body,wrap=document.querySelector(".wrap");
+  const L=$("railL"),Rr=$("railR"),stage=$("stage"),front=document.querySelector(".front"),logP=$("logPanel"),deckP=$("deckPanel");
+  if(!L||!Rr||!wrap||!stage)return;
+  if(!layoutWired){layoutWired=true;window.addEventListener("resize",()=>{const b=isBattle();if(b!==body.classList.contains("battle"))render();});}
+  body.classList.toggle("battle",battle);
+  if(battle){
+    const openL=railPref("L",true),openR=railPref("R",window.innerWidth>=1600);
+    const build=(rail,side,open,label,kids)=>{
+      rail.classList.toggle("collapsed",!open);
+      let tog=rail.querySelector(".railtog"),body2=rail.querySelector(".railbody");
+      if(!tog){tog=document.createElement("button");tog.type="button";tog.className="railtog";rail.appendChild(tog);
+        body2=document.createElement("div");body2.className="railbody";rail.appendChild(body2);
+        tog.addEventListener("click",()=>{const now=rail.classList.contains("collapsed");setRailPref(side,now);render();});}
+      tog.textContent=open?(side==="L"?"◀ Hide ":"Hide ▶ ")+label:(side==="L"?"▶ ":"◀ ")+label;
+      kids.forEach(k=>{if(k&&k.parentNode!==body2)body2.appendChild(k);});
+    };
+    let feed=$("railFeed");if(!feed){feed=document.createElement("div");feed.id="railFeed";}
+    feed.innerHTML="";
+    build(L,"L",openL,"Front & log",[front,feed,logP]);
+    build(Rr,"R",openR,"Your deck",[deckP]);
+    /* keep the order inside the left rail: front, what just happened, log */
+    const lb=L.querySelector(".railbody");[front,feed,logP].forEach(k=>lb.appendChild(k));
+  } else {
+    wrap.insertBefore(front,stage);
+    if(logP.parentNode!==wrap||logP.previousElementSibling!==stage)wrap.insertBefore(logP,stage.nextSibling);
+    if(deckP.parentNode!==wrap)wrap.insertBefore(deckP,logP.nextSibling);
+    const f=$("railFeed");if(f)f.innerHTML="";
+  }
+}
+/* ---- menus that open over the page: tonics, cutting, your deck ---- */
+const UI={modal:null,lastTonic:null};
+function openModal(m){UI.modal=m;UI.lastTonic=null;render();}
+function closeModal(){UI.modal=null;render();}
+function deckGroups(w){
+  const g=[];const seen={};
+  (S[w].deck||[]).forEach((id,i)=>{if(seen[id]==null){seen[id]=g.length;g.push({id,idx:[i]});}else g[seen[id]].idx.push(i);});
+  return g.sort((x,y)=>(C[x.id].c||0)-(C[y.id].c||0)||C[x.id].n.localeCompare(C[y.id].n));
+}
+function deckTile(id,n,o){
+  o=o||{};const d=C[id],L=deckStats(id,"p"),md=cardMods("p",id),lbl=modLabel(md),vn=vet("p",id);
+  const b=el("button","dtile"+(o.hl?" hl":"")+(d.junk?" dead":"")+(o.off?" off":""));b.type="button";
+  if(!d.trick&&!d.junk&&TAGS[d.tag])b.style.borderLeftColor=TAGS[d.tag];
+  const r=el("div","row");r.appendChild(el("b",null,d.n));r.appendChild(el("span","mono",d.junk?"—":String(d.c)));b.appendChild(r);
+  b.appendChild(el("div","mono tiny",d.junk?"dead weight":(d.trick?"trick":L.a+"/"+L.h)+(n>1?"  ×"+n:"")));
+  if(lbl||vn)b.appendChild(el("div","dmods",(vn?"★"+vn+" ":"")+lbl));
+  if(o.note)b.appendChild(el("div","tiny muted",o.note));
+  bindTip(b,id,false,()=>deckStats(id,"p"));
+  if(o.onClick&&!o.off)b.addEventListener("click",o.onClick);
+  return b;
+}
+function renderModal(){
+  if(typeof document.querySelector!=="function")return;
+  let m=$("modal");
+  if(!UI.modal||S.phase!=="market"&&UI.modal.kind!=="deck"){if(m)m.remove();if(UI.modal&&S.phase!=="market")UI.modal=null;return;}
+  if(!m){m=document.createElement("div");m.id="modal";document.body.appendChild(m);}
+  m.innerHTML="";
+  const shade=el("div","mshade");shade.addEventListener("click",closeModal);m.appendChild(shade);
+  const box=el("div","mbox");m.appendChild(box);
+  const head=el("div","mhead"),x=el("button","btn ghost","✕");x.type="button";x.addEventListener("click",closeModal);
+  const mm=UI.modal,body=el("div","mbody");
+  const meta=el("span","respill meta");meta.appendChild(document.createTextNode("◆"));meta.appendChild(el("b",null,String(S.p.meta)));meta.appendChild(document.createTextNode("meta"));
+  const grid=el("div","dgrid");
+  if(mm.kind==="tonic"){
+    const t=tonicDef(mm.k),off=(S.p.tonics||[]).find(o=>o.k===mm.k),price=tonicPrice(t);
+    head.appendChild(el("h2",null,"Tonic · "+t.n));
+    body.appendChild(el("p","mdesc",t.d));
+    if(mm.step==="info"){
+      const why=off.taken?"You already used this one.":(S.p.tonicUsed?"One tonic per round — you've had yours.":(S.p.meta<price?"You need "+price+" meta.":null));
+      const row=el("div","btnrow");
+      const buy=el("button","btn primary",t.purge?"Buy and purge · "+price:"Buy · "+price+" meta");buy.type="button";buy.disabled=!!why||(mpOn()&&S.p.submitted);
+      buy.addEventListener("click",()=>{if(t.purge){applyTonic(t.k,null);UI.modal={kind:"tonic",k:t.k,step:"done"};render();}else{UI.modal={kind:"tonic",k:t.k,step:"pick"};render();}});
+      row.appendChild(buy);if(why)row.appendChild(el("span","tiny muted",why));
+      else if(!t.purge)row.appendChild(el("span","tiny muted","Next you pick the one card it goes on. You're only charged when you apply it."));
+      body.appendChild(row);
+    } else if(mm.step==="pick"){
+      body.appendChild(el("p","mstep","Pick the ONE card for "+t.n+" — "+price+" meta. Only that copy changes."));
+      deckGroups("p").forEach(g=>{
+        const d=C[g.id];let note=null,off2=false;
+        if(d.junk&&!t.distil){off2=true;}
+        else if(t.mod){const room=tonicRoom(g.id,cardMods("p",g.id)),add=(t.mod.a||0)+(t.mod.h||0)+(t.mod.shield||0)*2;
+          if(d.trick){off2=true;note="tricks can't take it";}
+          else if(add>room){off2=true;note="can't hold it (room "+room+")";}
+          else if(((S.p.tonicCount||{})[g.id]||0)>=2){off2=true;note="already has 2 tonics";}}
+        grid.appendChild(deckTile(g.id,g.idx.length,{off:off2,note,onClick:()=>{
+          applyTonic(t.k,g.id,g.idx[0]);UI.modal={kind:"tonic",k:t.k,step:"done"};render();}}));
+      });
+      body.appendChild(grid);
+      const back=el("button","btn ghost","Back");back.type="button";back.addEventListener("click",()=>{UI.modal={kind:"tonic",k:t.k,step:"info"};render();});
+      body.appendChild(back);
+    } else {
+      body.appendChild(el("p","mstep",t.purge?"Done — your dead weight is gone. Here's your deck now:":"Done. Here's your deck now"+(UI.lastTonic?" — the changed copy is highlighted:":":")));
+      deckGroups("p").forEach(g=>grid.appendChild(deckTile(g.id,g.idx.length,{hl:g.id===UI.lastTonic})));
+      body.appendChild(grid);
+      const ok=el("button","btn primary","Done");ok.type="button";ok.addEventListener("click",closeModal);body.appendChild(ok);
+    }
+  } else if(mm.kind==="thin"){
+    head.appendChild(el("h2",null,"Cut cards"));
+    const cost=thinCost(),free=S.p.freeThin>0;
+    body.appendChild(el("p","mstep",(free?"Your next cut is FREE. ":"Next cut: "+cost+" meta. ")+"Click a card to cut ONE copy. Cuts get dearer: +3 for each cut this round, +1 for every real card you've ever cut."+(depth("p")<=THIN_FLOOR?" You're at "+THIN_FLOOR+" real cards — only dead weight can go now.":"")));
+    deckGroups("p").forEach(g=>{
+      const d=C[g.id];const off2=(!free&&S.p.meta<cost)||(!d.junk&&depth("p")<=THIN_FLOOR)||(mpOn()&&S.p.submitted);
+      grid.appendChild(deckTile(g.id,g.idx.length,{off:off2,note:off2?null:"cut · "+(free?"free":cost),onClick:()=>{thin(g.idx[g.idx.length-1]);}}));
+    });
+    body.appendChild(grid);
+    const ok=el("button","btn primary","Done");ok.type="button";ok.addEventListener("click",closeModal);body.appendChild(ok);
+  } else {
+    head.appendChild(el("h2",null,"Your deck · "+S.p.deck.length+" cards"));
+    deckGroups("p").forEach(g=>grid.appendChild(deckTile(g.id,g.idx.length)));
+    body.appendChild(grid);
+  }
+  head.appendChild(meta);head.appendChild(x);box.appendChild(head);box.appendChild(body);
+}
 function renderNow(){
-  wireDrawer();hideTip();
+  wireDrawer();hideTip();applyLayout();
   try{if(typeof document.querySelectorAll==="function")setTimeout(renderTutorial,0);}catch(e){}
-  renderRes();renderFront();renderStage();renderDeck();renderLog();renderRosters();renderKeywords();
+  renderRes();renderFront();renderStage();renderDeck();renderLog();renderRosters();renderKeywords();renderModal();
   try{window.claude&&window.claude.hot&&window.claude.hot.snapshot&&window.claude.hot.snapshot(S);}catch(e){}
 }
 function start(d){
