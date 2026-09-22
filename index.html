@@ -786,6 +786,7 @@ body.fit #coach p{font-size:13.5px}
 .lockmsg{font-weight:700;color:#8A4A10;background:#FBEFC8;border:2px solid #D9A51F;border-radius:6px;padding:6px 10px}
 .phasebar{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
 .phasebar .ph{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface2);color:var(--ink3);border:1px solid var(--line);font-weight:600}
+.unit.grave{opacity:.78;border-style:dashed!important;background:repeating-linear-gradient(135deg,rgba(120,110,95,.18) 0 6px,transparent 6px 12px)!important}
 .phasebar .ph.done{color:var(--ink2);text-decoration:line-through}
 .phasebar .ph.now{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px var(--accentSoft)}
 .sneakfx{position:fixed;z-index:80;pointer-events:none;font:800 16px "Archivo",sans-serif;color:#fff;background:#B0487A;padding:5px 10px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .75s cubic-bezier(.5,0,.3,1),opacity .3s;white-space:nowrap}
@@ -1252,6 +1253,18 @@ const C = cardTable({
   thornpetal:{n:"Thornpetal",s:"grove",c:2,a:2,h:2,tag:"Flower",tag2:"Thorn",t:"Your other THORN and FLOWER units in this lane get +1 attack.",aura:"Thorn",aura2:"Flower"},
   bonerot:{n:"Bonerot",s:"blight",c:3,a:2,h:4,tag:"Rot",tag2:"Bone",t:"On death: deal 2 damage to the enemy front unit.",rattledmg:2},
   ichorspore:{n:"Ichorspore",s:"blight",c:2,a:1,h:3,tag:"Ichor",tag2:"Spore",t:"Can be played in Water lanes. +1 spore at the start of every turn it survives.",prod:1},
+  /* --- phase cards: bounce, gravestones, ambush, last word --- */
+  uproot:{n:"Uproot",s:"grove",c:2,trick:true,t:"BOUNCE an enemy unit with 5 or less health: it goes back to its owner's hand.",bounce:5},
+  gale:{n:"Gale",s:"grove",c:4,trick:true,t:"BOUNCE every enemy unit in a lane back to its owner's hand.",bounceAll:1},
+  scatter:{n:"Scatter",s:"blight",c:2,trick:true,t:"BOUNCE an enemy unit with 4 or less health back to its owner's hand.",bounce:4},
+  gravebuster:{n:"Gravebuster",s:"grove",c:2,a:2,h:2,tag:"Root",t:"On play: dig up an enemy GRAVESTONE (this lane first). It is destroyed before it rises.",gravebust:1},
+  snapdragon:{n:"Snapdragon",s:"grove",c:3,a:2,h:3,tag:"Flower",t:"AMBUSH 2: played while answering, it bites the enemy front unit in its lane for 2.",ambush:2},
+  forecast:{n:"Forecast",s:"grove",c:1,trick:true,t:"Draw a card. Cast while answering: draw 2 instead.",drawt:1,foresee:1},
+  gravelurker:{n:"Gravelurker",s:"blight",c:2,a:3,h:2,tag:"Bone",t:"GRAVESTONE.",grave:1},
+  tombcrawler:{n:"Tombcrawler",s:"blight",c:3,a:3,h:4,tag:"Bone",t:"GRAVESTONE. When it rises: 2 damage to the enemy front unit in its lane.",grave:1,revealdmg:2},
+  cryptkeeper:{n:"Cryptkeeper",s:"blight",c:3,a:2,h:4,tag:"Bone",t:"GRAVESTONE. When it rises: draw a card.",grave:1,revealdraw:1},
+  headstone:{n:"Headstone Brute",s:"blight",c:5,a:5,h:6,tag:"Bone",t:"GRAVESTONE. Six feet under, and in no hurry.",grave:1},
+  finalhowl:{n:"Final Howl",s:"blight",c:2,trick:true,t:"LAST WORD ONLY. Your units in a lane get +2 attack this turn.",lastword:2},
   blightedsoil:{n:"Blighted Soil",s:"both",c:0,junk:true,t:"Dead weight. Recycling it gives nothing.",noscrapvalue:true}
 });
 const TAG_ORDER=["Thorn","Root","Flower","Aquatic","Rot","Spore","Bone","Ichor","Tribeless","Hybrid","Abomination","Minion"];
@@ -1273,7 +1286,7 @@ const BLIGHT_POOL=["rotling","rotling","gnawer","gnawer","hivecaller","rotchoir"
   "sporeburst","sporelance","witherbreath","necrotize","displace","mirepull","sporestorm","rotburn",
   "bonepyre","graverob","broodsong","plaguewind","hungermaw","tallyworm","blightpit","gravemarker","mireover","rotfog","mutationchamber","whisperingcrypt","bonechute","sporematron","hexwright","hoardergrub","pallidscribe","gravedigger","chitterhost",
   "whisperspores","rotharvest","broodsurge","carrioncall","plaguetide","nightmarket","sporetax","rottingpact","vivisector","leechling","sporetick","marrowfluke","ichorwasp","broodhusk","rubble","tangle"];
-GROVE_POOL.push("mossback","thornpetal");BLIGHT_POOL.push("bonerot","ichorspore");
+GROVE_POOL.push("mossback","thornpetal","uproot","gale","gravebuster","snapdragon","forecast");BLIGHT_POOL.push("bonerot","ichorspore","scatter","gravelurker","tombcrawler","cryptkeeper","headstone","finalhowl");
 const POOL={grove:GROVE_POOL,blight:BLIGHT_POOL};
 const FNAME={grove:"Grove",blight:"Blight"};
 const FRES={grove:"sun",blight:"spore"};
@@ -1338,6 +1351,35 @@ function cfgChanged(){return Object.keys(CFG_DEFAULT).some(k=>CFG[k]!==CFG_DEFAU
 function laneRoom(arr){return !CFG.laneCap||arr.filter(u=>!u.teamup).length<CFG.laneCap;}
 /* Every summoned/spawned body goes through here, so a full lane simply has no room. */
 function addU(arr,u){if(!laneRoom(arr))return false;arr.push(u);return true;}
+/* GRAVESTONES: buried units wait off-board (hidden, untargetable) until the last-word step. */
+function gsOf(l,w){if(!l.gs)l.gs={p:[],a:[]};if(!l.gs[w])l.gs[w]=[];return l.gs[w];}
+function revealGraves(){
+  if(!S||!S.lanes)return;
+  S.lanes.forEach(l=>{["p","a"].forEach(w=>{
+    const g=gsOf(l,w);if(!g.length)return;const o=w==="p"?"a":"p";
+    g.splice(0).forEach(u=>{
+      const d=C[u.id]||{};l[w].push(u);
+      log("🪦 "+(w==="p"?"Your ":FNAME[S.af]+"'s ")+u.n+" rises from its gravestone in "+l.nm+".",true);
+      if(d.revealdmg&&l[o].length){const t=l[o][0];applyDmg(t,d.revealdmg,l,o);log("   it claws "+t.n+" for "+d.revealdmg+".");cull(l,o);}
+      if(d.revealdraw)drawFor(w,d.revealdraw);
+    });
+  });});
+}
+function bustGrave(l,w){ /* w = the side doing the digging */
+  const o=w==="p"?"a":"p";
+  const L=gsOf(l,o).length?l:S.lanes.find(x=>gsOf(x,o).length);
+  if(!L)return null;const u=gsOf(L,o).shift();return {u,L};
+}
+/* BOUNCE: send a unit back to its owner's hand (tokens simply vanish). */
+function bounceUnit(l,side,u){
+  l[side]=l[side].filter(x=>x!==u);
+  const who=S[side];
+  if(C[u.id]&&C[u.id].token)return u.n+" is blown away";
+  if(who.hand.length<HAND_CAP){who.hand.push(u.id);return u.n+" goes back to "+(side==="p"?"your":FNAME[S.af]+"'s")+" hand";}
+  return u.n+" is blown away (hand full)";
+}
+/* "answering" = the second mover's step. The AI flags its last word with S.aiLast. */
+function answering(w){return w==="p"?S.sub==="respond":!S.aiLast;}
 /* ENVIRONMENTS (after PvZ's lawn / pool / roof / night). They set PERMANENT
    terrain on the main front, or change a rule for the whole match. */
 const MAIN_TERRAIN={
@@ -1833,7 +1875,7 @@ function startCombat(){
     /* Rebuild garrison units from the card as it stands NOW, so tonics, veterancy
        and treatments bought since last round actually show up on them. */
     const reb=(u,w)=>{if(!u)return null;const n=mk(u.id,w);n.src="Garrison — held this captured lane since last round";n.h=Math.min(n.h,Math.max(1,u.h+(n.h-(C[u.id].h||0))));return n;};
-    l.p=l.gp?[reb(l.gp,"p")]:[];l.a=l.ga?[reb(l.ga,"a")]:[];l.gp=null;l.ga=null;l.pushed=0;
+    l.p=l.gp?[reb(l.gp,"p")]:[];l.a=l.ga?[reb(l.ga,"a")]:[];l.gp=null;l.ga=null;l.pushed=0;l.gs=null;
     if(l.p.length)log(l.p[0].n+" is still garrisoning "+l.nm+".");
     (l.nest||[]).forEach(n=>{const w=n.fac===S.pf?"p":"a";const u=mk(n.id,w);u.base+=n.feed;u.h+=n.feed;u.src="Hatched from a nest in "+n.host+" last round";
       if(addU(l[w],u)){for(let k=0;k<n.sprouts;k++)addU(l[w],mk("sprout",w));log(l.nm+": a nested "+C[n.id].n+" hatches for "+(w==="p"?"you":FNAME[S.af])+".",true);}});
@@ -1963,6 +2005,9 @@ function aiPlaceUnits(){
     }
     dawnFix(u);u.src=originOf("a",pick.id,"Played from "+FNAME[S.af]+"'s hand");
     const ue=envOnLand(lane,"a",u);
+    if(d.grave){gsOf(lane,"a").push(ue);log(FNAME[S.af]+" buries something in "+lane.nm+". 🪦");continue;}
+    if(d.gravebust){const r=bustGrave(lane,"a");if(r)log(FNAME[S.af]+"'s "+d.n+" digs up your "+r.u.n+" in "+r.L.nm+" before it can rise.",true);}
+    if(d.ambush&&firstMoverSeat()!=="a"&&lane.p.length){const t=lane.p[0];applyDmg(t,d.ambush,lane,"p");log(FNAME[S.af]+"'s "+d.n+" springs an AMBUSH on "+t.n+" for "+d.ambush+".",true);cull(lane,"p");}
     if(!fuseInto(lane,"a",ue)){
       /* the AI steps a team-up wall in front when it's tougher than its current front */
       if(ue.teamup&&lane.a.length&&ue.h>lane.a[0].h)lane.a.unshift(ue);else lane.a.push(ue);}
@@ -2060,10 +2105,27 @@ function aiTricks(){
     }
     if(d.drawt){
       A.sun-=dc;A.hand.splice(idx,1);flurry("a");
-      drawFor("a",d.drawt);
-      log(FNAME[S.af]+" casts "+d.n+" and draws "+d.drawt+".");
+      const nd=d.drawt+(d.foresee&&answering("a")?d.foresee:0);
+      drawFor("a",nd);
+      log(FNAME[S.af]+" casts "+d.n+" and draws "+nd+".");
       triggerSpite("p");continue;
     }
+    if(d.lastword){
+      if(!S.aiLast){tskip[tid]=1;continue;}
+      const L=S.lanes.filter(x=>x.a.length&&x.p.length).sort((x,y)=>y.a.length-x.a.length)[0];
+      if(!L){tskip[tid]=1;continue;}spend();
+      L.a.forEach(u=>u.weak=(u.weak||0)-d.lastword);
+      log(FNAME[S.af]+" casts "+d.n+" — its units in "+L.nm+" get +"+d.lastword+" attack.",true);triggerSpite("p");continue;}
+    if(d.bounce){
+      const best=S.lanes.map(l=>({l,t:l.p.filter(u=>u.h<=d.bounce&&!(C[u.id]&&C[u.id].token)).sort((x,y)=>(C[y.id].c||0)-(C[x.id].c||0))[0]})).filter(o=>o.t)
+        .sort((x,y)=>(C[y.t.id].c||0)-(C[x.t.id].c||0))[0];
+      if(!best||(C[best.t.id].c||0)<2){tskip[tid]=1;continue;}spend();
+      log(FNAME[S.af]+" casts "+d.n+" — "+bounceUnit(best.l,"p",best.t)+".",true);triggerSpite("p");continue;}
+    if(d.bounceAll){
+      const L=S.lanes.filter(x=>x.p.length>=2).sort((x,y)=>y.p.reduce((t,u)=>t+(C[u.id].c||0),0)-x.p.reduce((t,u)=>t+(C[u.id].c||0),0))[0];
+      if(!L){tskip[tid]=1;continue;}spend();
+      const names=L.p.slice().map(u=>bounceUnit(L,"p",u));
+      log(FNAME[S.af]+" casts "+d.n+" — "+L.nm+" is swept clear: "+names.join("; ")+".",true);triggerSpite("p");continue;}
     if(d.slayer){
       const best=S.lanes.map(l=>({l,t:l.p.filter(u=>u.h<=d.slayer).sort((x,y)=>atk(y,l,"p")-atk(x,l,"p"))[0]}))
         .filter(o=>o.t).sort((x,y)=>atk(y.t,y.l,"p")-atk(x.t,x.l,"p"))[0];
@@ -2444,6 +2506,7 @@ function triggerSpite(side){
   }));
 }
 function resolve(){
+  revealGraves();
   S.resolveTick=(S.resolveTick||0)+1;
   S.lanes.forEach(resolveLane);
 }
@@ -2612,6 +2675,7 @@ function commitUnits(){
   setTimeout(()=>{
     act(()=>{
       if(S.tut&&S.round===1)tutAiPlace(); else {aiPlaceUnits(); aiTricks();}
+      revealGraves();
       S.sub="tricks";S.beat=null;busy=false;
       log("Their answer is in. Last word is yours — cast tricks.");sfx("turn");
     });
@@ -2624,7 +2688,7 @@ function commitTricks(){
   S.beat=aiGetsLastWord?FNAME[S.af]+" has the last word…":"Combat resolves…";
   render();
   setTimeout(()=>{
-    const wait=aiGetsLastWord?act(()=>{if(S.tut&&S.round===1)tutAiTricks();else aiTricks();}):0;
+    const wait=aiGetsLastWord?act(()=>{revealGraves();if(S.tut&&S.round===1)tutAiTricks();else{S.aiLast=true;try{aiTricks();}finally{S.aiLast=false;}}}):0;
     setTimeout(()=>{
     S.beat="Combat resolves…";render();
     setTimeout(()=>{
@@ -3358,6 +3422,9 @@ function canTarget(hi,l){
     if(!trickWindow)return false;
     if(d.sprouts)return true;
     if(d.pyre||d.laneward)return l.p.length>0;
+    if(d.lastword)return S.sub==="tricks"&&l.p.length>0;
+    if(d.bounce)return l.a.some(u=>u.h<=d.bounce);
+    if(d.bounceAll)return l.a.length>0;
     if(d.sweep||d.sweepdebuff)return l.a.length>0;
     if(d.terraform||d.envset)return !(d.envset&&l.env&&l.env.k===d.envset&&envOwnerSide(l)==="p");
     if(d.drawt||d.swarmdraw||(d.conjure&&!d.pyre)||d.surge||d.sweepall||d.churn||d.tax||d.borrow||d.nextdisc)return true;
@@ -3372,7 +3439,7 @@ function canTarget(hi,l){
   if(d.devour&&!l.p.length)return false;
   if(d.infest&&!l.a.length)return false;    // a parasite needs a host
   if(l.terr&&l.terr.water&&!d.infest&&!canSwim(d))return false;   // pool lane
-  if(!d.infest&&!d.teamup&&!(d.fusion===undefined&&l.p.some(u=>u.fbase))&&!laneRoom(l.p))return false;   // lane cap (growing out of a base takes no new slot)
+  if(!d.infest&&!d.teamup&&!(d.fusion===undefined&&l.p.some(u=>u.fbase))&&!laneRoom(l.p.concat(gsOf(l,"p"))))return false;   // lane cap (growing out of a base takes no new slot)
   if(d.flank&&!l.flank)return false;
   if(d.cond==="losing"&&(l.cap||0)>-40)return false;   // only where Blight is ahead
   return true;
@@ -3398,6 +3465,9 @@ function playCard(hi,li){
       if(d.drawt){drawFor("p",d.drawt);plog("   you draw "+d.drawt+".");}
       if(d.conjure)conjure("p",d.conjure);
     }
+    else if(d.lastword){l.p.forEach(u=>u.weak=(u.weak||0)-d.lastword);log("You cast "+d.n+" — your units in "+l.nm+" get +"+d.lastword+" attack this turn.",true);}
+    else if(d.bounce){const t=l.a.filter(u=>u.h<=d.bounce).sort((x,y)=>atk(y,l,"a")-atk(x,l,"a"))[0];log("You cast "+d.n+" — "+bounceUnit(l,"a",t)+".",true);}
+    else if(d.bounceAll){const names=l.a.slice().map(u=>bounceUnit(l,"a",u));log("You cast "+d.n+" — "+l.nm+" is swept clear: "+names.join("; ")+".",true);}
     else if(d.envset){setEnv(l,d.envset,"p");if(d.envsun){S.p.sun+=d.envsun;log("   +"+d.envsun+" sun back.");}}
     else if(d.terraform){setTerrain(l,terrainByName(d.terraform),null,null,1);terraformRider(l,"p",d);log("You cast "+d.n+" — "+l.nm+" becomes "+d.terraform+" for the rest of the round"+(d.tfhp?", your units there get +"+d.tfhp+" health":"")+(d.tfatk?", your units there get +"+d.tfatk+" attack":"")+", and you draw a card.",true);}
     else if(d.conjure){log("You cast "+d.n+".");conjure("p",d.conjure,id);}
@@ -3441,7 +3511,8 @@ function playCard(hi,li){
       plog("You cast "+d.n+" — "+unitsOnBoard("p")+" units out, you draw "+(drawn.join(", ")||"nothing")+".",true);
     }
     else if(d.drawt){
-      const drawn=[];for(let k=0;k<d.drawt;k++){const c=drawOne("p");if(c){S.p.hand.push(c);drawn.push(C[c].n);}}
+      const nd=d.drawt+(d.foresee&&answering("p")?d.foresee:0);
+      const drawn=[];for(let k=0;k<nd;k++){const c=drawOne("p");if(c){S.p.hand.push(c);drawn.push(C[c].n);}}
       plog("You cast "+d.n+" and draw "+(drawn.join(", ")||"nothing")+".");
     }
     else if(d.shove){shiftCap(l,25);l.pushed=1;log("You cast "+d.n+" — "+l.nm+" slides 25% your way ("+capLabel(l)+").");}
@@ -3516,6 +3587,9 @@ function playCard(hi,li){
     }
     dawnFix(u);u.src=originOf("p",id,"Played from your hand");
     const ue=envOnLand(l,"p",u);
+    if(d.grave){gsOf(l,"p").push(ue);log("You bury "+d.n+" in "+l.nm+". 🪦 It rises when the last word begins — nothing can touch it till then.");S.tuFront=false;S.sel=null;render();return;}
+    if(d.gravebust){const r=bustGrave(l,"p");log(r?"You play "+d.n+" — it digs up "+FNAME[S.af]+"'s "+r.u.n+" in "+r.L.nm+"!":d.n+" finds no gravestones to dig.",!!r);}
+    if(d.ambush&&firstMoverSeat()!=="p"&&l.a.length){const t=l.a[0];applyDmg(t,d.ambush,l,"a");log(d.n+" springs an AMBUSH on "+t.n+" for "+d.ambush+".",true);cull(l,"a");}
     if(!fuseInto(l,"p",ue)){if(ue.teamup&&S.tuFront&&l.p.length){l.p.unshift(ue);log("   TEAM-UP: "+d.n+" steps in front.");}else l.p.push(ue);}
     S.tuFront=false;
     if(ue.wither){l.p=l.p.filter(x=>x!==ue);}
@@ -3808,7 +3882,8 @@ function mpPack(){
       p:S.pf==="grove"?l.p:l.a, a:S.pf==="grove"?l.a:l.p,
       /* garrisons are seat-relative too: store them Grove-first like everything else */
       terr:l.terr||null,env:l.env||null,terrKeep:l.terrKeep||0,nest:l.nest||[],
-      gp:(S.pf==="grove"?l.gp:l.ga)||null, ga:(S.pf==="grove"?l.ga:l.gp)||null})),
+      gp:(S.pf==="grove"?l.gp:l.ga)||null, ga:(S.pf==="grove"?l.ga:l.gp)||null,
+      gs:{p:S.pf==="grove"?gsOf(l,"p"):gsOf(l,"a"), a:S.pf==="grove"?gsOf(l,"a"):gsOf(l,"p")}})),
     seats:o, log:S.log.slice(-60), mood:S.a.mood||0
   };
 }
@@ -3837,7 +3912,8 @@ function mpUnpack(raw){
     mk:mine==="grove"?l.mk:6-l.mk, cap:l.cap==null?((mine==="grove"?l.mk:6-l.mk)-3)*40:(mine==="grove"?l.cap:-l.cap),
     /* lanes are stored Grove-side-first; flip them if I am the Blight seat */
     p:mine==="grove"?l.p:l.a, a:mine==="grove"?l.a:l.p,
-    gp:mine==="grove"?l.gp:l.ga, ga:mine==="grove"?l.ga:l.gp
+    gp:mine==="grove"?l.gp:l.ga, ga:mine==="grove"?l.ga:l.gp,
+    gs:{p:((l.gs||{})[mine==="grove"?"p":"a"])||[], a:((l.gs||{})[mine==="grove"?"a":"p"])||[]}
   }));
   return S2;
 }
@@ -4091,6 +4167,7 @@ function mpCommitUnits(){
 }
 function mpEndRespond(){
   log("Your answer is in. "+FNAME[S.af]+" has the last word.",true);
+  revealGraves();
   S.mpStep=3; S.sub="tricks";
   mpHandOff(firstMoverFaction());
 }
@@ -4444,6 +4521,8 @@ function renderBoard(ct,interactive){
       st.appendChild(document.createTextNode(" "));st.appendChild(el("span","sh","♥"+u.h));
       x.appendChild(st);top.appendChild(x);
     });
+    gsOf(l,"a").forEach(()=>{const x=el("div","unit a grave");x.appendChild(el("div","nm","🪦 Gravestone"));x.appendChild(el("div","st","? / ?"));
+      bindInfoTip(x,{title:"🪦 Gravestone",col:"#6E6656",kind:"Hidden Blight unit",effect:"Something is buried here. It rises when the last-word step begins — until then no trick can touch it.",rows:[["Counter","A Gravebuster digs one up before it rises."]]});top.appendChild(x);});
     d.appendChild(top);
     const m=el("div","marker"+(l.pushed?" pushed":""));
     m.style.display="block";
@@ -4475,6 +4554,8 @@ function renderBoard(ct,interactive){
       st.appendChild(document.createTextNode(" "));st.appendChild(el("span","sh","♥"+u.h));
       x.appendChild(st);bot.appendChild(x);
     });
+    gsOf(l,"p").forEach(u=>{const x=el("div","unit p grave");bindTip(x,u.id,false,()=>unitStats(u,l,"p"));x.appendChild(el("div","nm","🪦 "+u.n));
+      x.appendChild(el("div","st","buried · ⚔"+u.base+" ♥"+u.h));bot.appendChild(x);});
     d.appendChild(bot);
     if(!wide||vis.includes(li)){if(wide&&!l.flank&&UI.pan&&UI.pan!=="M")d.classList.add("ctx");b.appendChild(d);}
   });
@@ -5289,7 +5370,7 @@ function renderCombat(st){
   {const fm=firstMoverFaction?firstMoverFaction():(playerMovesFirst()?S.pf:S.af),sm=fm===S.pf?S.af:S.pf;
    const steps=[[FNAME[fm]+" commits units","place"],[FNAME[sm]+" answers · units + tricks","respond"],[FNAME[fm]+" last word · tricks","tricks"],["⚔ Fight","fight"]];
    const cur=S.beat&&/resolv|Fighting/i.test(S.beat)?"fight":sub;
-   const tl=el("div","phasebar");steps.forEach(([t,k],i)=>{const st=el("span","ph"+(k===cur?" now":"")+((steps.findIndex(x=>x[1]===cur)>i)?" done":""),(i+1)+" "+t);tl.appendChild(st);});
+   const tl=el("div","phasebar");steps.forEach(([t,k],i)=>{const st=el("span","ph"+(k===cur?" now":"")+((steps.findIndex(x=>x[1]===cur)>i)?" done":""),t);tl.appendChild(st);});
    hl.appendChild(tl);}
   const blurb=waiting
     ? (sub==="place"
@@ -5542,6 +5623,10 @@ const KEYWORDS=[
     ["Aura / Scaling","Buffs its tribe in the lane / grows per tribe member you control. Both have 0 attack alone."],
     ["Tribeless","No tribe: nothing buffs it and it needs nothing."],
     ["Multi-tribe","Belongs to two tribes (like Bloomspike: Thorn · Flower) and counts as both for auras, scaling, grafting and synergy."],
+    ["Gravestone","Blight units buried face-down. The enemy sees only 🪦 — no trick can touch them — until they rise at the start of the last-word step."],
+    ["Bounce","Sends a unit back to its owner's hand. No death trigger; they must pay for it again. Tokens just vanish."],
+    ["Ambush","Bonus when the unit is played while ANSWERING (you are not the side that commits first)."],
+    ["Last word","A trick that can only be cast in the final trick step, by the side that committed first."],
     ["Team-up","Can step IN FRONT of an ally when played (you choose front or behind), and never counts toward the lane cap."],
     ["Survey","Each turn it survives, its lane's capture moves a little your way — even while contested."],
     ["Cross-tribe","Wants a different tribe beside it."],
