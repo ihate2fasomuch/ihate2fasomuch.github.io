@@ -92,6 +92,7 @@
     [e.destinationName,"Message.destinationName"]));}else e=new w(b),e.destinationName=a,3<=arguments.length&&(e.qos=c),4<=arguments.length&&(e.retained=d);l.send(e)};this.disconnect=function(){l.disconnect()};this.getTraceLog=function(){return l.getTraceLog()};this.startTrace=function(){l.startTrace()};this.stopTrace=function(){l.stopTrace()};this.isConnected=function(){return l.connected}},Message:w}}("undefined"!==typeof global?global:"undefined"!==typeof self?self:"undefined"!==typeof window?window:
     {})});
 </script>
+<meta charset="utf-8">
 <title>Grove and Blight</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -524,7 +525,9 @@ body.fit #railL{grid-column:1;grid-row:2}
 body.fit #stage{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;overflow:hidden}
 body.fit #railR{grid-column:3;grid-row:2}
 body.fit .rail{display:flex;flex-direction:column;gap:8px;min-height:0;width:280px}
-body.fit #railR{width:300px}
+body.fit #railL{width:235px}
+body.fit #railL.collapsed{width:42px}
+body.fit #railR{width:265px}
 body.fit #railR.collapsed{width:42px}
 body.fit.narrowui .rail.collapsed{width:34px}
 body.fit.narrowui .rail.collapsed .railtog{padding:10px 4px;font-size:11.5px}
@@ -759,6 +762,56 @@ body.fit .mini{padding:3px 7px;gap:0}
 body.fit .pack{gap:6px;padding:9px 11px}
 body.fit .z-up .offerrow .fchip{padding:3px 8px}
 .netmsg{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:95;background:var(--todo);color:var(--todoInk);padding:10px 18px;border-radius:8px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+
+.vfront{display:none}
+body.fit .rail .vfront{display:block;margin-top:6px}
+body.fit .rail .front .zones,body.fit .rail .front .track,body.fit .rail .front .zone-labels{display:none}
+body.fit .rail .front .front-head>.tiny.muted:last-child{display:none}
+.vcol{position:relative;display:flex;flex-direction:column;border-radius:6px;overflow:visible;margin-right:62px}
+.vz{height:46px;display:flex;flex-direction:column;justify-content:center;padding:0 10px;background:var(--sunken);border-bottom:1px solid var(--line)}
+.vz:first-child{border-radius:6px 6px 0 0}.vz:last-child{border-radius:0 0 6px 6px;border-bottom:none}
+.vz.mine{background:var(--groveSoft)} .vz.theirs{background:var(--blightSoft)}
+.vz.here{box-shadow:inset 4px 0 0 var(--ink)}
+.vzl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink2)}
+.vzs{font-size:11px;color:var(--ink3)}
+.vnotch{position:absolute;right:-6px;width:6px;height:1px;background:var(--ink3)}
+.vpin{position:absolute;right:-62px;transform:translateY(-50%);font:700 12px "IBM Plex Mono",monospace;color:var(--ink);transition:top .5s cubic-bezier(.3,.8,.3,1);white-space:nowrap}
+.vpin::before{content:"";position:absolute;left:-62px;top:50%;width:62px;height:2px;background:var(--ink);opacity:.35}
+
+body.fit #coach{left:auto;right:12px;bottom:12px;transform:none;width:min(330px,calc(100vw - 24px))}
+body.fit #coach p{font-size:13.5px}
+
+.card.locked{position:relative}
+.card .lockt{margin-top:3px;font-size:11.5px;font-weight:700;color:#8A6A10;background:#FBEFC8;border-radius:4px;padding:1px 5px;align-self:flex-start}
+.lockmsg{font-weight:700;color:#8A4A10;background:#FBEFC8;border:2px solid #D9A51F;border-radius:6px;padding:6px 10px}
+.phasebar{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.phasebar .ph{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface2);color:var(--ink3);border:1px solid var(--line);font-weight:600}
+.phasebar .ph.done{color:var(--ink2);text-decoration:line-through}
+.phasebar .ph.now{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px var(--accentSoft)}
+.sneakfx{position:fixed;z-index:80;pointer-events:none;font:800 16px "Archivo",sans-serif;color:#fff;background:#B0487A;padding:5px 10px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .75s cubic-bezier(.5,0,.3,1),opacity .3s;white-space:nowrap}
+.lane.sneakfrom{box-shadow:0 0 0 4px #B0487A!important}
+
+.pannav{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex:none}
+.panbtn{font:inherit;font-weight:700;font-size:13px;padding:6px 12px;border-radius:6px;border:2px solid var(--line);background:var(--surface2);color:var(--ink2);cursor:pointer;white-space:nowrap}
+.panbtn.on{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.panbtn.tgt:not(.on){border-color:var(--accent);animation:fx-ready 1.6s infinite}
+.minimap{display:flex;gap:2px;flex:1;justify-content:center}
+.mmc{font:600 11px "IBM Plex Mono",monospace;width:34px;height:26px;border:1px solid var(--line);border-radius:4px;cursor:pointer;color:var(--ink2);padding:0}
+.mmc.fl{border-style:dashed}
+.mmc.on{outline:2px solid var(--ink);outline-offset:1px}
+.mmc.tgt{box-shadow:0 0 0 2px var(--accent)}
+.lane.ctx{opacity:.8}
+
+.prevstat{position:absolute;left:50%;top:30px;transform:translateX(-50%);z-index:4;background:var(--ink);color:var(--ground);border-radius:999px;padding:3px 10px;font:700 13px "IBM Plex Mono",monospace;display:flex;gap:6px;align-items:center;pointer-events:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.prevstat .pl{font:600 11px "Archivo",sans-serif;opacity:.7}
+.prevstat .up{color:#9CE08A} .prevstat .dn{color:#F59A86}
+
+.trickfx{position:fixed;z-index:85;pointer-events:none;transform:translate(-50%,-50%) scale(.4);opacity:0;font:800 18px "Bitter",serif;padding:8px 16px;border-radius:12px;color:#fff;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:fx-trick 1.25s cubic-bezier(.2,1.4,.4,1) forwards}
+.trickfx.mine{background:linear-gradient(135deg,#2E7D4F,#6BAF4A)}
+.trickfx.theirs{background:linear-gradient(135deg,#8A3A2A,#C9663A)}
+@keyframes fx-trick{0%{opacity:0;transform:translate(-50%,-30%) scale(.4)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}70%{opacity:1;transform:translate(-50%,-60%) scale(1)}100%{opacity:0;transform:translate(-50%,-90%) scale(.9)}}
+.lane.trickflash{animation:fx-tflash .9s ease-out}
+@keyframes fx-tflash{0%{box-shadow:inset 0 0 0 0 rgba(242,193,78,0)}30%{box-shadow:inset 0 0 0 6px rgba(242,193,78,.9),0 0 18px rgba(242,193,78,.7)}100%{box-shadow:inset 0 0 0 0 rgba(242,193,78,0)}}
 </style>
 
 <div class="wrap">
@@ -788,6 +841,7 @@ body.fit .z-up .offerrow .fchip{padding:3px 8px}
     <div class="zones" id="zones"><div class="zone mine"></div><div class="zone"></div><div class="zone"></div><div class="zone"></div><div class="zone theirs"></div></div>
     <div class="track" id="track"></div>
     <div class="zone-labels"><span id="zl0">Your Home</span><span>Outskirts</span><span>Town Square</span><span>Outskirts</span><span id="zl4">Their Home</span></div>
+    <div class="vfront" id="vfront"></div>
   </div>
 
   <div id="stage"></div>
@@ -833,7 +887,7 @@ body.fit .z-up .offerrow .fchip{padding:3px 8px}
       <div class="gbody">
         <ol class="steps">
           <li><b>Supply.</b> You see a shelf of 25 of the <em>enemy's</em> cards. Put exactly <b>8 into each of two packs</b> (each needs at least one unit). Prices are fixed by the round: 6, 9, 12… You also choose one permanent upgrade to list for them, and set its price.</li>
-          <li><b>Market.</b> You buy <b>one</b> of their two packs; the other is thrown away. Spend leftover meta on a tonic, sticker crates, your workshop, or the upgrade they listed for you.</li>
+          <li><b>Market.</b> You buy <b>one</b> of their two packs; the other is thrown away. Spend leftover scrap on a tonic, sticker crates, your workshop, or the upgrade they listed for you.</li>
           <li><b>Combat.</b> Five turns. Units and tricks cost <b>sun</b> (Grove) or <b>spore</b> (Blight), which refills every turn and does not carry over.</li>
           <li><b>Round end.</b> Whoever holds more <b>main lanes</b> moves the front one step — two if they win by 3 or more.</li>
         </ol>
@@ -842,14 +896,14 @@ body.fit .z-up .offerrow .fchip{padding:3px 8px}
 
     <details><summary><span class="gn">3</span>Stocking packs — building a trap</summary>
       <div class="gbody">
-        <p>You can't hold good cards back: both packs must be full. If they refuse both packs they keep their meta, but <b>Rubble goes into their own deck</b>. So the real lever is selling cards that are strong alone and <b>useless together</b>:</p>
+        <p>You can't hold good cards back: both packs must be full. If they refuse both packs they keep their scrap, but <b>Rubble goes into their own deck</b>. So the real lever is selling cards that are strong alone and <b>useless together</b>:</p>
         <div class="grid2">
           <div class="tcard"><h3>Strand a payoff</h3><p>Auras and scalers (Fungal Chorus, Bristlecap…) have 0 attack. Sold without their tribe, they do nothing.</p></div>
           <div class="tcard"><h3>Clog the curve</h3><p>Resource doesn't stack. A pack of 5-drops can't all be cast.</p></div>
           <div class="tcard"><h3>Mistime a window</h3><p>Turn-1-only and turn-4+ cards are bricks in the wrong deck.</p></div>
           <div class="tcard"><h3>Split a pair</h3><p>Cross-tribe cards want a partner tribe. Sell one half.</p></div>
         </div>
-        <p>They are doing the same to you. Each pack shows its <b>curve</b> for free (how many cheap, mid and big cards, tricks and dead weight). <b>Appraising</b> (2 meta) tells you what it's worth <b>to your deck</b> — high, fair or low — and why.</p>
+        <p>They are doing the same to you. Each pack shows its <b>curve</b> for free (how many cheap, mid and big cards, tricks and dead weight). <b>Appraising</b> (2 scrap) tells you what it's worth <b>to your deck</b> — high, fair or low — and why.</p>
         <p><b>What makes a pack good?</b> Not just synergy, and not just high cost:</p>
         <div class="grid2">
           <div class="tcard"><h3>Big cards</h3><p>More power per card you draw — but you cast one a turn, and early turns give only 3–4 sun.</p></div>
@@ -871,7 +925,7 @@ body.fit .z-up .offerrow .fchip{padding:3px 8px}
         <p><b>Flurry:</b> the third card you play in a turn draws you a card (once a turn).</p>
         <p>If the front is pushed deep into one side's home, <b>that</b> side takes the first-mover role.</p>
         <p><b>The exchange:</b> in each lane, all your units' attack adds up and hits their <b>front</b> unit; overkill carries to the next one. Both sides hit at once. So a tough unit in front shields everything behind it.</p>
-        <p>Once per turn you may <b>scrap</b> a card from your hand for 2 resource.</p>
+        <p>Once per turn you may <b>recycle</b> a card from your hand for 2 resource.</p>
       </div>
     </details>
 
@@ -881,7 +935,7 @@ body.fit .z-up .offerrow .fchip{padding:3px 8px}
         <div class="grid2">
           <div class="tcard"><h3>20% — held</h3><p>Counts toward winning the round. (Holding lanes gives no extra sun — that snowballed.)</p></div>
           <div class="tcard"><h3>60% — captured</h3><p>Your strongest unit there stays as a garrison next round. A captured flank also rakes the main lane beside it and speeds your capture there.</p></div>
-          <div class="tcard"><h3>Flanks</h3><p><b>Sneak attack:</b> hold a flank and your flankers hit the enemy's REAR unit in the main lane beside it every turn while that lane is deadlocked (half their attack; all of it once captured). <b>Cut off:</b> if the enemy holds that main lane, your units on the flank lose 1 health every turn. Holding a flank sector at round end also pays <b>+3 meta</b> and <b>breaks ties</b> on main lanes. Flanks move 1.6× faster and get random terrain. On the wide map, hold 2 of a sector's 3.</p></div>
+          <div class="tcard"><h3>Flanks</h3><p><b>Sneak attack:</b> hold a flank and your flankers hit the enemy's REAR unit in the main lane beside it every turn while that lane is deadlocked (half their attack; all of it once captured). <b>Cut off:</b> if the enemy holds that main lane, your units on the flank lose 1 health every turn. Holding a flank sector at round end also pays <b>+3 scrap</b> and <b>breaks ties</b> on main lanes. Flanks move 1.6× faster and get random terrain. On the wide map, hold 2 of a sector's 3.</p></div>
           <div class="tcard"><h3>Backs to the wall</h3><p>Units fight +1 in a lane the enemy holds, +2 once it is captured.</p></div>
         </div>
       </div>
@@ -891,20 +945,20 @@ body.fit .z-up .offerrow .fchip{padding:3px 8px}
       <div class="gbody">
         <div class="grid2">
           <div class="tcard"><h3>Draw pile</h3><p>You draw through a shuffled pile; cards only come back once you've drawn everything.</p></div>
-          <div class="tcard"><h3>Cutting</h3><p>3 meta, +3 for each extra cut that round, and every real card you cut makes future cuts +1. Rubble can always be cut.</p></div>
+          <div class="tcard"><h3>Cutting</h3><p>3 scrap, +3 for each extra cut that round, and every real card you cut makes future cuts +1. Rubble can always be cut.</p></div>
           <div class="tcard"><h3>Tonics</h3><p>Three offered, take <b>one</b> per round. Changes that card in your deck forever — every copy. Each one you buy makes the next 2 dearer.</p></div>
           <div class="tcard"><h3>Grove cross-breeds</h3><p>Two Thornlings → a Bramblejack; two Bramblejacks → a Thornwarden. These Hybrids drop a tier when damaged instead of dying.</p></div>
-          <div class="tcard"><h3>Blight experiments</h3><p>Two cards of one tribe + 4 meta → a random Abomination. 2 meta to reroll.</p></div>
-          <div class="tcard"><h3>Graft</h3><p>Three cards of one tribe + 5 meta → one big body that keeps the tribe.</p></div>
+          <div class="tcard"><h3>Blight experiments</h3><p>Two cards of one tribe + 4 scrap → a random Abomination. 2 scrap to reroll.</p></div>
+          <div class="tcard"><h3>Graft</h3><p>Three cards of one tribe + 5 scrap → one big body that keeps the tribe.</p></div>
         </div>
       </div>
     </details>
 
     <details><summary><span class="gn">7</span>Sticker book</summary>
       <div class="gbody">
-        <p>A crate costs 5 meta and gives <b>three pieces</b> from 15 sets.</p>
+        <p>A crate costs 5 scrap and gives <b>three pieces</b> from 15 sets.</p>
         <div class="grid2">
-          <div class="tcard"><h3>Perk sets</h3><p>Every piece is a level that works straight away — more meta each round, cheaper appraisals, fewer refusal Rubble, and so on.</p></div>
+          <div class="tcard"><h3>Perk sets</h3><p>Every piece is a level that works straight away — more scrap each round, cheaper appraisals, fewer refusal Rubble, and so on.</p></div>
           <div class="tcard"><h3>Companion sets</h3><p>One piece short of complete, a rookie companion (−1/−1) joins; complete, it's full strength. Deploy one free per turn, each once per round.</p></div>
         </div>
       </div>
@@ -914,7 +968,7 @@ body.fit .z-up .offerrow .fchip{padding:3px 8px}
       <div class="gbody">
         <p>Units clear between rounds. Three things carry:</p>
         <div class="grid2">
-          <div class="tcard"><h3>Veterancy ★</h3><p>A card still standing at round end PERMANENTLY gets +1/+1 — up to +3 for cheap cards, +2 for 3–4 costs, +1 for big and workshop cards.</p></div>
+          <div class="tcard"><h3>Veterancy ★</h3><p>A card still standing at round end earns XP (3 for surviving, more for doing its job); every 4 XP is PERMANENTLY +1/+1 — up to +2, or +1 for big and workshop cards. Cards with 0 attack only gain health.</p></div>
           <div class="tcard"><h3>Hard lessons ★</h3><p>The side that LOSES the round also promotes its two hardest-hitting cards that fell (most attack thrown), +1/+1 each, same caps.</p></div>
           <div class="tcard"><h3>Garrison</h3><p>Your strongest unit in each captured lane starts next round there.</p></div>
           <div class="tcard"><h3>Reserve</h3><p>Up to three unplayed cards stay in your hand.</p></div>
@@ -966,45 +1020,45 @@ const C = cardTable({
    =========================================================================== */
   /* THORN — aggression that grows */
   thornling:{n:"Thornling",s:"grove",c:2,a:2,h:2,tag:"Thorn",t:"CROSS-BREED two at the workshop (between rounds) to make a Bramblejack.",fuse:"bramblejack"},
-  bristlecap:{n:"Bristlecap",s:"grove",c:3,a:0,h:3,tag:"Thorn",t:"Your other THORN units in this lane get +2 attack. It has none of its own.",aura:"Thorn",aurav:2},
-  nettleweave:{n:"Nettleweave",s:"grove",c:3,a:0,h:3,tag:"Thorn",t:"+1 attack per other THORN you control anywhere, up to +4. Inert alone.",scale:"Thorn"},
-  bloomspike:{n:"Bloomspike",s:"grove",c:3,a:2,h:3,tag:"Thorn",tag2:"Flower",t:"BLOOM — gains +1/+1 at the end of every turn it survives.",bloom:1},
-  ironvine:{n:"Ironvine",s:"grove",c:4,a:3,h:5,tag:"Thorn",t:"THORNMAIL — deals 2 damage straight back to whatever attacks it.",thornmail:2},
-  zealvine:{n:"Zealvine",s:"grove",c:3,a:2,h:3,tag:"Thorn",t:"ZEAL — +3 attack while the front line sits on your half of the map.",zeal:3},
+  bristlecap:{n:"Bristlecap",s:"grove",c:3,a:0,h:3,tag:"Thorn",t:"Your other THORN units in this lane get +2 attack.",aura:"Thorn",aurav:2},
+  nettleweave:{n:"Nettleweave",s:"grove",c:3,a:0,h:3,tag:"Thorn",t:"+1 attack per other THORN you control anywhere, up to +4.",scale:"Thorn"},
+  bloomspike:{n:"Bloomspike",s:"grove",c:3,a:2,h:3,tag:"Thorn",tag2:"Flower",t:"BLOOM.",bloom:1},
+  ironvine:{n:"Ironvine",s:"grove",c:4,a:3,h:5,tag:"Thorn",t:"THORNMAIL 2.",thornmail:2},
+  zealvine:{n:"Zealvine",s:"grove",c:3,a:2,h:3,tag:"Thorn",t:"ZEAL +3.",zeal:3},
   /* ROOT — walls and economy */
-  seedpod:{n:"Seedpod",s:"grove",c:1,a:1,h:2,tag:"Root",t:"A cheap body and nothing more."},
-  taproot:{n:"Taproot",s:"grove",c:2,a:0,h:4,tag:"Root",t:"+1 resource at the start of every turn it survives. It pays from NEXT turn, so it costs you tempo now.",prod:1},
-  sapwell:{n:"Sapwell",s:"grove",c:3,a:0,h:4,tag:"Root",t:"+2 resource at the start of every turn it survives. It pays from NEXT turn.",prod:2},
-  barkplate:{n:"Barkplate",s:"grove",c:3,a:0,h:8,tag:"Root",t:"TEAM-UP. Eight health for three — step it in front of your attackers.",teamup:1},
-  gallnut:{n:"Gallnut",s:"grove",c:2,a:1,h:4,tag:"Root",t:"TEAM-UP. BULWARK — gains +1 attack every time it is attacked.",bulwark:1,teamup:1},
+  seedpod:{n:"Seedpod",s:"grove",c:1,a:1,h:2,tag:"Root",t:"CROSS-BREED two into a Burrowroot.",fuse:"h_burrowroot"},
+  taproot:{n:"Taproot",s:"grove",c:2,a:0,h:4,tag:"Root",t:"+1 sun each turn it survives.",prod:1},
+  sapwell:{n:"Sapwell",s:"grove",c:3,a:0,h:4,tag:"Root",t:"+2 sun each turn it survives.",prod:2},
+  barkplate:{n:"Barkplate",s:"grove",c:3,a:0,h:8,tag:"Root",t:"TEAM-UP.",teamup:1},
+  gallnut:{n:"Gallnut",s:"grove",c:2,a:1,h:4,tag:"Root",t:"TEAM-UP. BULWARK. CROSS-BREED two into a Galloak.",bulwark:1,teamup:1,fuse:"h_galloak"},
   deeproot:{n:"Deeproot",s:"grove",c:3,a:0,h:2,tag:"Root",t:"On play: the unit in front of it gains +4 health.",bolster:4},
   worldroot:{n:"Worldroot",s:"grove",c:7,a:5,h:9,tag:"Root",t:"Your other units in this lane get +2 health while it lives.",ward:2},
   ancientwood:{n:"Ancientwood",s:"grove",c:4,a:5,h:8,tag:"Root",t:"Playable from turn 3 onward. ENTRENCH — its lane keeps gaining capture at half speed even while contested. On play: its roots spread — your other units in this lane get +0/+2.",late:3,entrench:1,rootgift:2},
   titanbloom:{n:"Titanbloom",s:"grove",c:6,a:6,h:7,tag:"Root",t:"Enormous stats, no text. That is the whole card."},
   /* FLOWER — reaction and support */
-  petalward:{n:"Petalward",s:"grove",c:3,a:1,h:5,tag:"Flower",t:"VIGIL — draw a card every time it is attacked.",vigil:1},
-  rallyrose:{n:"Rally Rose",s:"grove",c:3,a:2,h:3,tag:"Flower",t:"RALLY — gains +2 attack whenever another friendly unit dies in this lane.",rally:2},
-  sunflare:{n:"Sunflare",s:"grove",c:1,a:1,h:2,tag:"Flower",t:"On play: gain 1 sun — or 3 if you have a ROOT unit anywhere on the board.",kicker:"Root",gain:3,gainbase:1},
-  dawnbloom:{n:"Dawnbloom",s:"grove",c:2,a:4,h:4,tag:"Flower",t:"Playable only on TURN 1. A brutal opening — and it cannot be scrapped, so after turn 1 it is simply dead in your hand.",early:1,noscrap:true},
+  petalward:{n:"Petalward",s:"grove",c:3,a:1,h:5,tag:"Flower",t:"VIGIL.",vigil:1},
+  rallyrose:{n:"Rally Rose",s:"grove",c:3,a:2,h:3,tag:"Flower",t:"RALLY +2.",rally:2},
+  sunflare:{n:"Sunflare",s:"grove",c:1,a:1,h:2,tag:"Flower",fuse:"h_sunbloom",t:"On play: gain 1 sun — or 3 if you have a ROOT unit anywhere on the board. CROSS-BREED two into a Sunbloom.",kicker:"Root",gain:3,gainbase:1},
+  dawnbloom:{n:"Dawnbloom",s:"grove",c:2,a:4,h:4,tag:"Flower",t:"A 4/4 on TURN 1. From turn 2 on it arrives as a 1/1.",dawn:1},
   spiteblossom:{n:"Spiteblossom",s:"grove",c:3,a:1,h:4,tag:"Flower",t:"Gains +1 attack each time the enemy casts a trick.",spite:1},
   /* AQUATIC — position and precision */
-  lilypad:{n:"Lilypad",s:"grove",c:2,a:1,h:2,tag:"Aquatic",t:"+2 attack while it is ALONE in its lane.",lone:2},
+  lilypad:{n:"Lilypad",s:"grove",c:2,a:1,h:2,tag:"Aquatic",t:"+2 attack while it is ALONE in its lane. CROSS-BREED two into a Lotus Queen.",lone:2,fuse:"h_lotus"},
   mirrorleaf:{n:"Mirrorleaf",s:"grove",c:3,a:0,h:6,tag:"Aquatic",t:"MIRROR — its attack is always exactly the enemy front unit's attack.",mirror:true},
-  outrider:{n:"Outrider",s:"grove",c:3,a:2,h:3,tag:"Aquatic",t:"+3 attack on a FLANK, −1 in a MAIN lane. A skirmisher, lost in the centre.",flankb:3,mainb:-1},
-  reedspear:{n:"Reedspear",s:"grove",c:3,a:3,h:2,tag:"Aquatic",t:"SNIPER — strikes the enemy's WEAKEST unit instead of their front line.",sniper:1},
-  tidecaller:{n:"Tidecaller",s:"grove",c:4,a:2,h:5,tag:"Aquatic",t:"REGROW — puts a 1/1 Sprout into this lane every time it is attacked.",regrow:1},
-  shellbark:{n:"Shellbark",s:"grove",c:4,a:2,h:4,tag:"Aquatic",t:"SHIELD 3 — ignores the first 3 damage every single turn.",shield:3},
+  outrider:{n:"Outrider",s:"grove",c:3,a:2,h:3,tag:"Aquatic",t:"+3 attack on a FLANK, −1 in a MAIN lane.",flankb:3,mainb:-1},
+  reedspear:{n:"Reedspear",s:"grove",c:3,a:3,h:2,tag:"Aquatic",t:"SNIPER. CROSS-BREED two into a Reedmaster.",sniper:1,fuse:"h_reedmaster"},
+  tidecaller:{n:"Tidecaller",s:"grove",c:4,a:2,h:5,tag:"Aquatic",t:"REGROW.",regrow:1},
+  shellbark:{n:"Shellbark",s:"grove",c:4,a:2,h:4,tag:"Aquatic",t:"SHIELD 3.",shield:3},
   /* FUSION — PvZH-style. Play it onto one of your units and it merges into your
      FRONT unit, handing over stats and a keyword. In an empty lane it is just a body. */
-  sapgraft:{n:"Sapgraft",s:"grove",c:1,a:1,h:2,tag:"Flower",t:"FUSION BASE — the next unit you play in this lane grows out of it: +1/+2, and you draw a card.",fusion:{a:1,h:2,draw:1}},
-  thornsap:{n:"Thornsap",s:"grove",c:2,a:1,h:3,tag:"Thorn",t:"FUSION BASE — the next unit you play in this lane grows out of it: +2 attack and THORNMAIL 2.",fusion:{a:2,kw:{thornmail:2}}},
-  barkgraft:{n:"Barkgraft",s:"grove",c:2,a:0,h:5,tag:"Root",t:"FUSION BASE — the next unit you play in this lane grows out of it: +5 health and BULWARK.",fusion:{h:5,kw:{bulwark:1}}},
-  reedgraft:{n:"Reedgraft",s:"grove",c:3,a:1,h:3,tag:"Aquatic",t:"FUSION BASE — the next unit you play in this lane grows out of it: +2/+1 and SNIPER.",fusion:{a:2,h:1,kw:{sniper:1}}},
-  evergraft:{n:"Evergraft",s:"grove",c:4,a:2,h:5,tag:"Tribeless",t:"No tribe. FUSION BASE — the next unit you play in this lane grows out of it: +2/+2 and BLOOM.",fusion:{a:2,h:2,kw:{bloom:1}}},
+  sapgraft:{n:"Sapgraft",s:"grove",c:1,a:1,h:2,tag:"Flower",t:"FUSION BASE — the next unit you play in this lane grows out of it: +1/+1, and you draw a card.",fusion:{a:1,h:1,draw:1}},
+  thornsap:{n:"Thornsap",s:"grove",c:2,a:1,h:3,tag:"Thorn",t:"FUSION BASE — the next unit you play in this lane grows out of it: +2 attack and THORNMAIL 1.",fusion:{a:2,kw:{thornmail:1}}},
+  barkgraft:{n:"Barkgraft",s:"grove",c:2,a:0,h:5,tag:"Root",t:"FUSION BASE — the next unit you play in this lane grows out of it: +4 health and BULWARK.",fusion:{h:4,kw:{bulwark:1}}},
+  reedgraft:{n:"Reedgraft",s:"grove",c:2,a:1,h:3,tag:"Aquatic",t:"FUSION BASE — the next unit you play in this lane grows out of it: +2/+2 and SNIPER.",fusion:{a:2,h:2,kw:{sniper:1}}},
+  evergraft:{n:"Evergraft",s:"grove",c:3,a:2,h:5,tag:"Tribeless",t:"FUSION BASE — the next unit you play in this lane grows out of it: +3/+3 and BLOOM.",fusion:{a:3,h:3,kw:{bloom:1}}},
   /* GROVE — efficient bodies, risky economy, tempo discounts */
   thornnursery:{n:"Thorn Nursery",s:"grove",c:2,a:0,h:3,tag:"Thorn",t:"Your THORN cards cost 1 less while it lives.",disc:{tag:"Thorn",n:1}},
-  brambleback:{n:"Brambleback",s:"grove",c:3,a:4,h:4,tag:"Thorn",t:"THORNMAIL 1. Simply efficient.",thornmail:1},
-  glasshouse:{n:"Glasshouse",s:"grove",c:2,a:0,h:1,tag:"Root",t:"+2 resource every turn it survives — but it has one health.",prod:2},
+  brambleback:{n:"Brambleback",s:"grove",c:3,a:4,h:4,tag:"Thorn",t:"THORNMAIL 1.",thornmail:1},
+  glasshouse:{n:"Glasshouse",s:"grove",c:2,a:0,h:1,tag:"Root",t:"+2 sun each turn it survives.",prod:2},
   oakheart:{n:"Oakheart",s:"grove",c:5,a:5,h:8,tag:"Root",t:"Your other units in this lane get +1 health.",ward:1},
   spearleaf:{n:"Spearleaf",s:"grove",c:2,a:3,h:2,tag:"Aquatic",t:"+1 attack on a FLANK.",flankb:1},
   dewcatcher:{n:"Dewcatcher",s:"grove",c:2,a:1,h:3,tag:"Aquatic",t:"Your TRICKS cost 1 less while it lives.",disc:{tag:"trick",n:1}},
@@ -1024,7 +1078,7 @@ const C = cardTable({
   bramblegallery:{n:"Bramble Gallery",s:"grove",c:4,trick:true,t:"ENVIRONMENT — your units in this lane strike TWICE each exchange.",envset:"gallery"},
   /* GROVE TRICKS — proactive. Grove sees their board, so it acts on its own turn. */
   brambleshot:{n:"Bramble Shot",s:"grove",c:2,trick:true,t:"Deal 3 to the FRONT enemy unit in a lane.",dmg:3},
-  thornlash:{n:"Thornlash",s:"grove",c:3,trick:true,t:"Deal 4 to the LAST enemy unit in a lane. Reaches past walls.",dmg:4,back:true},
+  thornlash:{n:"Thornlash",s:"grove",c:3,trick:true,t:"Deal 4 to the LAST enemy unit in a lane.",dmg:4,back:true},
   seedcall:{n:"Seedcall",s:"grove",c:2,trick:true,t:"Draw 2 cards.",drawt:2},
   snapvine:{n:"Snapvine",s:"grove",c:3,trick:true,t:"BONUS ATTACK — your units in a lane strike immediately, before combat.",strikenow:true},
   thornvolley:{n:"Thorn Volley",s:"grove",c:5,trick:true,t:"BONUS ATTACK — your units in a lane strike immediately, each with +1 attack for that strike.",strikenow:true,strikebonus:1},
@@ -1034,8 +1088,14 @@ const C = cardTable({
   grafthand:{n:"Grafthand",s:"grove",c:3,a:2,h:3,tag:"Root",t:"Your HYBRID units in this lane get +2 attack.",aura:"Hybrid",aurav:2},
   greenwall:{n:"Greenwall",s:"grove",c:3,trick:true,t:"Every one of your units in a lane gains +3 health this turn.",laneward:3},
   sunburst:{n:"Sunburst",s:"grove",c:3,trick:true,t:"Deal 2 damage to every enemy unit in a lane, and 1 to every enemy unit in the lanes beside it.",sweep:2,sweepside:1},
-  bramblejack:{n:"Bramblejack",s:"grove",c:4,a:4,h:4,tag:"Hybrid",t:"HYBRID, tier 1. Damage knocks it back to a Thornling instead of killing it. Cross-breed two into a Thornwarden.",fused:"thornling",fuse:"thornwarden",fusecost:7},
-  thornwarden:{n:"Thornwarden",s:"grove",c:6,a:7,h:8,tag:"Hybrid",t:"HYBRID, tier 2. Knocked back to a Bramblejack — three answers to kill for good.",fused:"bramblejack"},
+  bramblejack:{n:"Bramblejack",s:"grove",c:4,a:4,h:4,tag:"Thorn",tag2:"Hybrid",t:"HYBRID, tier 1. Damage knocks it back to a Thornling instead of killing it. Cross-breed two into a Thornwarden.",fused:"thornling",fuse:"thornwarden",fusecost:7},
+  h_burrowroot:{n:"Burrowroot",s:"grove",c:3,a:2,h:5,tag:"Root",tag2:"Hybrid",t:"HYBRID. Damage knocks it back to a Seedpod instead of killing it.",fused:"seedpod",makecost:2},
+  h_sunbloom:{n:"Sunbloom",s:"grove",c:2,a:2,h:3,tag:"Flower",tag2:"Hybrid",t:"HYBRID. On play: gain 2 sun. Damage knocks it back to a Sunflare.",fused:"sunflare",makecost:3,gainflat:2},
+  h_lotus:{n:"Lotus Queen",s:"grove",c:4,a:3,h:4,tag:"Aquatic",tag2:"Hybrid",t:"HYBRID. +3 attack while ALONE in its lane. Damage knocks it back to a Lilypad.",fused:"lilypad",makecost:3,lone:3},
+  h_reedmaster:{n:"Reedmaster",s:"grove",c:5,a:4,h:4,tag:"Aquatic",tag2:"Hybrid",t:"HYBRID. SNIPER. Damage knocks it back to a Reedspear.",fused:"reedspear",makecost:4,sniper:1},
+  h_galloak:{n:"Galloak",s:"grove",c:4,a:2,h:7,tag:"Root",tag2:"Hybrid",t:"HYBRID. TEAM-UP. BULWARK. Damage knocks it back to a Gallnut. CROSS-BREED two into an Ironbark.",fused:"gallnut",makecost:3,bulwark:1,teamup:1,fuse:"h_ironbark"},
+  h_ironbark:{n:"Ironbark",s:"grove",c:6,a:3,h:11,tag:"Root",tag2:"Hybrid",t:"HYBRID, tier 2. TEAM-UP. BULWARK 2. Damage knocks it back to a Galloak.",fused:"h_galloak",makecost:6,bulwark:2,teamup:1},
+  thornwarden:{n:"Thornwarden",s:"grove",c:6,a:7,h:8,tag:"Thorn",tag2:"Hybrid",t:"HYBRID, tier 2. Damage knocks it back to a Bramblejack instead of killing it.",fused:"bramblejack"},
 
 /* ===========================================================================
    BLIGHT — death, sacrifice, transformation and swarm.
@@ -1043,44 +1103,44 @@ const C = cardTable({
    and get stronger in numbers. Nothing in Blight reacts to being attacked.
    =========================================================================== */
   /* ROT — swarm and feeding */
-  rotling:{n:"Rotling",s:"blight",c:2,a:2,h:2,tag:"Rot",t:"Experiment fodder. Two cards of one tribe can be rolled into something far worse — or far better."},
-  gnawer:{n:"Gnawer",s:"blight",c:1,a:1,h:2,tag:"Rot",t:"BROOD — on play, draw a card if you already have 3+ units on the board.",brood:3},
-  hivecaller:{n:"Hivecaller",s:"blight",c:3,a:1,h:3,tag:"Rot",t:"HIVE — at the start of each turn, draw an extra card while you hold 5+ units across the board.",hive:5},
-  rotchoir:{n:"Rot Choir",s:"blight",c:3,a:1,h:3,tag:"Rot",t:"CROWD — +1 attack for every 2 other units you have on the board, up to +4.",crowd:4},
-  swarmlord:{n:"Swarmlord",s:"blight",c:4,a:2,h:4,tag:"Rot",t:"HORDE — while you have 5+ units on the board, ALL your units get +1 attack.",horde:1},
-  carrionfeast:{n:"Carrion Feast",s:"blight",c:3,a:2,h:3,tag:"Rot",t:"SLAY — gains +2 attack every time it destroys an enemy.",slay:2},
-  shamblehulk:{n:"Shamblehulk",s:"blight",c:4,a:3,h:5,tag:"Rot",t:"SPLASH — also deals 2 damage to the unit standing behind its target.",splash:2},
+  rotling:{n:"Rotling",s:"blight",c:2,a:2,h:2,tag:"Rot",t:"Experiment fodder."},
+  gnawer:{n:"Gnawer",s:"blight",c:1,a:1,h:2,tag:"Rot",t:"BROOD.",brood:3},
+  hivecaller:{n:"Hivecaller",s:"blight",c:3,a:1,h:3,tag:"Rot",t:"HIVE.",hive:5},
+  rotchoir:{n:"Rot Choir",s:"blight",c:3,a:1,h:3,tag:"Rot",t:"CROWD.",crowd:4},
+  swarmlord:{n:"Swarmlord",s:"blight",c:4,a:2,h:4,tag:"Rot",t:"HORDE.",horde:1},
+  carrionfeast:{n:"Carrion Feast",s:"blight",c:3,a:2,h:3,tag:"Rot",t:"SLAY 2.",slay:2},
+  shamblehulk:{n:"Shamblehulk",s:"blight",c:4,a:3,h:5,tag:"Rot",t:"SPLASH 2.",splash:2},
   /* SPORE — economy and mutation */
-  sporestalk:{n:"Sporestalk",s:"blight",c:2,a:0,h:4,tag:"Spore",t:"+1 resource at the start of every turn it survives. It pays from NEXT turn.",prod:1},
-  brainvat:{n:"Brain Vat",s:"blight",c:3,a:0,h:4,tag:"Spore",t:"+2 resource at the start of every turn it survives. It pays from NEXT turn.",prod:2},
-  fungalchorus:{n:"Fungal Chorus",s:"blight",c:3,a:0,h:3,tag:"Spore",t:"Your other SPORE units in this lane get +2 attack. It has none of its own.",aura:"Spore",aurav:2},
-  mycelia:{n:"Mycelia",s:"blight",c:3,a:0,h:3,tag:"Spore",t:"+1 attack per other SPORE you control anywhere, up to +4. Inert alone.",scale:"Spore"},
-  mutagen:{n:"Mutagen",s:"blight",c:3,a:2,h:3,tag:"Spore",t:"MUTATE — on play it becomes a random other SPORE card, and that card arrives with +2/+2.",mutate:"Spore",mutbuff:2},
-  blightpod:{n:"Blightpod",s:"blight",c:4,a:2,h:4,tag:"Spore",t:"On death: draw 2 cards. It wants to die.",rattledraw:2},
+  sporestalk:{n:"Sporestalk",s:"blight",c:2,a:0,h:4,tag:"Spore",t:"+1 spore each turn it survives.",prod:1},
+  brainvat:{n:"Brain Vat",s:"blight",c:3,a:0,h:4,tag:"Spore",t:"+2 spore each turn it survives.",prod:2},
+  fungalchorus:{n:"Fungal Chorus",s:"blight",c:3,a:0,h:3,tag:"Spore",t:"Your other SPORE units in this lane get +2 attack.",aura:"Spore",aurav:2},
+  mycelia:{n:"Mycelia",s:"blight",c:3,a:0,h:3,tag:"Spore",t:"+1 attack per other SPORE you control anywhere, up to +4.",scale:"Spore"},
+  mutagen:{n:"Mutagen",s:"blight",c:3,a:2,h:3,tag:"Spore",t:"MUTATE — becomes a random SPORE card with +2/+2.",mutate:"Spore",mutbuff:2},
+  blightpod:{n:"Blightpod",s:"blight",c:4,a:2,h:4,tag:"Spore",t:"On death: draw 2 cards.",rattledraw:2},
   /* BONE — sacrifice and the long game */
-  crawler:{n:"Crawler",s:"blight",c:2,a:1,h:4,tag:"Bone",t:"TEAM-UP. On death: deal 4 damage to the enemy front unit. A wall that bites back once.",rattledmg:4,teamup:1},
-  gravekeeper:{n:"Gravekeeper",s:"blight",c:3,a:1,h:3,tag:"Bone",t:"CONSUME — on play, destroy one of your own units here. That card PERMANENTLY gains +1/+1 in your deck.",consume:1},
-  bonegarrison:{n:"Bone Garrison",s:"blight",c:4,a:1,h:6,tag:"Bone",t:"Takes 2 less damage in MAIN lanes. A useless garrison on a flank.",tough:2},
-  boneline:{n:"Bone Line",s:"blight",c:3,a:0,h:5,tag:"Bone",t:"SCREEN — while you hold 3+ units here, damage never carries from one to the next.",screen:true},
+  crawler:{n:"Crawler",s:"blight",c:2,a:1,h:4,tag:"Bone",t:"TEAM-UP. On death: deal 4 damage to the enemy front unit.",rattledmg:4,teamup:1},
+  gravekeeper:{n:"Gravekeeper",s:"blight",c:3,a:1,h:3,tag:"Bone",t:"CONSUME.",consume:1},
+  bonegarrison:{n:"Bone Garrison",s:"blight",c:4,a:1,h:6,tag:"Bone",t:"Takes 2 less damage in MAIN lanes.",tough:2},
+  boneline:{n:"Bone Line",s:"blight",c:3,a:0,h:5,tag:"Bone",t:"SCREEN.",screen:true},
   lastrites:{n:"Last Rites",s:"blight",c:3,a:3,h:4,tag:"Bone",t:"+3 attack while you hold 1 card or fewer. On death: draw a card.",ascetic:3,asceticat:1,rattledraw:1},
   charnellord:{n:"Charnel Lord",s:"blight",c:4,a:7,h:7,tag:"Bone",t:"Playable from turn 4 onward. On death: deal 5 damage to EVERY enemy unit in its lane.",late:4,rattleblast:5},
   /* ICHOR — chaos and transformation */
-  oozeling:{n:"Oozeling",s:"blight",c:2,a:1,h:3,tag:"Ichor",t:"EVOLVE — at the end of each round it PERMANENTLY becomes a different card of the same cost, with +2/+2.",evolve:1},
-  echoslime:{n:"Echoslime",s:"blight",c:3,a:2,h:3,tag:"Ichor",t:"WARP — on play it becomes a random card from a DIFFERENT tribe entirely.",warp:1},
-  sludgemaw:{n:"Sludgemaw",s:"blight",c:4,a:3,h:4,tag:"Ichor",t:"DEVOUR — on play, eat one of your own units here and take its attack.",devour:true},
-  bilespine:{n:"Bilespine",s:"blight",c:3,a:2,h:3,tag:"Ichor",t:"CORRODE — the enemy front unit in this lane loses 1 attack every turn, for the rest of the round.",corrode:1},
+  oozeling:{n:"Oozeling",s:"blight",c:2,a:1,h:3,tag:"Ichor",t:"EVOLVE.",evolve:1},
+  echoslime:{n:"Echoslime",s:"blight",c:3,a:2,h:3,tag:"Ichor",t:"WARP.",warp:1},
+  sludgemaw:{n:"Sludgemaw",s:"blight",c:4,a:3,h:4,tag:"Ichor",t:"DEVOUR.",devour:true},
+  bilespine:{n:"Bilespine",s:"blight",c:3,a:2,h:3,tag:"Ichor",t:"CORRODE.",corrode:1},
   gluttonmaw:{n:"Glutton Maw",s:"blight",c:3,a:1,h:3,tag:"Ichor",t:"+1 attack for every card in your hand, up to +4.",hoard:4},
   bloatmass:{n:"Bloatmass",s:"blight",c:6,a:6,h:6,tag:"Ichor",t:"Enormous stats, no text. That is the whole card."},
-  charneltitan:{n:"Charnel Titan",s:"blight",c:6,a:5,h:6,tag:"Rot",t:"CROWD — +1 attack for every 2 other units you have on the board, up to +4. A swarm general, not a lone giant.",crowd:4},
-  gravebloom:{n:"Gravebloom",s:"blight",c:2,a:6,h:6,tag:"Rot",t:"Desperation. Only playable in a lane where Grove has 40%+ capture.",cond:"losing"},
+  charneltitan:{n:"Charnel Titan",s:"blight",c:6,a:5,h:6,tag:"Rot",t:"CROWD.",crowd:4},
+  gravebloom:{n:"Gravebloom",s:"blight",c:2,a:6,h:6,tag:"Rot",t:"Only playable in a lane where Grove has 40%+ capture.",cond:"losing"},
   /* INFEST — Blight's answer to fusion, and its opposite: it goes onto an ENEMY.
      The host is weakened while it lives, and when it dies the parasite bursts out
      on Blight's side. Can only be played onto an enemy unit. */
-  leechling:{n:"Leechling",s:"blight",c:1,a:1,h:1,tag:"Rot",t:"INFEST the enemy front unit: it loses 1 attack. When it dies, a Leechling bursts out for you.",infest:{leech:1}},
-  sporetick:{n:"Sporetick",s:"blight",c:2,a:1,h:2,tag:"Spore",t:"INFEST the enemy front unit: you gain +1 spore every turn it lives. Bursts out when it dies.",infest:{drain:1}},
-  marrowfluke:{n:"Marrowfluke",s:"blight",c:3,a:2,h:3,tag:"Bone",t:"INFEST the enemy front unit: −1 attack. When it dies, the fluke bursts out and you draw a card.",infest:{leech:1,draw:1}},
-  ichorwasp:{n:"Ichorwasp",s:"blight",c:3,a:2,h:2,tag:"Ichor",t:"INFEST the enemy front unit: it takes 2 damage at the end of every turn. Bursts out when it dies.",infest:{dot:2}},
-  broodhusk:{n:"Broodhusk",s:"blight",c:4,a:3,h:3,tag:"Tribeless",t:"No tribe. INFEST the enemy front unit: −1 attack, 1 damage every turn. It bursts out with two Sprouts.",infest:{leech:1,dot:1,sprouts:2}},
+  leechling:{n:"Leechling",s:"blight",c:1,a:1,h:1,tag:"Rot",t:"INFEST: −1 attack, 1 damage a turn.",infest:{leech:1,dot:1}},
+  sporetick:{n:"Sporetick",s:"blight",c:2,a:1,h:2,tag:"Spore",t:"INFEST: 1 damage a turn, and +1 spore a turn for you.",infest:{drain:1,dot:1}},
+  marrowfluke:{n:"Marrowfluke",s:"blight",c:3,a:2,h:3,tag:"Bone",t:"INFEST: −2 attack. Draw a card when it bursts out.",infest:{leech:2,draw:1}},
+  ichorwasp:{n:"Ichorwasp",s:"blight",c:3,a:2,h:2,tag:"Ichor",t:"INFEST: 3 damage a turn.",infest:{dot:3}},
+  broodhusk:{n:"Broodhusk",s:"blight",c:4,a:3,h:3,tag:"Tribeless",t:"INFEST: −1 attack, 2 damage a turn. Bursts out with two Sprouts.",infest:{leech:1,dot:2,sprouts:2}},
   /* BLIGHT — pricier bodies, but card advantage: conjuring, drawing, swarm discounts */
   sporematron:{n:"Spore Matron",s:"blight",c:3,a:1,h:3,tag:"Spore",t:"Your SPORE cards cost 1 less while it lives.",disc:{tag:"Spore",n:1}},
   hexwright:{n:"Hexwright",s:"blight",c:2,a:0,h:3,tag:"Ichor",t:"Your TRICKS cost 1 less while it lives.",disc:{tag:"trick",n:1}},
@@ -1093,8 +1153,8 @@ const C = cardTable({
   blightpit:{n:"Blight Pit",s:"blight",c:4,a:0,h:6,tag:"Spore",t:"LANDMARK — this lane becomes a Blight Pit: enemy units here take 1 damage at the end of every turn. If it survives the round, the pit stays next round.",landmark:{n:"Blight Pit",d:"Blight landmark: enemies of its owner take 1 damage here at the end of every turn.",fester:1,col:"#7A3A5A"}},
   gravemarker:{n:"Grave Marker",s:"blight",c:2,a:1,h:2,tag:"Bone",t:"On death: this lane's capture moves 15% your way.",deathclaim:15},
   mireover:{n:"Mire Over",s:"blight",c:1,trick:true,t:"A lane becomes MARSH (−1 attack for everyone) for the rest of the round. Your units there get +1 health. Draw a card.",terraform:"Marsh",tfhp:1},
-  rotfog:{n:"Rot Fog",s:"blight",c:1,trick:true,t:"A lane becomes THICKET (1 less damage for everyone) for the rest of the round. Your units there get +1 attack. Draw a card.",terraform:"Thicket",tfatk:1},
-  mutationchamber:{n:"Mutation Chamber",s:"blight",c:1,trick:true,t:"ENVIRONMENT — every unit you play here transforms into a random unit that costs 1 more.",envset:"chamber"},
+  rotfog:{n:"Rot Fog",s:"blight",c:2,trick:true,t:"ENVIRONMENT — your units in this lane take 1 less damage and deal +1 attack.",envset:"fog"},
+  mutationchamber:{n:"Mutation Chamber",s:"blight",c:2,trick:true,t:"ENVIRONMENT — at the start of every turn, your FRONT unit here transforms into a random unit that costs 1 more (it keeps its damage).",envset:"chamber"},
   whisperingcrypt:{n:"Whispering Crypt",s:"blight",c:2,trick:true,t:"ENVIRONMENT — at the start of each turn, if you have a unit here, CONJURE a random card.",envset:"crypt"},
   bonechute:{n:"Bone Chute",s:"blight",c:2,trick:true,t:"ENVIRONMENT — STRIKETHROUGH: each exchange, every enemy unit behind the front here also takes 1 damage.",envset:"chute"},
   /* BLIGHT TRICKS — reactive. Blight moves last, so it warps what already happened. */
@@ -1118,8 +1178,8 @@ const C = cardTable({
   sporetax:{n:"Spore Tax",s:"blight",c:2,trick:true,t:"Your opponent gets 2 less resource next turn.",tax:2},
   rottingpact:{n:"Rotting Pact",s:"blight",c:1,trick:true,t:"Your units in a lane get +2 attack this turn — and each takes 1 damage.",pact:2},
   plaguewind:{n:"Plaguewind",s:"blight",c:4,trick:true,t:"EVERY enemy unit in a lane loses 2 attack this turn.",sweepdebuff:2},
-  carrionrite:{n:"Carrion Rite",s:"blight",c:3,a:2,h:3,tag:"Bone",t:"+3 attack while you also control a ROT unit in this lane. Wants two tribes, not one.",cross:"Rot",crossv:3},
-  fleshweld:{n:"Fleshweld",s:"blight",c:3,a:1,h:4,tag:"Ichor",t:"Your SPORE units in this lane get +3 health. Wants two tribes, not one.",crossward:"Spore",crosswardv:3},
+  carrionrite:{n:"Carrion Rite",s:"blight",c:3,a:2,h:3,tag:"Bone",t:"+3 attack while you also control a ROT unit in this lane.",cross:"Rot",crossv:3},
+  fleshweld:{n:"Fleshweld",s:"blight",c:3,a:1,h:4,tag:"Ichor",t:"Your SPORE units in this lane get +3 health.",crossward:"Spore",crosswardv:3},
   /* EXPERIMENT RESULTS — Blight does not fuse. It rolls. Cheap, fast, rerollable,
      and the table runs from embarrassing to terrifying. */
   abom_runt:{n:"Runt",s:"blight",c:3,a:3,h:3,tag:"Abomination",t:"A failed experiment. Still a body."},
@@ -1127,9 +1187,17 @@ const C = cardTable({
   abom_horror:{n:"Horror",s:"blight",c:4,a:4,h:7,tag:"Abomination",t:"It came out hard to kill."},
   abom_titan:{n:"Abomination",s:"blight",c:5,a:7,h:6,tag:"Abomination",t:"It came out right."},
   abom_lurker:{n:"Skulker",s:"blight",c:4,a:4,h:4,tag:"Abomination",t:"+3 attack while it is NOT the front unit. It came out shy.",rear:3},
-  abom_glutton:{n:"Gorgeworm",s:"blight",c:4,a:3,h:6,tag:"Abomination",t:"SLAY — gains +2 attack each time it destroys an enemy. It came out hungry.",slay:2},
-  abom_perfect:{n:"Perfected Horror",s:"blight",c:5,a:6,h:6,tag:"Abomination",t:"SPLASH 3 — it came out better than intended.",splash:3},
+  abom_glutton:{n:"Gorgeworm",s:"blight",c:4,a:3,h:6,tag:"Abomination",t:"SLAY 2. It came out hungry.",slay:2},
+  abom_perfect:{n:"Perfected Horror",s:"blight",c:5,a:6,h:6,tag:"Abomination",t:"SPLASH 3. It came out better than intended.",splash:3},
   abom_apex:{n:"Apex Horror",s:"blight",c:6,a:8,h:8,tag:"Abomination",t:"On death: deal 4 to every enemy in its lane. The vats will rarely do this twice.",rattleblast:4},
+  abom_maggots:{n:"Maggot Tide",s:"blight",c:4,a:3,h:4,tag:"Abomination",t:"CROWD. It came out crawling.",crowd:1},
+  abom_swarmking:{n:"Swarm King",s:"blight",c:5,a:4,h:5,tag:"Abomination",t:"HORDE. It came out in charge.",horde:1},
+  abom_fungal:{n:"Fungal Horror",s:"blight",c:4,a:3,h:5,tag:"Abomination",t:"+1 spore each turn it survives. It came out blooming.",prod:1},
+  abom_sporemother:{n:"Spore Mother",s:"blight",c:5,a:4,h:6,tag:"Abomination",t:"On play: two Sprouts join it. It came out pregnant with spores.",summon:2},
+  abom_ossuary:{n:"Ossuary",s:"blight",c:5,a:3,h:8,tag:"Abomination",t:"Takes 2 less damage in MAIN lanes. It came out stacked.",tough:2},
+  abom_bonestorm:{n:"Bonestorm",s:"blight",c:5,a:5,h:5,tag:"Abomination",t:"On death: deal 3 to every enemy in its lane. It came out rattling.",rattleblast:3},
+  abom_ooze:{n:"Ichor Ooze",s:"blight",c:4,a:3,h:6,tag:"Abomination",tag2:"Ichor",t:"CORRODE. Can be played in Water lanes. It came out dripping.",corrode:1},
+  abom_leviathan:{n:"Leviathan",s:"blight",c:6,a:7,h:7,tag:"Abomination",tag2:"Ichor",t:"SPLASH 2. Can be played in Water lanes. It came out enormous.",splash:2},
   vivisector:{n:"Vivisector",s:"blight",c:3,a:2,h:3,tag:"Bone",t:"Your ABOMINATION units in this lane get +2 attack.",aura:"Abomination",aurav:2},
 
 /* ===========================================================================
@@ -1137,54 +1205,54 @@ const C = cardTable({
    them and nothing needs them, so they carry their own value. Each side has its
    own, in its own character: Grove's endure, Blight's pay out when they die.
    =========================================================================== */
-  wanderseed:{n:"Wanderseed",s:"grove",c:2,a:3,h:3,tag:"Tribeless",t:"No tribe. Simply better stats than any 2-drop that has one."},
-  stoneward:{n:"Stoneward",s:"grove",c:3,a:1,h:7,tag:"Tribeless",t:"No tribe. Seven health for three and no text at all."},
-  gildenleaf:{n:"Gildenleaf",s:"grove",c:3,a:2,h:3,tag:"Tribeless",t:"No tribe. On play: gain 3 resource.",gainflat:3},
-  lonepine:{n:"Lone Pine",s:"grove",c:4,a:3,h:6,tag:"Tribeless",t:"No tribe. SHIELD 1 — shrugs off the first point of damage every turn.",shield:1},
-  relicbloom:{n:"Relicbloom",s:"grove",c:5,a:5,h:6,tag:"Tribeless",t:"No tribe. On play: draw a card.",draw:1},
-  straggler:{n:"Straggler",s:"blight",c:2,a:2,h:3,tag:"Tribeless",t:"No tribe. On death: draw a card.",rattledraw:1},
-  boneheap:{n:"Boneheap",s:"blight",c:3,a:1,h:7,tag:"Tribeless",t:"TEAM-UP. No tribe. Seven health for three.",teamup:1},
-  scrapling:{n:"Scrapling",s:"blight",c:3,a:2,h:3,tag:"Tribeless",t:"No tribe. On play: gain 3 resource.",gainflat:3},
-  hollowed:{n:"Hollowed",s:"blight",c:4,a:3,h:5,tag:"Tribeless",t:"No tribe. On death: draw a card.",rattledraw:1},
-  revenant:{n:"Revenant",s:"blight",c:5,a:5,h:6,tag:"Tribeless",t:"No tribe. On death: deal 3 to the enemy front unit.",rattledmg:3},
+  wanderseed:{n:"Wanderseed",s:"grove",c:2,a:3,h:3,tag:"Tribeless",t:""},
+  stoneward:{n:"Stoneward",s:"grove",c:3,a:1,h:7,tag:"Tribeless",t:""},
+  gildenleaf:{n:"Gildenleaf",s:"grove",c:3,a:2,h:3,tag:"Tribeless",t:"On play: gain 3 resource.",gainflat:3},
+  lonepine:{n:"Lone Pine",s:"grove",c:4,a:3,h:6,tag:"Tribeless",t:"SHIELD 1.",shield:1},
+  relicbloom:{n:"Relicbloom",s:"grove",c:5,a:5,h:6,tag:"Tribeless",t:"On play: draw a card.",draw:1},
+  straggler:{n:"Straggler",s:"blight",c:2,a:2,h:3,tag:"Tribeless",t:"On death: draw a card.",rattledraw:1},
+  boneheap:{n:"Boneheap",s:"blight",c:3,a:1,h:7,tag:"Tribeless",t:"TEAM-UP.",teamup:1},
+  scrapling:{n:"Scrapling",s:"blight",c:3,a:2,h:3,tag:"Tribeless",t:"On play: gain 3 resource.",gainflat:3},
+  hollowed:{n:"Hollowed",s:"blight",c:4,a:3,h:5,tag:"Tribeless",t:"On death: draw a card.",rattledraw:1},
+  revenant:{n:"Revenant",s:"blight",c:5,a:5,h:6,tag:"Tribeless",t:"On death: deal 3 to the enemy front unit.",rattledmg:3},
   /* MINIONS — stickers from crates. Never bought in packs, never in a deck: you
      keep a small stash and deploy ONE per turn for free. Grove's come potted;
      Blight's are rabble. */
-  m_sentry:{n:"Potted Sentry",s:"grove",c:0,a:1,h:4,tag:"Minion",t:"Minion. A potted wall.",minion:1,rar:"common"},
+  m_sentry:{n:"Potted Sentry",s:"grove",c:0,a:1,h:4,tag:"Minion",t:"Minion.",minion:1,rar:"common"},
   m_thistle:{n:"Potted Thistle",s:"grove",c:0,a:2,h:1,tag:"Minion",t:"Minion. THORNMAIL 1.",thornmail:1,minion:1,rar:"common"},
   m_sunbell:{n:"Potted Sunbell",s:"grove",c:0,a:0,h:2,tag:"Minion",t:"Minion. +1 sun every turn it lives.",prod:1,minion:1,rar:"common"},
   m_salve:{n:"Potted Salve",s:"grove",c:0,a:0,h:3,tag:"Minion",t:"Minion. On deploy: your other units in the lane get +2 health.",ward:2,minion:1,rar:"rare"},
-  m_oak:{n:"Potted Oak",s:"grove",c:0,a:3,h:5,tag:"Minion",t:"Minion. A rare, full-sized plant in a very large pot.",minion:1,rar:"rare"},
-  m_seedling:{n:"Potted Seedling",s:"grove",c:0,a:1,h:2,tag:"Minion",t:"Minion. BLOOM — +1/+1 every turn it survives.",bloom:1,minion:1,rar:"common"},
-  m_ivy:{n:"Potted Ivy",s:"grove",c:0,a:1,h:3,tag:"Minion",t:"Minion. BULWARK — +1 attack each time it is attacked.",bulwark:1,minion:1,rar:"common"},
-  m_reed:{n:"Potted Reed",s:"grove",c:0,a:2,h:2,tag:"Minion",t:"Minion. SNIPER — picks off the weakest enemy.",sniper:1,minion:1,rar:"rare"},
+  m_oak:{n:"Potted Oak",s:"grove",c:0,a:3,h:5,tag:"Minion",t:"Minion.",minion:1,rar:"rare"},
+  m_seedling:{n:"Potted Seedling",s:"grove",c:0,a:1,h:2,tag:"Minion",t:"Minion. BLOOM.",bloom:1,minion:1,rar:"common"},
+  m_ivy:{n:"Potted Ivy",s:"grove",c:0,a:1,h:3,tag:"Minion",t:"Minion. BULWARK.",bulwark:1,minion:1,rar:"common"},
+  m_reed:{n:"Potted Reed",s:"grove",c:0,a:2,h:2,tag:"Minion",t:"Minion. SNIPER.",sniper:1,minion:1,rar:"rare"},
   m_crawlie:{n:"Crawlie",s:"blight",c:0,a:1,h:2,tag:"Minion",t:"Minion. On death: draw a card.",rattledraw:1,minion:1,rar:"common"},
   m_husk:{n:"Husk",s:"blight",c:0,a:1,h:5,tag:"Minion",t:"Minion. Takes 1 less damage in main lanes.",tough:1,minion:1,rar:"common"},
-  m_spitter:{n:"Spitter",s:"blight",c:0,a:2,h:2,tag:"Minion",t:"Minion. CORRODE — the enemy front loses 1 attack every turn.",corrode:1,minion:1,rar:"rare"},
-  m_shambler:{n:"Shambler",s:"blight",c:0,a:1,h:4,tag:"Minion",t:"Minion. Shuffling rabble.",minion:1,rar:"common"},
+  m_spitter:{n:"Spitter",s:"blight",c:0,a:2,h:2,tag:"Minion",t:"Minion. CORRODE.",corrode:1,minion:1,rar:"rare"},
+  m_shambler:{n:"Shambler",s:"blight",c:0,a:1,h:4,tag:"Minion",t:"Minion.",minion:1,rar:"common"},
   m_boomgrub:{n:"Boom Grub",s:"blight",c:0,a:1,h:1,tag:"Minion",t:"Minion. On death: 3 damage to the enemy front unit.",rattledmg:3,minion:1,rar:"common"},
   m_sporeling:{n:"Sporeling",s:"blight",c:0,a:0,h:2,tag:"Minion",t:"Minion. +1 spore every turn it lives.",prod:1,minion:1,rar:"common"},
   m_gnats:{n:"Gnat Cloud",s:"blight",c:0,a:2,h:2,tag:"Minion",t:"Minion. SPLASH 1.",splash:1,minion:1,rar:"rare"},
-  m_minihulk:{n:"Mini Hulk",s:"blight",c:0,a:3,h:5,tag:"Minion",t:"Minion. Small for a hulk. Large for a minion.",minion:1,rar:"rare"},
-  sprout:{n:"Sprout",s:"both",c:1,a:1,h:1,tag:"Tribeless",t:"A token. Made, never bought.",token:true},
+  m_minihulk:{n:"Mini Hulk",s:"blight",c:0,a:3,h:5,tag:"Minion",t:"Minion.",minion:1,rar:"rare"},
+  sprout:{n:"Sprout",s:"both",c:1,a:1,h:1,tag:"Tribeless",t:"A token.",token:true},
   /* GRAFT RESULTS — three cards of one tribe pressed into one body. They KEEP
      the tribe they were made from, so a graft still feeds your archetype. */
-  graft_Thorn:{n:"Thornmass",s:"grove",c:4,a:7,h:6,tag:"Thorn",t:"Grafted from three Thorn cards. THORNMAIL 2.",thornmail:2},
-  graft_Root:{n:"Rootmass",s:"grove",c:4,a:4,h:12,tag:"Root",t:"Grafted from three Root cards. Your other units in this lane get +2 health.",ward:2},
-  graft_Flower:{n:"Bloommass",s:"grove",c:4,a:5,h:7,tag:"Flower",t:"Grafted from three Flower cards. On play: draw 2 cards.",draw:2},
-  graft_Aquatic:{n:"Tidemass",s:"grove",c:4,a:6,h:6,tag:"Aquatic",t:"Grafted from three Aquatic cards. SNIPER.",sniper:1},
-  graft_Rot:{n:"Rotmass",s:"blight",c:4,a:6,h:6,tag:"Rot",t:"Grafted from three Rot cards. CROWD — +1 attack for every 2 other units you have on the board, up to +4.",crowd:4},
-  graft_Spore:{n:"Sporemass",s:"blight",c:4,a:4,h:10,tag:"Spore",t:"Grafted from three Spore cards. +2 resource every turn it survives.",prod:2},
-  graft_Bone:{n:"Bonemass",s:"blight",c:4,a:5,h:7,tag:"Bone",t:"Grafted from three Bone cards. On death: 5 damage to the enemy front.",rattledmg:5},
-  graft_Ichor:{n:"Ichormass",s:"blight",c:4,a:6,h:6,tag:"Ichor",t:"Grafted from three Ichor cards. CORRODE 2.",corrode:2},
-  rubble:{n:"Rubble",s:"both",c:0,junk:true,t:"Dead weight. Does nothing, ever — but you can at least scrap it for resource."},
-  tangle:{n:"Tangle",s:"both",c:0,junk:true,t:"Dead weight that cannot even be scrapped. It just sits in your hand.",noscrap:true},
+  graft_Thorn:{n:"Thornmass",s:"grove",c:4,a:7,h:6,tag:"Thorn",t:"THORNMAIL 2.",thornmail:2},
+  graft_Root:{n:"Rootmass",s:"grove",c:4,a:4,h:12,tag:"Root",t:"Your other units in this lane get +2 health.",ward:2},
+  graft_Flower:{n:"Bloommass",s:"grove",c:4,a:5,h:7,tag:"Flower",t:"On play: draw 2 cards.",draw:2},
+  graft_Aquatic:{n:"Tidemass",s:"grove",c:4,a:6,h:6,tag:"Aquatic",t:"SNIPER.",sniper:1},
+  graft_Rot:{n:"Rotmass",s:"blight",c:4,a:6,h:6,tag:"Rot",t:"CROWD.",crowd:4},
+  graft_Spore:{n:"Sporemass",s:"blight",c:4,a:4,h:10,tag:"Spore",t:"+2 resource every turn it survives.",prod:2},
+  graft_Bone:{n:"Bonemass",s:"blight",c:4,a:5,h:7,tag:"Bone",t:"On death: 5 damage to the enemy front.",rattledmg:5},
+  graft_Ichor:{n:"Ichormass",s:"blight",c:4,a:6,h:6,tag:"Ichor",t:"CORRODE 2.",corrode:2},
+  rubble:{n:"Rubble",s:"both",c:0,junk:true,t:"Dead weight. You can recycle it for resource."},
+  tangle:{n:"Tangle",s:"both",c:0,junk:true,t:"Dead weight. Can't be recycled.",noscrap:true},
   /* multi-tribe cards */
-  mossback:{n:"Mossback",s:"grove",c:3,a:1,h:6,tag:"Root",tag2:"Aquatic",t:"TEAM-UP. Counts as ROOT and AQUATIC — so it can wade into Water lanes.",teamup:1},
-  thornpetal:{n:"Thornpetal",s:"grove",c:2,a:2,h:2,tag:"Flower",tag2:"Thorn",t:"Counts as FLOWER and THORN. Your other THORN and FLOWER units in this lane get +1 attack.",aura:"Thorn",aura2:"Flower"},
-  bonerot:{n:"Bonerot",s:"blight",c:3,a:2,h:4,tag:"Rot",tag2:"Bone",t:"Counts as ROT and BONE. On death: deal 2 damage to the enemy front unit.",rattledmg:2},
-  ichorspore:{n:"Ichorspore",s:"blight",c:2,a:1,h:3,tag:"Ichor",tag2:"Spore",t:"Counts as ICHOR and SPORE — it can swim. +1 spore at the start of every turn it survives.",prod:1},
-  blightedsoil:{n:"Blighted Soil",s:"both",c:0,junk:true,t:"Dead weight. Scrapping it gives you nothing at all.",noscrapvalue:true}
+  mossback:{n:"Mossback",s:"grove",c:3,a:1,h:6,tag:"Root",tag2:"Aquatic",t:"TEAM-UP. Can be played in Water lanes.",teamup:1},
+  thornpetal:{n:"Thornpetal",s:"grove",c:2,a:2,h:2,tag:"Flower",tag2:"Thorn",t:"Your other THORN and FLOWER units in this lane get +1 attack.",aura:"Thorn",aura2:"Flower"},
+  bonerot:{n:"Bonerot",s:"blight",c:3,a:2,h:4,tag:"Rot",tag2:"Bone",t:"On death: deal 2 damage to the enemy front unit.",rattledmg:2},
+  ichorspore:{n:"Ichorspore",s:"blight",c:2,a:1,h:3,tag:"Ichor",tag2:"Spore",t:"Can be played in Water lanes. +1 spore at the start of every turn it survives.",prod:1},
+  blightedsoil:{n:"Blighted Soil",s:"both",c:0,junk:true,t:"Dead weight. Recycling it gives nothing.",noscrapvalue:true}
 });
 const TAG_ORDER=["Thorn","Root","Flower","Aquatic","Rot","Spore","Bone","Ichor","Tribeless","Hybrid","Abomination","Minion"];
 const TAGS={Thorn:"#7A8F3C",Root:"#6B7A52",Flower:"#A8643C",Aquatic:"#3F7A82",
@@ -1216,7 +1284,7 @@ let DRAW_SIZE=PACK_SIZE_REQ*2;   // so this many leave the shelf in total
 /* Prices are FIXED and rise with the round. Letting players set them meant the
    whole phase collapsed into "price both out of reach and deny them cards" — the
    choice is what goes in the pack, not what it costs. */
-function packPrice(){return 6+(S.round-1)*3;}
+function packPrice(){return 4+(S.round-1)*2;}
 const MIN_PACK=3;        // each pack needs at least three cards and at least one unit
 let TURNS=5;
 /* A draw that always contains something of each kind, so you can always build a
@@ -1246,14 +1314,15 @@ const MAPS={
 };
 let MAP_CHOICE="classic";
 /* MATCH SETTINGS — all optional. Defaults are the normal game. */
-const CFG_DEFAULT={laneCap:0,turns:5,front:14,pack:8,meta:12,capture:1,stickers:1,tonics:1};
+const CFG_DEFAULT={laneCap:0,turns:5,front:14,pack:8,meta:12,capture:1,capmode:"product",stickers:1,tonics:1};
 const CFG_OPTS={
   laneCap:{n:"Lane cap",d:"Most units each side may have in one lane. Summons with no room fizzle.",o:[[0,"None"],[3,"3"],[2,"2"]]},
   turns:{n:"Turns per round",o:[[4,"4"],[5,"5"],[6,"6"]]},
   front:{n:"Front length",d:"How far the front must be pushed to win.",o:[[10,"Short"],[14,"Normal"],[18,"Long"]]},
   pack:{n:"Cards per pack",o:[[6,"6"],[8,"8"],[10,"10"]]},
-  meta:{n:"Starting meta",o:[[8,"8"],[12,"12"],[20,"20"]]},
+  meta:{n:"Starting scrap",o:[[8,"8"],[12,"12"],[20,"20"]]},
   capture:{n:"Capture speed",o:[[0.7,"Slow"],[1,"Normal"],[1.4,"Fast"]]},
+  capmode:{n:"Capture rule (experimental)",d:"Attack × health: a lane pushes by its units' total attack × total health. Capture value: every card has its own ⚑ number (about cost + 1) and a lane pushes by 3 × the ⚑ it has standing there.",o:[["product","Attack × health"],["value","Card ⚑ values"]]},
   stickers:{n:"Sticker crates",o:[[1,"On"],[0,"Off"]]},
   tonics:{n:"Tonics",o:[[1,"On"],[0,"Off"]]}
 };
@@ -1353,9 +1422,15 @@ function vet(who,id){return Math.min(vetCap(id),((S[who].vet&&S[who].vet[id])||0
 /* Veterancy cap by cost: cheap cards can climb to +3, 3–4 costs to +2, anything
    bigger (and every graft, hybrid or abomination) to +1. */
 function vetCap(id){const d=C[id];if(!d)return 0;if(id.startsWith("graft_")||isT(d,"Hybrid")||isT(d,"Abomination"))return 1;
-  const c=d.c||0;return c<=2?3:(c<=4?2:1);}
+  const c=d.c||0;return c<=4?2:1;}
 let UIDN=0;
 function newUid(){return (++UIDN).toString(36)+Math.random().toString(36).slice(2,6);}
+function originOf(w,id,how){
+  const P=S[w],q=P.conj&&P.conj[id];
+  if(q&&q.length){return "Conjured by "+q.shift()+" · played turn "+S.turn;}
+  return how+" · turn "+S.turn;
+}
+function dawnFix(u){if(u&&C[u.id]&&C[u.id].dawn&&S&&S.phase==="combat"&&S.turn>1){u.base=Math.min(u.base,1+(u.vet||0));u.h=Math.min(u.h,1+(u.vet||0));u.n=C[u.id].n+" (late)";}return u;}
 function mk(id,who){
   const d=C[id], v=who?vet(who,id):0, m=who?cardMods(who,id):{};
   const r=who?resonance(who,id):0;
@@ -1363,7 +1438,7 @@ function mk(id,who){
   const nightA=(S&&S.env==="night"&&(isT(d,"Spore")||isT(d,"Aquatic")))?1:0;
   const heroH=((who&&S&&S[who]&&S[who].hero==="warden"&&isT(d,"Root"))?1:0)+nightA;
   return{uid:newUid(),hive:d.hive||0,disc:d.disc||null,digger:d.digger||0,fbase:d.fusion?id:null,onPlayDraw:(d.draw||0)+(m.draw||0),mods:m,id,n:d.n,vet:v,treated:(m.a||m.h||m.shield||m.slay||m.draw)?1:0,
-  base:(d.a||0)+v+(m.a||0)+r+gr.a+nightA,h:(d.h||0)+v+(m.h||0)+r+gr.h+heroH,growth:gr,res:r,prod:d.prod||0,tag:d.tag||null,tag2:d.tag2||null,teamup:d.teamup||0,survey:d.survey||0,wither:d.wither||0,
+  base:(d.a||0)+((d.a||0)>0?v+r:0)+(m.a||0)+gr.a+nightA,h:(d.h||0)+v+(m.h||0)+r+gr.h+heroH,growth:gr,res:r,prod:d.prod||0,tag:d.tag||null,tag2:d.tag2||null,teamup:d.teamup||0,survey:d.survey||0,wither:d.wither||0,
   aura:d.aura||null,aura2:d.aura2||null,aurav:d.aurav||1,scale:d.scale||null,ward:d.ward||0,lone:d.lone||0,
   slay:(d.slay||0)+(m.slay||0),spite:d.spite||0,shield:(d.shield||0)+(m.shield||0),rear:d.rear||0,flankb:d.flankb||0,
   mainb:d.mainb||0,tough:d.tough||0,hoard:d.hoard||0,ascetic:d.ascetic||0,zeal:d.zeal||0,
@@ -1389,7 +1464,8 @@ function terrainByName(n){return TERRAIN.find(t=>t.n===n);}
 /* Terrain can belong to a side (a LANDMARK). Owned terrain only helps its owner. */
 function terrOwnerSide(l){if(!l.terr||!l.terr.owner)return null;return l.terr.owner===S.pf?"p":"a";}
 function terrainAtk(l,side){const t=l.terr;if(!t)return 0;let a=t.atk||0;if(t.ownAtk&&terrOwnerSide(l)===side)a+=t.ownAtk;return a;}
-function terrainSoak(l,side){const t=l.terr;if(!t)return 0;let v=t.soak||0;if(t.ownSoak&&terrOwnerSide(l)===side)v+=t.ownSoak;return v;}
+function terrainSoak(l,side){const t=l.terr;let v=0;if(t){v=t.soak||0;if(t.ownSoak&&terrOwnerSide(l)===side)v+=t.ownSoak;}
+  if(l.env&&l.env.k==="fog"&&envOwnerSide(l)===side)v+=1;return v;}
 function terrainHp(l){return (l.terr&&l.terr.hp)||0;}
 /* Backs to the wall: the further a lane's marker is pushed toward YOUR base,
    the harder your units in it fight. Makes the last notch the hardest to take. */
@@ -1436,7 +1512,12 @@ function shiftCap(l,d){
    exactly as hard as one 4/4 (4×4=16), so going wide with cheap bodies is as good
    per stat as one big card — and cheap cards carry more stats per sun. Summoned
    tokens count half. */
+/* Capture VALUE (experimental rule): a card's ⚑ is cost + 1, adjusted by role —
+   skirmishers and scouts are better at taking ground, walls and payoffs worse. */
+function capValue(id){const d=C[id];if(!d||d.trick||d.junk)return 0;if(d.token)return 1;if(d.cv!=null)return d.cv;
+  let v=(d.c||0)+1;if(d.flank||d.flankb||d.survey||d.claim)v+=1;if(!(d.a>0))v=Math.max(1,v-2);if(d.aura||d.scale)v-=1;return Math.max(1,v);}
 function pressure(l,side){
+  if(CFG.capmode==="value"){let v=0;l[side].forEach(u=>{if(atk(u,l,side)>0)v+=capValue(u.id);});return v*3;}
   let A=0,H=0;
   l[side].forEach(u=>{const k=C[u.id].token?0.5:1;A+=Math.max(0,atk(u,l,side))*k;H+=Math.max(0,u.h)*k;});
   return A*H;
@@ -1481,6 +1562,7 @@ function atk(u,lane,side){
   if(u.leech)a-=u.leech;                 // a Blight parasite feeding on it
   a+=lastStand(lane,side);
   a+=terrainAtk(lane,side);
+  if(lane.env&&lane.env.k==="fog"&&envOwnerSide(lane)===side)a+=1;
   return Math.max(0,a);
 }
 /* Never open on a hand of nothing but tricks and rubble: seed it with bodies if the deck has any. */
@@ -1644,7 +1726,7 @@ function valuePack(cards,deck,opt){
   if(tot>=18)v-=2.5;                        // cannot possibly cast it all
   return Math.round(v);
 }
-/* Meta price the AI asks for its own pack: what it's worth to the PLAYER's deck,
+/* Scrap price the AI asks for its own pack: what it's worth to the PLAYER's deck,
    discounted, and never priced beyond what the player could plausibly pay. */
 function askingPrice(cards){
   const worth=valuePack(cards,S.p.deck);
@@ -1680,7 +1762,7 @@ function startStock(){
   S.a.mood=rnd(5)-2;   // hidden haggling mood, ±2
   // You choose an upgrade to list for THEM; they list one for you.
   const avail=UPGRADES.filter(u=>!upLvl("p",u.k));
-  S.a.offer=mpOn()?null:(avail.length?(()=>{const u=avail[rnd(avail.length)];return {k:u.k,price:Math.max(3,upValue(u.k)),taken:false};})():null);
+  S.a.offer=mpOn()?null:(avail.length?(()=>{const u=avail[rnd(avail.length)];return {k:u.k,price:upPrice(u),taken:false};})():null);
   log("── Round "+S.round+" · supply phase ──",true);
   render();
 }
@@ -1692,8 +1774,8 @@ function startMarket(){
   // It takes AT MOST ONE pack.
   /* Prices are fixed, so "is it worth the price" is the wrong question. The real
      choice is: which pack beats the other, and does either beat refusing — which
-     saves the meta but puts Rubble into its OWN deck. Cards also add depth now. */
-  const METAW=0.35;                                  // what one meta is worth in card-points
+     saves the scrap but puts Rubble into its OWN deck. Cards also add depth now. */
+  const METAW=0.35;                                  // what one scrap is worth in card-points
   const d0=depth("a");
   const depthWant=d0<20?0.9:(d0<30?0.5:0.2);        // each real card added, while shallow
   const price0=S.p.packs[0].price;
@@ -1718,23 +1800,23 @@ function startMarket(){
     S.a.meta-=buyCost(best.pk,"a"); S.p.meta+=sellerTake(best.pk.price);
     S.a.deck.push(...best.pk.cards); best.pk.taken=true;
     if(best.pk.sticker)giveSticker("a",best.pk.sticker);
-    log(FNAME[S.af]+" buys "+best.nm+". You earn "+sellerTake(best.pk.price)+" meta after the depot's cut.",true);
+    log(FNAME[S.af]+" buys "+best.nm+". You earn "+sellerTake(best.pk.price)+" scrap after the depot's cut.",true);
     const other=S.p.packs.find(p=>!p.taken);
     if(other)log("The other pack goes unsold and is discarded.");
   } else {
     const r=refusalRubble(S.p.packs[0].price,"a");
     for(let k=0;k<r;k++)S.a.deck.push("rubble");
-    log(FNAME[S.af]+" buys NOTHING — it keeps its meta, and "+r+" Rubble go into ITS deck.",true);
+    log(FNAME[S.af]+" buys NOTHING — it keeps its scrap, and "+r+" Rubble go into ITS deck.",true);
   }
   // Does the enemy take the upgrade YOU listed for them?
-  /* The AI opens a sticker crate when it has meta to spare. */
+  /* The AI opens a sticker crate when it has scrap to spare. */
   if(S.p.offer&&!upLvl("a",S.p.offer.k)){
     const u=UPGRADES.find(x=>x.k===S.p.offer.k), worth=upValue(S.p.offer.k)+S.a.mood;
     log("You listed "+u.n+" at "+S.p.offer.price+". "+FNAME[S.af]+" values it at "+worth+".");
     if(S.a.meta-S.p.offer.price>=packPrice()+3&&worth>=S.p.offer.price){
       S.a.meta-=S.p.offer.price;S.p.meta+=S.p.offer.price;
       S.a.ups=S.a.ups||{};S.a.ups[S.p.offer.k]=true;
-      log("   They take it. You earn "+S.p.offer.price+" meta — and they have it forever.",true);
+      log("   They take it. You earn "+S.p.offer.price+" scrap — and they have it forever.",true);
     } else log("   They pass on it.");
   }
   aiWorkshop();
@@ -1750,11 +1832,14 @@ function startCombat(){
   S.lanes.forEach(l=>{
     /* Rebuild garrison units from the card as it stands NOW, so tonics, veterancy
        and treatments bought since last round actually show up on them. */
-    const reb=(u,w)=>{if(!u)return null;const n=mk(u.id,w);n.h=Math.min(n.h,Math.max(1,u.h+(n.h-(C[u.id].h||0))));return n;};
+    const reb=(u,w)=>{if(!u)return null;const n=mk(u.id,w);n.src="Garrison — held this captured lane since last round";n.h=Math.min(n.h,Math.max(1,u.h+(n.h-(C[u.id].h||0))));return n;};
     l.p=l.gp?[reb(l.gp,"p")]:[];l.a=l.ga?[reb(l.ga,"a")]:[];l.gp=null;l.ga=null;l.pushed=0;
     if(l.p.length)log(l.p[0].n+" is still garrisoning "+l.nm+".");
+    (l.nest||[]).forEach(n=>{const w=n.fac===S.pf?"p":"a";const u=mk(n.id,w);u.base+=n.feed;u.h+=n.feed;u.src="Hatched from a nest in "+n.host+" last round";
+      if(addU(l[w],u)){for(let k=0;k<n.sprouts;k++)addU(l[w],mk("sprout",w));log(l.nm+": a nested "+C[n.id].n+" hatches for "+(w==="p"?"you":FNAME[S.af])+".",true);}});
+    l.nest=[];
     if(l.terrKeep){l.terrKeep=0;log(l.nm+" keeps its "+l.terr.n+" from last round.");}
-    else if(l.flank){l.terr=TERRAIN[rnd(TERRAIN.length)];log(l.nm+" terrain: "+l.terr.n+" — "+l.terr.d);}
+    else if(l.flank){l.terr=TERRAIN[rnd(TERRAIN.length)];if(!(S.tut&&S.round===1))log(l.nm+" terrain: "+l.terr.n+" — "+l.terr.d);}
     else l.terr=l.baseTerr||null;
   });
   S.p.hand=(S.p.carry||[]).concat(openingHand(S.p.deck,"p"));
@@ -1876,6 +1961,7 @@ function aiPlaceUnits(){
       u.base+=food.base;lane.a=lane.a.filter(x=>x!==food);
       log(FNAME[S.af]+"'s "+d.n+" devours its own "+food.n+".");
     }
+    dawnFix(u);u.src=originOf("a",pick.id,"Played from "+FNAME[S.af]+"'s hand");
     const ue=envOnLand(lane,"a",u);
     if(!fuseInto(lane,"a",ue)){
       /* the AI steps a team-up wall in front when it's tougher than its current front */
@@ -2102,8 +2188,9 @@ const LANE_ENVS={
   meadow:{n:"Sunny Meadow",d:"Every unit its owner plays here gives them +1 sun on arrival.",col:"#D4A62A"},
   echo:{n:"Echo Glade",d:"The first unit its owner plays here each turn also puts a copy of itself into their hand.",col:"#5FA37A"},
   gallery:{n:"Bramble Gallery",d:"Its owner's units here strike TWICE each exchange.",col:"#8A4A2A"},
-  chamber:{n:"Mutation Chamber",d:"Every unit its owner plays here transforms into a random unit that costs 1 more.",col:"#7A4A8A"},
+  chamber:{n:"Mutation Chamber",d:"At the start of every turn, its owner's front unit here transforms into a random unit that costs 1 more.",col:"#7A4A8A"},
   crypt:{n:"Whispering Crypt",d:"At the start of each turn, if its owner has a unit here, they CONJURE a random card.",col:"#4A4A6A"},
+  fog:{n:"Rot Fog",d:"Its owner's units here take 1 less damage and deal +1 attack.",col:"#6B7A4A"},
   chute:{n:"Bone Chute",d:"STRIKETHROUGH: each exchange, every enemy unit behind the front here also takes 1 damage from its owner.",col:"#A89A7A"}
 };
 function envOwnerSide(l){return l.env?(l.env.owner===S.pf?"p":"a"):null;}
@@ -2114,14 +2201,20 @@ function envOnLand(l,w,u){
   if(!l.env||envOwnerSide(l)!==w)return u;
   const k=l.env.k;
   if(k==="meadow"){S[w].sun+=1;log("   the Sunny Meadow yields +1 "+FRES[w==="p"?S.pf:S.af]+".");}
-  if(k==="echo"){const key=S.round+":"+S.turn;if(S[w].echoTurn!==key&&S[w].hand.length<HAND_CAP&&!C[u.id].token){S[w].echoTurn=key;S[w].hand.push(u.id);
+  if(k==="echo"){const key=S.round+":"+S.turn;if(S[w].echoTurn!==key&&S[w].hand.length<HAND_CAP&&!C[u.id].token){S[w].echoTurn=key;S[w].hand.push(u.id);S[w].conj=S[w].conj||{};(S[w].conj[u.id]=S[w].conj[u.id]||[]).push("the Echo Glade");
     if(w==="p")plog("   the Echo Glade copies "+u.n+" into your hand."); else log("   the Echo Glade copies a card into "+FNAME[S.af]+"'s hand.");}}
-  if(k==="chamber"){const fac=w==="p"?S.pf:S.af,c=(C[u.id].c||0)+1;
-    const pool=POOL[fac].filter((id,i,a)=>a.indexOf(id)===i&&!C[id].trick&&!C[id].junk&&!C[id].token&&(C[id].c||0)===c&&!C[id].fusion);
-    if(pool.length){const into=pool[rnd(pool.length)],nu=mk(into,w);log("   the Mutation Chamber twists "+u.n+" into a "+nu.n+".",true);return nu;}}
+
   return u;
 }
+function chamberMutate(l,w){
+  const u=l[w][0];if(!u||C[u.id].token)return;
+  const fac=w==="p"?S.pf:S.af,c=Math.min(7,(C[u.id].c||0)+1);
+  const pool=POOL[fac].filter((id,i,a)=>a.indexOf(id)===i&&!C[id].trick&&!C[id].junk&&!C[id].token&&(C[id].c||0)===c&&!C[id].fusion&&!C[id].landmark&&!C[id].infest);
+  if(!pool.length)return;const into=pool[rnd(pool.length)],nu=mk(into,w);nu.h=Math.max(1,nu.h-Math.max(0,(C[u.id].h||0)+(u.vet||0)-u.h));
+  nu.src="Mutated from "+u.n+" by the Mutation Chamber";l[w][0]=nu;log(l.nm+": the Mutation Chamber twists "+u.n+" into a "+nu.n+".",true);
+}
 function envTurnStart(){
+  S.lanes.forEach(l=>{if(l.env&&l.env.k==="chamber"){const w=envOwnerSide(l);if(w)chamberMutate(l,w);}});
   S.lanes.forEach(l=>{if(l.env&&l.env.k==="crypt"){const w=envOwnerSide(l);if(w&&l[w].length){log(l.nm+": the Whispering Crypt whispers.");conjure(w,{n:1});}}});
 }
 /* ---- MAP CARDS ---- */
@@ -2178,7 +2271,7 @@ function conjure(w,spec,exclude){
   const got=[];
   for(let k=0;k<(spec.n||1);k++){
     if(S[w].hand.length>=HAND_CAP||!pool.length)break;
-    const id=pool[rnd(pool.length)];S[w].hand.push(id);got.push(C[id].n+(spec.cheap?" (−"+spec.cheap+")":""));
+    const id=pool[rnd(pool.length)];S[w].hand.push(id);S[w].conj=S[w].conj||{};(S[w].conj[id]=S[w].conj[id]||[]).push(exclude&&C[exclude]?C[exclude].n:"a conjure");got.push(C[id].n+(spec.cheap?" (−"+spec.cheap+")":""));
     if(spec.cheap){S[w].cheap=S[w].cheap||[];S[w].cheap.push(id);}
   }
   if(w==="p")plog("   you conjure "+(got.join(", ")||"nothing — your hand is full")+".");
@@ -2207,11 +2300,17 @@ function fuseInto(l,side,u){
   if(f.draw){drawFor(side,f.draw);log("   the fusion draws "+f.draw+".");}
   return true;
 }
-function applyInfest(l,side,d,id){
-  const foe=other(side), host=l[foe][0]; if(!host)return false;
+const INFEST_PRESS=5;
+/* You choose the host. A bigger host is a better nest: the parasite bursts out
+   +1/+1 for every 3 health the host had, and it hatches on its own after 2 turns
+   even if the host is still alive — so an infest is never wasted. */
+function applyInfest(l,side,d,id,idx){
+  const foe=other(side);
+  if(idx==null||!l[foe][idx]){idx=0;l[foe].forEach((u,i)=>{if(u.h>l[foe][idx].h)idx=i;});if(side==="p")idx=0;}
+  const host=l[foe][idx]; if(!host)return false;
   const f=d.infest;
   host.leech=(host.leech||0)+(f.leech||0);
-  host.infest=(host.infest||[]).concat([{id,owner:side==="p"?S.pf:S.af,dot:f.dot||0,drain:f.drain||0,draw:f.draw||0,sprouts:f.sprouts||0}]);
+  host.infest=(host.infest||[]).concat([{id,owner:side==="p"?S.pf:S.af,dot:f.dot||0,drain:f.drain||0,draw:f.draw||0,sprouts:f.sprouts||0,feed:Math.floor(Math.max(0,host.h)/3),age:0}]);
   log((side==="p"?"You infest ":FNAME[S.af]+" infests ")+host.n+" with a "+d.n+" — it's marked 🪱 on the board"+((f.dot||0)?", loses "+f.dot+" health every turn":"")+((f.drain||0)?", feeds "+f.drain+" "+FRES[side==="p"?S.pf:S.af]+" a turn":"")+", and bursts out when the host dies.",true);
   return true;
 }
@@ -2224,14 +2323,18 @@ function onDeathMap(l,side,u){
 function burst(l,side,u){
   if(u)onDeathMap(l,side,u);
   if(!u||!u.infest||!u.infest.length)return;
-  u.infest.forEach(pz=>{
+  spawnParasites(l,u,u.infest);
+  u.infest=[];
+}
+function spawnParasites(l,u,list){
+  list.forEach(pz=>{
     const w=pz.owner===S.pf?"p":"a";
-    addU(l[w],mk(pz.id,w));
+    gainXp(w,pz.id,1);
+    {const nb=mk(pz.id,w);nb.src="Burst out of "+u.n+" (infest)";if(pz.feed){nb.base+=pz.feed;nb.h+=pz.feed;}addU(l[w],nb);}
     for(let k=0;k<pz.sprouts;k++)addU(l[w],mk("sprout",w));
     if(pz.draw)drawFor(w,pz.draw);
-    log("   a "+C[pz.id].n+" bursts out of "+u.n+(pz.sprouts?" with "+pz.sprouts+" Sprouts":"")+(pz.draw?" — and a card is drawn":"")+".");
+    log("   a "+C[pz.id].n+(pz.feed?" (+"+pz.feed+"/+"+pz.feed+", well fed)":"")+" bursts out of "+u.n+(pz.sprouts?" with "+pz.sprouts+" Sprouts":"")+(pz.draw?" — and a card is drawn":"")+".");
   });
-  u.infest=[];
 }
 function cull(l,side){
   const dead=l[side].filter(u=>u.h<=0);
@@ -2242,6 +2345,7 @@ function cull(l,side){
 }
 function fireDeath(l,side,u){
   const out=[];onDeathMap(l,side,u);
+  if(u.rattledraw||u.rattledmg||u.rattleblast||u.rattle)gainXp(side,u.id,1);
   if(u.rattledraw){drawFor(side,u.rattledraw);out.push("its death draws "+u.rattledraw);}
   if(u.rattledmg){const foe=l[other(side)][0];
     if(foe){foe.h-=u.rattledmg;out.push("it bursts for "+u.rattledmg);
@@ -2327,6 +2431,7 @@ function strike(l,side,dmg){
 /* Slayers grow permanently for each enemy they put down. */
 function rewardSlayers(l,side,kills){
   if(!kills)return;
+  const best=l[side].filter(u=>!C[u.id].token).sort((x,y)=>atk(y,l,side)-atk(x,l,side))[0];if(best)gainXp(side,best.id,kills);
   l[side].forEach(u=>{
     if(u.slay){u.base+=u.slay*kills;log("   "+u.n+" feeds and grows to "+u.base+" attack.");}
     if(C[u.id].growkill)grow(side,u.id,kills,0,5,0);
@@ -2396,6 +2501,9 @@ function resolveLaneBody(l){
       onP.out.forEach(x=>log("   you — "+x));
       rewardSlayers(l,"p",onA.kills);
       rewardSlayers(l,"a",onP.kills);
+      const tanky=u=>u&&(u.bulwark||u.thornmail||u.shield||u.tough||u.vigil||u.regrow||u.teamup);
+      if(aAtk>0&&tanky(l.p[0]))gainXp("p",l.p[0].id,1);
+      if(pAtk>0&&tanky(l.a[0]))gainXp("a",l.a[0].id,1);
       /* SPLASH (Blight): spills onto the unit standing behind the target. */
       const spill=(from,to)=>{
         const amt=l[from].reduce((s,u)=>s+(u.splash||0),0);
@@ -2427,6 +2535,16 @@ function resolveLaneBody(l){
         if(dot){u.h-=dot;hit=true;log("   the parasites in "+u.n+" gnaw it for "+dot+(u.h<=0?" — it collapses.":"."));}});
       if(hit)cull(l,w);
     });
+    /* parasites that have ridden a living host for 2 turns hatch anyway, tearing 2 health out */
+    ["p","a"].forEach(w=>{l[w].forEach(u=>{if(!u.infest||!u.infest.length)return;
+      const ripe=u.infest.filter(pz=>++pz.age>=2);if(!ripe.length)return;
+      u.infest=u.infest.filter(pz=>ripe.indexOf(pz)<0);
+      u.h-=2*ripe.length;log("   "+ripe.length+" parasite"+(ripe.length>1?"s hatch":" hatches")+" out of "+u.n+", tearing "+(2*ripe.length)+" health.",true);
+      spawnParasites(l,u,ripe);
+    });cull(l,w);});
+    /* ...and every living parasite drags the lane toward its owner */
+    let press=0;l.p.concat(l.a).forEach(u=>(u.infest||[]).forEach(pz=>{press+=(pz.owner===S.pf?1:-1)*INFEST_PRESS;}));
+    if(press){shiftCap(l,press);log("   parasites spread through "+l.nm+": "+Math.abs(press)+"% "+(press>0?"your":FNAME[S.af]+"'s")+" way.");}
     const pSurv=l.p.reduce((s,u)=>s+atk(u,l,"p"),0);
     const aSurv=l.a.reduce((s,u)=>s+atk(u,l,"a"),0);
     const b=l.cap||0, bmk=l.mk;
@@ -2450,6 +2568,7 @@ function resolveLaneBody(l){
       if(main)["p","a"].forEach(w=>{if(l[w].length&&laneHeld(main,other(w))){l[w].forEach(u=>u.h-=1);
         log("   "+(w==="p"?"your":FNAME[S.af]+"'s")+" units on "+l.nm+" are CUT OFF ("+main.nm+" is held by the enemy) — each loses 1 health.");cull(l,w);}});}
     l.p.forEach(u=>u.weak=0); l.a.forEach(u=>u.weak=0);   // debuffs last one turn
+    {const dd=(l.cap||0)-b;if(dd>=10)l.p.forEach(u=>gainXp("p",u.id,1));if(dd<=-10)l.a.forEach(u=>gainXp("a",u.id,1));}
     if((l.cap||0)!==b){
       l.pushed=1;
       const d=(l.cap||0)-b;
@@ -2492,7 +2611,7 @@ function commitUnits(){
   S.beat=FNAME[S.af]+" answers with units and tricks…";render();
   setTimeout(()=>{
     act(()=>{
-      aiPlaceUnits(); aiTricks();
+      if(S.tut&&S.round===1)tutAiPlace(); else {aiPlaceUnits(); aiTricks();}
       S.sub="tricks";S.beat=null;busy=false;
       log("Their answer is in. Last word is yours — cast tricks.");sfx("turn");
     });
@@ -2543,6 +2662,12 @@ function randomOfTribe(faction,tribe,notId,sameCost){
    hardest fighters even if they fell. */
 function creditAtk(l,side,amt){if(!amt)return;const P=S[side];P.rdmg=P.rdmg||{};
   const units=l[side].filter(u=>!u.sniper&&!C[u.id].token);units.forEach(u=>{const a=atk(u,l,side);if(a>0)P.rdmg[u.id]=(P.rdmg[u.id]||0)+a;});}
+/* VETERANCY XP: cards earn XP by doing their job — surviving a round (3), getting
+   kills, holding the line as a wall, pushing a lane, firing a death trigger, or a
+   parasite bursting out. Every 4 XP is a permanent ★ level (same caps as before). */
+const XP_PER=4;
+function gainXp(w,id,n){if(!id||!C[id]||C[id].token||C[id].minion)return;const P=S[w];P.xp=P.xp||{};P.xp[id]=(P.xp[id]||0)+n;}
+function xpOf(w,id){return ((S[w]&&S[w].xp)||{})[id]||0;}
 function hardLessons(w){
   const P=S[w],tally=P.rdmg||{},names=[];
   const survived={};S.lanes.forEach(l=>l[w].forEach(u=>survived[u.id]=1));
@@ -2553,6 +2678,9 @@ function hardLessons(w){
     else log(FNAME[S.af]+" learns hard lessons: "+names.join(", ")+".");}
 }
 function bankMomentum(loser){
+  /* parasites still inside a living host nest in the lane and hatch next round */
+  S.lanes.forEach(l=>{l.nest=l.nest||[];["p","a"].forEach(w=>l[w].forEach(u=>(u.infest||[]).forEach(pz=>{l.nest.push({fac:pz.owner,id:pz.id,feed:pz.feed||0,sprouts:pz.sprouts||0,host:u.n});})));
+    if(l.nest.length)log(l.nm+": "+l.nest.length+" parasite"+(l.nest.length>1?"s nest":" nests")+" here and will hatch at the start of next round.",true);});
   S.lanes.forEach(l=>{if(l.terr&&l.terr.mark==="perm"){const ow=terrOwnerSide(l),lost=ow&&laneHeld(l,other(ow));l.terrKeep=lost?0:1;
       log(l.nm+": "+(lost?"the enemy holds it — the "+l.terr.n+" is trampled.":"the "+l.terr.n+" endures into next round."),true);return;}
     if(l.terr&&l.terr.mark){const alive=l.p.concat(l.a).some(u=>u.uid===l.terr.mark);l.terrKeep=alive?1:0;
@@ -2564,12 +2692,15 @@ function bankMomentum(loser){
     const survived={};
     S.lanes.forEach(l=>l[w].forEach(u=>{if(!C[u.id].token)survived[u.id]=true;}));
     const names=[];
-    Object.keys(survived).forEach(id=>{
-      if(vet(w,id)>=vetCap(id))return;
-      S[w].vet[id]=vet(w,id)+1;
-      if(w==="p")names.push(C[id].n+" +"+S[w].vet[id]);
+    Object.keys(survived).forEach(id=>gainXp(w,id,3));
+    const xp=S[w].xp||{};
+    Object.keys(xp).forEach(id=>{
+      let up=0;
+      while(xp[id]>=XP_PER&&vet(w,id)<vetCap(id)){S[w].vet[id]=vet(w,id)+1;xp[id]-=XP_PER;up++;}
+      if(vet(w,id)>=vetCap(id))xp[id]=0;
+      if(up&&w==="p")names.push(C[id].n+" ★"+S[w].vet[id]);
     });
-    if(w==="p"&&names.length)log("Veterans: "+names.join(", ")+" — permanently stronger in your deck.",true);
+    if(w==="p"&&names.length)log("Veterans level up: "+names.join(", ")+" — permanently stronger in your deck.",true);
   });
   // 1b. Hard lessons — the side that lost the round also promotes its two hardest fighters that fell.
   if(loser)hardLessons(loser);
@@ -2611,13 +2742,13 @@ function endRound(){
   const margin=Math.abs(pm-am);
   const step=(margin>=3?2:1)*(S.round>=12?2:1);
   const mySide=w;setTimeout(()=>sfx(mySide==="p"?"win":mySide==="a"?"lose":"click"),900);
-  if(w==="p"){S.front=Math.min(FRONT_MAX,S.front+step);log("You take the round ("+pm+"–"+am+" main lanes). Front → "+S.front+".",true);S.p.meta+=8;S.a.meta+=16;}
-  else if(w==="a"){S.front=Math.max(0,S.front-step);log(FNAME[S.af]+" takes the round ("+am+"–"+pm+" main lanes). Front → "+S.front+".",true);S.a.meta+=8;S.p.meta+=16;S.p.freeThin=1;S.p.freeAppraise=1;log("You fall back and regroup: +16 meta, a free cut, and a free appraisal.");}
-  else {log("Round drawn. The front holds.",true);S.p.meta+=10;S.a.meta+=10;}
+  if(w==="p"){S.front=Math.min(FRONT_MAX,S.front+step);log("You take the round ("+pm+"–"+am+" main lanes). Front → "+S.front+".",true);S.p.meta+=11;S.a.meta+=18;}
+  else if(w==="a"){S.front=Math.max(0,S.front-step);log(FNAME[S.af]+" takes the round ("+am+"–"+pm+" main lanes). Front → "+S.front+".",true);S.a.meta+=11;S.p.meta+=18;S.p.freeThin=1;S.p.freeAppraise=1;log("You fall back and regroup: +18 scrap, a free cut, and a free appraisal.");}
+  else {log("Round drawn. The front holds.",true);S.p.meta+=13;S.a.meta+=13;}
 
-  /* Flank sectors pay out BETWEEN rounds (+3 meta each) — useful, but it never
+  /* Flank sectors pay out BETWEEN rounds (+3 scrap each) — useful, but it never
      swings a fight the way extra sun or spore did. */
-  ["p","a"].forEach(w=>{const f=flanksHeld(w);if(f){S[w].meta+=3*f;if(w==="p")log("Flank supply lines: +"+(3*f)+" meta for "+f+" flank sector"+(f>1?"s":"")+" held.",true);else log(FNAME[S.af]+" banks +"+(3*f)+" meta from its flanks.");}});
+  ["p","a"].forEach(w=>{const f=flanksHeld(w);if(f){S[w].meta+=3*f;if(w==="p")log("Flank supply lines: +"+(3*f)+" scrap for "+f+" flank sector"+(f>1?"s":"")+" held.",true);else log(FNAME[S.af]+" banks +"+(3*f)+" scrap from its flanks.");}});
   ["p","a"].forEach(w=>{const sm=perkLvl(w,"seedmoney");if(sm){S[w].meta+=sm;if(w==="p")plog("Seed Money: +"+sm+" meta.");}});
   if(S.front>=FRONT_MAX)S.over="p"; else if(S.front<=0)S.over="a";
   else {S.round++; S.phase="roundend";}
@@ -2640,7 +2771,7 @@ function placedCount(){return S.p.packs.reduce((n,pk)=>n+pk.cards.length,0);}
 /* Listing an upgrade for the other side is part of stocking — not optional. */
 function offerNeeded(){return UPGRADES.some(u=>!upLvl("a",u.k));}
 function stockReady(){return packsLegal()&&(!!S.p.offer||!offerNeeded());}
-function autoOffer(){if(S.p.offer||!offerNeeded())return;const av=UPGRADES.filter(u=>!upLvl("a",u.k));const u=av[rnd(av.length)];S.p.offer={k:u.k,price:u.base};}
+function autoOffer(){if(S.p.offer||!offerNeeded())return;const av=UPGRADES.filter(u=>!upLvl("a",u.k));const u=av[rnd(av.length)];S.p.offer={k:u.k,price:upPrice(u)};}
 function packsLegal(){
   return S.p.packs.every(p=>
     p.cards.length===PACK_SIZE_REQ && p.cards.some(id=>!C[id].trick&&!C[id].junk));
@@ -2723,7 +2854,7 @@ function appraise(i){
   if(TUT.on&&S.tut){const n=tutNeed();if(!n||!n.appraise||i!==1)return;}
   if(S.p.freeAppraise){S.p.freeAppraise--;S.a.appraised[i]=true;plog("You appraise Pack "+(i===0?"A":"B")+" free (you were pushed back last round).");render();return;}
   const ac=appraiseCost();if(S.p.meta<ac)return;S.p.meta-=ac;S.a.appraised[i]=true;plog("You appraise Pack "+(i===0?"A":"B")+" for "+ac+".");render();}
-/* The depot takes a quarter of every sale, so buying no longer pours meta into the seller. */
+/* The depot takes a quarter of every sale, so buying no longer pours scrap into the seller. */
 function sellerTake(price){return price-Math.floor(price/4);}
 function buyCost(pk,w){return Math.max(1,pk.price-perkLvl(w,"quarter"));}
 function buy(i){
@@ -2746,29 +2877,30 @@ function buy(i){
   }
   render();
 }
-function fuseCost(id){return C[id].fusecost||3;}
+function fuseCost(id){const r=C[C[id].fuse];return (r&&r.makecost)||C[id].fusecost||3;}
 /* ---------------------------------------------------------------------------
    Grove FUSES: a fixed recipe, a known result, and the fused unit degrades a
    tier instead of dying. Blight EXPERIMENTS: feed the vats any two cards of one
    tribe, pay less than a fusion costs, and roll the table. Rerolls are cheap.
    You are not buying a result, you are buying variance.
    --------------------------------------------------------------------------- */
-const EXPERIMENT_TABLE=[
-  {id:"abom_runt",   w:26},
-  {id:"abom_brute",  w:20},
-  {id:"abom_horror", w:16},
-  {id:"abom_lurker", w:13},
-  {id:"abom_glutton",w:11},
-  {id:"abom_titan",  w:8},
-  {id:"abom_perfect",w:4},
-  {id:"abom_apex",   w:2}
-];
+/* What you feed the vats decides what can come out: every tribe has its own table. */
+const EXP_TABLES={
+  Rot:  [["abom_runt",24],["abom_brute",20],["abom_maggots",16],["abom_glutton",14],["abom_swarmking",10],["abom_titan",8],["abom_perfect",5],["abom_apex",3]],
+  Spore:[["abom_runt",24],["abom_horror",18],["abom_fungal",18],["abom_sporemother",14],["abom_titan",10],["abom_perfect",8],["abom_apex",3]],
+  Bone: [["abom_runt",24],["abom_horror",20],["abom_lurker",16],["abom_ossuary",14],["abom_bonestorm",12],["abom_titan",6],["abom_apex",4]],
+  Ichor:[["abom_runt",24],["abom_brute",18],["abom_ooze",18],["abom_glutton",12],["abom_leviathan",8],["abom_perfect",8],["abom_apex",3]],
+  _:    [["abom_runt",26],["abom_brute",20],["abom_horror",16],["abom_lurker",13],["abom_glutton",11],["abom_titan",8],["abom_perfect",4],["abom_apex",2]]
+};
+function expTable(tag){return (EXP_TABLES[tag]||EXP_TABLES._).map(([id,w])=>({id,w}));}
+const EXPERIMENT_TABLE=expTable("_");
 const EXP_TOTAL=EXPERIMENT_TABLE.reduce((s,e)=>s+e.w,0);
 const EXP_COST=4, REROLL_COST=2;
-function rollAbomination(){
-  let r=rnd(EXP_TOTAL);
-  for(const e of EXPERIMENT_TABLE){if(r<e.w)return e.id;r-=e.w;}
-  return EXPERIMENT_TABLE[0].id;
+function rollAbomination(tag){
+  const t=expTable(tag),tot=t.reduce((s,e)=>s+e.w,0);
+  let r=rnd(tot);
+  for(const e of t){if(r<e.w)return e.id;r-=e.w;}
+  return t[0].id;
 }
 function canExperiment(deck){
   const c={};
@@ -2785,10 +2917,10 @@ function doExperiment(tag){
     const i=S.p.deck.findIndex(id=>isT(C[id],tag));
     if(i<0)break;eaten.push(C[S.p.deck[i]].n);(UI.fxIn=UI.fxIn||[]).push(S.p.deck[i]);S.p.deck.splice(i,1);
   }
-  const res=rollAbomination();
+  const res=rollAbomination(tag);
   const fin=UI.fxIn||[];UI.fxIn=null;
   setTimeout(()=>forgeFx(fin,res,"Out of the vats!","A "+C[res].n+" ("+C[res].a+"/"+C[res].h+"). Keep it, or pay "+REROLL_COST+" to roll again."),0);
-  S.p.pending={res,eaten:eaten.join(" + ")};
+  S.p.pending={res,eaten:eaten.join(" + "),tag};
   plog("You feed "+S.p.pending.eaten+" into the vats. Out comes a "+C[res].n+" ("+C[res].a+"/"+C[res].h+").",true);
   render();
 }
@@ -2796,7 +2928,7 @@ function rerollExperiment(){
   if(!S.p.pending||S.p.meta<REROLL_COST)return;
   S.p.meta-=REROLL_COST;
   const was=C[S.p.pending.res].n;
-  S.p.pending.res=rollAbomination();
+  S.p.pending.res=rollAbomination(S.p.pending.tag);
   plog("Back into the vat. The "+was+" comes out a "+C[S.p.pending.res].n+".",true);
   render();
 }
@@ -2833,8 +2965,8 @@ const TONICS=[
   {k:"ferocity",n:"Ferocity",    d:"One copy gains SLAY 2 — it grows permanently each time it kills.",    cost:7, mod:{slay:2}},
   {k:"awaken",  n:"Awakening",   d:"One copy gains: on play, draw a card.",              cost:8,  mod:{draw:1}},
   {k:"mitosis", n:"Mitosis",     d:"Copy one card (tonics and all) into your deck.",      cost:9,  dup:true},
-  {k:"distil",  n:"Distillation",d:"Destroy one card and take 3 meta for it.",           cost:0,  distil:3},
-  {k:"purge",   n:"Purge",       d:"Remove EVERY piece of dead weight from your deck — 1 more meta per piece.", cost:3, purge:true}
+  {k:"distil",  n:"Distillation",d:"Destroy one card and take 3 scrap for it.",           cost:0,  distil:3},
+  {k:"purge",   n:"Purge",       d:"Remove EVERY piece of dead weight from your deck — 1 more scrap per piece.", cost:3, purge:true}
 ];
 /* ---- Sticker book (after Garden Warfare's sticker packs) --------------------
    Crates hold PIECES. There are many sets, so no crate is a sure thing, and every
@@ -2846,11 +2978,11 @@ const CRATE_COST=5;
 const MINIONS={grove:["m_sentry","m_thistle","m_sunbell","m_seedling","m_ivy","m_salve","m_oak","m_reed"],
                blight:["m_shambler","m_boomgrub","m_sporeling","m_crawlie","m_husk","m_gnats","m_minihulk","m_spitter"]};
 const PERKSETS=[
-  {k:"seedmoney",n:"Seed Money",max:3,d:l=>"+"+l+" meta at the end of every round."},
+  {k:"seedmoney",n:"Seed Money",max:3,d:l=>"+"+l+" scrap at the end of every round."},
   {k:"scout",n:"Scout's Eye",max:2,d:l=>"Appraisals cost "+Math.max(0,2-l)+"."},
   {k:"quarter",n:"Quartermaster",max:2,d:l=>"Packs you buy cost "+l+" less (the seller is still paid in full)."},
   {k:"salvage",n:"Salvage Crew",max:2,d:l=>"Refusing both packs costs "+l+" fewer Rubble."},
-  {k:"scrapper",n:"Scrapper",max:3,d:l=>"Scrapping a card gives "+(2+l)+" resource instead of 2."},
+  {k:"scrapper",n:"Recycler",max:3,d:l=>"Recycling a card gives "+(2+l)+" resource instead of 2."},
   {k:"thick",n:"Thick Skin",max:3,d:l=>"Units you play on turn 1 get +"+l+" health."},
   {k:"crew",n:"Crew Boss",max:3,faction:true,d:l=>"Your companions arrive with +"+l+"/+"+l+"."}
 ];
@@ -2867,7 +2999,7 @@ function bookFull(w){const fac=w==="p"?S.pf:S.af;return stickerSets(fac).every(s
 function giveSticker(w,k){
   const P=S[w],fac=w==="p"?S.pf:S.af,st=stickerSets(fac).find(x=>x.k===k);if(!st)return null;
   P.book=P.book||{};
-  if((P.book[k]||0)>=st.need){P.meta+=1;return st.n+" (full → +1 meta)";}
+  if((P.book[k]||0)>=st.need){P.meta+=1;return st.n+" (full → +1 scrap)";}
   P.book[k]=(P.book[k]||0)+1;const have=P.book[k];
   return st.n+" "+have+"/"+st.need+(have>=st.need?" — COMPLETE":(!st.perk&&have===st.need-1?" — rookie joins":""));
 }
@@ -2901,7 +3033,7 @@ function openCrate(w){
     const perk=Math.random()<0.45;
     const pool=sets.filter(x=>!!x.perk===perk);
     const st=pool[rnd(pool.length)];
-    if((P.book[st.k]||0)>=st.need){P.meta+=1;got.push(st.n+" (already full → +1 meta)");continue;}
+    if((P.book[st.k]||0)>=st.need){P.meta+=1;got.push(st.n+" (already full → +1 scrap)");continue;}
     P.book[st.k]=(P.book[st.k]||0)+1;
     const have=P.book[st.k];
     got.push(st.n+" "+have+"/"+st.need+(have>=st.need?" — COMPLETE":(!st.perk&&have===st.need-1?" — rookie joins":"")));
@@ -2911,7 +3043,7 @@ function openCrate(w){
   return got;
 }
 function spawnCompanion(l,w,id){
-  const u=mk(id,w);
+  const u=mk(id,w);u.src="Sticker-book companion";
   if(!setDone(w,id)){u.base=Math.max(0,u.base-1);u.h=Math.max(1,u.h-1);u.n+=" (rookie)";}
   const cl=perkLvl(w,"crew");u.base+=cl;u.h+=cl;
   if(u.ward)l[w].forEach(o=>o.h+=u.ward);
@@ -3025,7 +3157,7 @@ function modLabel(m){
   if(m.draw)bits.push("draws");
   return bits.join(" ");
 }
-/* Permanent upgrades — the long game. Paid in meta, or discounted by holding flanks. */
+/* Permanent upgrades — the long game. Paid in scrap, or discounted by holding flanks. */
 /* Upgrades are PERMANENT and ONE-TIME. Crucially you don't buy them from a shop —
    you decide which single upgrade to LIST in your enemy's depot each round, and they
    do the same for you. You're choosing which permanent power your opponent may access. */
@@ -3035,6 +3167,9 @@ const UPGRADES=[
   {k:"draw", n:"Deep Roots",   d:"Draw an extra card at the start of every turn.",    base:12},
   {k:"thin", n:"Pruning Shed", d:"Your first cut each round costs nothing.",          base:7}
 ];
+/* Upgrade prices are FIXED (the seller only chooses which one) — otherwise you'd
+   just list one at a silly price that nobody would ever buy. */
+function upPrice(u){return Math.max(4,u.base-2);}
 function upLvl(who,k){return (S[who].ups&&S[who].ups[k])?1:0;}
 function flankDiscount(){return ["L","R"].filter(sec=>holdsSector(sec,"p")).length*2;}
 function ownedAll(who){return UPGRADES.every(u=>upLvl(who,u.k));}
@@ -3052,7 +3187,7 @@ function upValue(k){
   const base={sun:10,hand:8,draw:12,thin:7}[k]||8;
   return base+rnd(5)-2;
 }
-/* Graft: pay 5 meta and THREE cards of one tribe for one large body.
+/* Graft: pay 5 scrap and THREE cards of one tribe for one large body.
    Real card disadvantage traded for stats — the opposite deal from fusion. */
 const GRAFT_COST=5;
 function canGraft(){
@@ -3097,11 +3232,11 @@ function doGraft(tag){
   plog("You graft "+eaten.join(" + ")+" into a "+C[res].n+" for "+GRAFT_COST+". Three cards became one.",true);
   render();
 }
-/* Blight's workshop — it spends meta on its own deck instead of hoarding it. */
+/* Blight's workshop — it spends scrap on its own deck instead of hoarding it. */
 function aiWorkshop(){
   const A=S.a;
   A.mods=A.mods||{};
-  /* Keep enough for NEXT round's pack (+3 a round), counting the 8+ meta every
+  /* Keep enough for NEXT round's pack (+3 a round), counting the 8+ scrap every
      round-end pays out no matter who wins. Everything above that gets spent. */
   const RESERVE=Math.max(2,packPrice()+3-8+2);
   let cuts=0;
@@ -3132,9 +3267,9 @@ function aiWorkshop(){
       const tag=opts[rnd(opts.length)];
       A.meta-=EXP_COST;
       for(let k=0;k<2;k++){const i=A.deck.findIndex(id=>isT(C[id],tag));if(i>=0)A.deck.splice(i,1);}
-      let res=rollAbomination();
+      let res=rollAbomination(tag);
       // it will pay to reroll a dud if it can afford to
-      while(res==="abom_runt"&&A.meta>=REROLL_COST){A.meta-=REROLL_COST;res=rollAbomination();}
+      while(res==="abom_runt"&&A.meta>=REROLL_COST){A.meta-=REROLL_COST;res=rollAbomination(tag);}
       A.deck.push(res);
 
     }
@@ -3207,10 +3342,10 @@ function scrap(hi){
   if(S.p.discarded||S.sub==="tricks")return;
   if(mpOn()&&!mpIsMyTurn())return;
   const id=S.p.hand[hi], d=C[id];
-  if(d.noscrap){log(d.n+" cannot be scrapped. It just sits there.");render();return;}
+  if(d.noscrap){log(d.n+" cannot be recycled. It just sits there.");render();return;}
   const worth=d.noscrapvalue?0:2+perkLvl("p","scrapper");
   S.p.discarded=true;S.p.sun+=worth;S.p.hand.splice(hi,1);S.sel=null;
-  log("You scrap "+d.n+(worth?" for "+worth+" sun.":" for nothing at all."));
+  log("You recycle "+d.n+(worth?" for "+worth+" sun.":" for nothing at all."));
   render();
 }
 function canTarget(hi,l){
@@ -3345,7 +3480,7 @@ function playCard(hi,li){
     }
     triggerSpite("a");
   } else {
-    if(d.infest){applyInfest(l,"p",d,id);S.sel=null;render();return;}
+    if(d.infest){applyInfest(l,"p",d,id,S.infIdx);S.infIdx=null;S.sel=null;render();return;}
     const u=mk(id,"p");u.h+=homeBonus("p");if(S.turn===1)u.h+=perkLvl("p","thick");
     onLand(l,"p",u,d);
     if(d.brood&&unitsOnBoard("p")>=d.brood){drawFor("p",1);log(d.n+" broods — your swarm draws you a card.");}
@@ -3379,6 +3514,7 @@ function playCard(hi,li){
         log(d.n+" consumes "+food.n+" — that card is permanently +"+S.p.vet[food.id]+"/+"+S.p.vet[food.id]+" in your deck.",true);
       }
     }
+    dawnFix(u);u.src=originOf("p",id,"Played from your hand");
     const ue=envOnLand(l,"p",u);
     if(!fuseInto(l,"p",ue)){if(ue.teamup&&S.tuFront&&l.p.length){l.p.unshift(ue);log("   TEAM-UP: "+d.n+" steps in front.");}else l.p.push(ue);}
     S.tuFront=false;
@@ -3655,7 +3791,7 @@ function mpPack(){
     pending:S[w].pending||null,discarded:!!S[w].discarded,hero:S[w].hero||null,spRound:S[w].spRound||0,gmRound:S[w].gmRound||0,cheap:S[w].cheap||[],grow:S[w].grow||{},incomeWhy:S[w].incomeWhy||null,taxNext:S[w].taxNext||0,nextDisc:S[w].nextDisc||0,stockRound:S[w].stockRound||0,
     book:S[w].book||{},compUsed:S[w].compUsed||{},minionUsed:!!S[w].minionUsed,
     cutsTotal:S[w].cutsTotal||0,tonicsBought:S[w].tonicsBought||0,
-    rdmg:S[w].rdmg||{},plays:S[w].plays||0,flT:S[w].flT||null
+    rdmg:S[w].rdmg||{},plays:S[w].plays||0,flT:S[w].flT||null,xp:S[w].xp||{},conj:S[w].conj||{}
   });
   const o={};
   o[S.pf]=seat("p"); o[S.af]=seat("a");
@@ -3671,7 +3807,7 @@ function mpPack(){
       mk:S.pf==="grove"?l.mk:6-l.mk, cap:S.pf==="grove"?(l.cap||0):-(l.cap||0),
       p:S.pf==="grove"?l.p:l.a, a:S.pf==="grove"?l.a:l.p,
       /* garrisons are seat-relative too: store them Grove-first like everything else */
-      terr:l.terr||null,env:l.env||null,terrKeep:l.terrKeep||0,
+      terr:l.terr||null,env:l.env||null,terrKeep:l.terrKeep||0,nest:l.nest||[],
       gp:(S.pf==="grove"?l.gp:l.ga)||null, ga:(S.pf==="grove"?l.ga:l.gp)||null})),
     seats:o, log:S.log.slice(-60), mood:S.a.mood||0
   };
@@ -3697,7 +3833,7 @@ function mpUnpack(raw){
   S2.log=(d.log||[]).slice();
   S2.logN=S2.log.reduce((m,e)=>Math.max(m,e.n||0),0);
   S2.lanes=d.lanes.map(l=>({
-    id:l.id,nm:l.nm,flank:l.flank,sector:l.sector||undefined,adj:l.adj||undefined,pushed:0,terr:l.terr,terrKeep:l.terrKeep||0,env:l.env||null,baseTerr:l.baseTerr||null,
+    id:l.id,nm:l.nm,flank:l.flank,sector:l.sector||undefined,adj:l.adj||undefined,pushed:0,terr:l.terr,terrKeep:l.terrKeep||0,nest:l.nest||[],env:l.env||null,baseTerr:l.baseTerr||null,
     mk:mine==="grove"?l.mk:6-l.mk, cap:l.cap==null?((mine==="grove"?l.mk:6-l.mk)-3)*40:(mine==="grove"?l.cap:-l.cap),
     /* lanes are stored Grove-side-first; flip them if I am the Blight seat */
     p:mine==="grove"?l.p:l.a, a:mine==="grove"?l.a:l.p,
@@ -3782,7 +3918,7 @@ async function mpJoin(code){
 }
 
 const mpOther=()=>MP.seat==="grove"?"blight":"grove";
-const SUBMIT_WINDOW=15;   // seconds the slower player gets once the first one is in
+const SUBMIT_WINDOW=45;   // seconds the slower player gets once the first one is in
 
 /* Each seat draws its own ten cards when a stocking phase opens. The host cannot
    generate them in advance — it does not own the other seat. */
@@ -3824,6 +3960,7 @@ function mpClearTimer(){ if(MP.timer){clearInterval(MP.timer);MP.timer=null;} MP
 function mpStartTimer(phase){
   if(MP.timer||S.p.submitted)return;
   MP.deadline=Date.now()+SUBMIT_WINDOW*1000;
+  sfx("turn",true);log(FNAME[S.af]+" is done — you have "+SUBMIT_WINDOW+" seconds.",true);
   MP.timer=setInterval(()=>{
     if(S.p.submitted||!mpSimultaneous())return mpClearTimer();
     if(Date.now()>=MP.deadline){ mpClearTimer(); mpAutoSubmit(phase); }
@@ -3934,7 +4071,7 @@ async function mpTryResolve(phase){
       log(FNAME[S.af]+" refused both of your packs — "+rr+" Rubble go into THEIR deck.",true); }
     if(mine.bought==null){ const rr=refusalRubble(packPrice(),"p"); for(let i=0;i<rr;i++)S.p.deck.push("rubble");
       log("You refused both of their packs — "+rr+" Rubble go into your deck.",true); }
-    if(theirs.paid)log(FNAME[S.af]+" bought your pack — you earn "+sellerTake(theirs.paid)+" meta after the depot's cut.",true);
+    if(theirs.paid)log(FNAME[S.af]+" bought your pack — you earn "+sellerTake(theirs.paid)+" scrap after the depot's cut.",true);
     S.p.submitted=false;S.a.submitted=false;
     startCombat();
     render();await mpPush();
@@ -3957,6 +4094,9 @@ function mpEndRespond(){
   S.mpStep=3; S.sub="tricks";
   mpHandOff(firstMoverFaction());
 }
+/* push the board after every play, so the other player watches it happen */
+let LIVE_T=null;
+function mpLivePush(){clearTimeout(LIVE_T);LIVE_T=setTimeout(()=>{try{MP.pushing=true;Promise.resolve(mpPush()).finally(()=>{MP.pushing=false;});}catch(e){MP.pushing=false;}},120);}
 function mpResolveTurn(){
   act(()=>{mpResolveTurnBody();});
   return mpPush();
@@ -4008,7 +4148,9 @@ function deckStats(id,w){
 /* What a unit on the board is doing this instant. */
 function unitStats(u,l,side){
   const notes=[];
+  notes.unshift(u.src?"Origin: "+u.src:(C[u.id].token?"Origin: a summoned token":"Origin: on the board"));
   if(u.vet)notes.push("Veteran ★"+u.vet);
+  {const x=xpOf(side,u.id);if(vet(side,u.id)<vetCap(u.id))notes.push("XP "+x+"/"+XP_PER+" to next ★");}
   if(u.fusions&&u.fusions.length)notes.push("Fused with "+u.fusions.join(", "));
   if(u.leech)notes.push("Parasites: −"+u.leech+" attack");
   if(u.infest&&u.infest.length)notes.push("Infested by "+u.infest.map(p=>C[p.id].n).join(", "));
@@ -4060,7 +4202,7 @@ function bindTip(node,id,side,live){
       (d.c+" "+res+(d.trick?" · trick":" · "+(L?L.a:d.a)+" attack / "+(L?L.h:d.h)+" health"+(L&&L.changed&&(L.a!==d.a||L.h!==d.h)?"  (card: "+d.a+"/"+d.h+")":"")))));
     if(L&&L.notes&&L.notes.length)TIP.appendChild(el("div","tt tl",L.notes.join(" · ")));
     TIP.appendChild(el("div","tg",d.junk?"Dead weight":(d.trick?"Trick":tagLabel(d))));
-    TIP.appendChild(el("div","tt",d.t));
+    if(d.t)TIP.appendChild(el("div","tt",d.t));
     const tr=traitsIn(d.t);
     if(tr.length){const kd=el("div","tkw");tr.forEach(k=>{const r=el("div");r.appendChild(el("b",null,k.full+": "));r.appendChild(document.createTextNode(k.v));kd.appendChild(r);});TIP.appendChild(kd);}
     if(side){
@@ -4093,7 +4235,7 @@ function bindInfoTip(node,o){
   node.addEventListener("mouseleave",()=>{TIP.hidden=true;TIP.classList.remove("big");});
 }
 const TERR_ICON={"Thicket":"🌿","Open Ground":"⚔","Marsh":"💧","Ruins":"🧱","Bramble Wall":"🌵","Water":"🌊","High Ground":"⛰"};
-const ENV_ICON={meadow:"🌻",echo:"🔁",gallery:"🏹",chamber:"🧪",crypt:"🕯",chute:"🦴"};
+const ENV_ICON={fog:"🌫",meadow:"🌻",echo:"🔁",gallery:"🏹",chamber:"🧪",crypt:"🕯",chute:"🦴"};
 function terrIcon(t){return TERR_ICON[t.n]||(t.water?"🌊":t.capMul?"⛰":t.owner?"🏛":"◆");}
 const TERR_PLAIN={
   "Thicket":{eff:"Every unit here takes 1 LESS damage each fight.",who:"Both sides. Good for small units that would otherwise die."},
@@ -4138,7 +4280,7 @@ function cardEl(id,o){
     if(L&&(L.a!==d.a||L.h!==d.h)){st.style.color="var(--grove)";st.style.fontWeight="600";st.title="Card: "+d.a+"/"+d.h;}
     b.appendChild(st);
   }
-  b.appendChild(el("div","tag",d.junk?"Dead weight":(d.trick?"Trick":tagLabel(d))));
+  b.appendChild(el("div","tag",d.junk?"Dead weight":(d.trick?"Trick":tagLabel(d))+(CFG.capmode==="value"&&!d.trick&&!d.junk?"  ⚑"+capValue(id):"")));
   if(d.tag2&&TAGS[d.tag2]&&!d.trick)b.classList.add("multi"),b.style.setProperty&&b.style.setProperty("--t2",TAGS[d.tag2]);
   const tx=el("div","txt");const tf=textWithTraits(d.t);if(tf)tx.appendChild(tf);else tx.textContent=d.t;b.appendChild(tx);
   if(o.onClick)b.addEventListener("click",o.onClick);
@@ -4150,7 +4292,7 @@ function renderRes(){
   const add=(l,v,c,ico)=>{const e=el("div","chip "+(c||""));if(ico)e.appendChild(el("span","ico",ico));e.appendChild(el("b",null,String(v)));e.appendChild(el("span","lab",l));r.appendChild(e);return e;};
   if(S.phase==="pick")return;
   if(S.phase==="combat")add("Your "+FRES[S.pf],S.p.sun,"big sun",RES_ICO[S.pf]).title="What you can spend this turn. It refills every turn and does not carry over.";
-  add("Your meta",S.p.meta,"big meta","◆").title="Spent between rounds: packs, appraisals, tonics, crates, the workshop.";
+  add("Your scrap",S.p.meta,"big meta","◆").title="Spent between rounds: packs, appraisals, tonics, crates, the workshop.";
   if(S.phase==="combat"){
     add("Mains",mainsHeld("p")+"–"+mainsHeld("a"));add("Flanks",flanksHeld("p")+"–"+flanksHeld("a"));
     add("Turn",S.turn+" / "+TURNS);
@@ -4158,7 +4300,7 @@ function renderRes(){
     add(FNAME[S.af]+" hand",S.a.hand.length,"bl");
   } else {
     add("Mains",mainsHeld("p")+"–"+mainsHeld("a"));add("Flanks",flanksHeld("p")+"–"+flanksHeld("a"));
-    add(FNAME[S.af]+" meta",S.a.meta,"bl");
+    add(FNAME[S.af]+" scrap",S.a.meta,"bl");
     add(FNAME[S.af]+" deck",S.a.deck.length,"bl");
   }
 }
@@ -4170,12 +4312,44 @@ function renderFront(){
   $("frontDesc").textContent=(cfgChanged()?"Custom rules"+(CFG.laneCap?" (lane cap "+CFG.laneCap+")":"")+" · ":"")+(S.env&&S.env!=="lawn"?ENVS[S.env].n+" · ":"")+(S.front===FRONT_MID?"Contested at Town Square"
     :(S.front>FRONT_MID?"You are advancing — ":FNAME[S.af]+" is advancing — ")+ZONES[zoneIdx()]);
   $("roundNo").textContent=S.round;
+  /* vertical version for the side bar: their home at the top, yours at the bottom */
+  const v=$("vfront");
+  if(v&&typeof v.appendChild==="function"&&v.style){
+    v.innerHTML="";
+    const col=el("div","vcol");
+    const zi=zoneIdx();
+    for(let z=4;z>=0;z--){
+      const r=el("div","vz"+(z===0?" mine":z===4?" theirs":"")+(z===zi?" here":""));
+      r.appendChild(el("span","vzl",ZONES[z]));
+      if(z===4)r.appendChild(el("span","vzs",FNAME[S.af]+"'s home — push here to win"));
+      if(z===0)r.appendChild(el("span","vzs",FNAME[S.pf]+"'s home — don't get pushed here"));
+      col.appendChild(r);
+    }
+    for(let i=0;i<=FRONT_MAX;i++){const n=el("div","vnotch");n.style.top=(100-i*100/FRONT_MAX)+"%";col.appendChild(n);}
+    const pin=el("div","vpin");pin.style.top=(100-S.front*100/FRONT_MAX)+"%";
+    pin.appendChild(el("span",null,"◀ front"));col.appendChild(pin);
+    v.appendChild(col);
+  }
 }
 /* Drag a card from your hand straight onto a lane. Legal lanes light up while you drag. */
 const DRAG={hi:null};
+/* What a unit card would actually be in a given lane — terrain, environments,
+   auras from allies, backs-to-the-wall and so on all change it. */
+function previewStats(hi,l){
+  const id=S.p.hand[hi],d=C[id];if(!d||d.trick||d.junk)return null;
+  const u=dawnFix(mk(id,"p"));u.h+=terrainHp(l);
+  l.p.push(u);let a=0;try{a=atk(u,l,"p");}finally{l.p.pop();}
+  const base=deckStats(id,"p");
+  return {a,h:u.h,da:a-(base?base.a:d.a),dh:u.h-(base?base.h:d.h)};
+}
+function prevBadge(hi,l,cls){const ps=previewStats(hi,l);if(!ps)return null;
+  const b=el("div","prevstat"+(cls?" "+cls:""));b.appendChild(el("span","pl","here:"));
+  b.appendChild(el("b","sa"+(ps.da>0?" up":ps.da<0?" dn":""),"⚔"+ps.a));b.appendChild(el("b","sh"+(ps.dh>0?" up":ps.dh<0?" dn":""),"♥"+ps.h));
+  return b;}
 /* Team-up units ask whether to step in front of or behind the allies already there. */
 function tryPlay(hi,li){
   const id=S.p.hand[hi],d=C[id],l=S.lanes[li];
+  if(d&&d.infest&&l.a.length>1){S.infAsk={hi,li};S.sel=hi;return render();}
   if(d&&d.teamup&&!d.trick&&l.p.length&&!l.p.some(u=>u.fbase)){S.tuAsk={hi,li};S.sel=hi;return render();}
   S.tuAsk=null;act(()=>playCard(hi,li));
 }
@@ -4192,33 +4366,54 @@ function infBadge(x,u){
 }
 function dragClear(){DRAG.hi=null;if(typeof document.querySelectorAll!=="function")return;
   document.querySelectorAll(".lane.droptarget,.lane.dragover").forEach(L=>L.classList.remove("droptarget","dragover"));
-  document.querySelectorAll(".card.dragging").forEach(c=>c.classList.remove("dragging"));}
+  document.querySelectorAll(".card.dragging").forEach(c=>c.classList.remove("dragging"));
+  document.querySelectorAll(".prevstat.drag").forEach(n=>n.remove());}
 function renderBoard(ct,interactive){
   const wide=S.lanes.length>5;
-  const b=el("div","board"+(wide?" wide":""));
-  let mainRow=null,flankRow=null,secL=null,secR=null;
+  const b=el("div","board");
+  let vis=null;
   if(wide){
-    mainRow=el("div","board mains");flankRow=el("div","flankrow");
-    secL=el("div","sector");secL.appendChild(el("div","sector-name","Left flank sector"+(holdsSector("L","p")?" · yours":(holdsSector("L","a")?" · theirs":""))));
-    secR=el("div","sector");secR.appendChild(el("div","sector-name","Right flank sector"+(holdsSector("R","p")?" · yours":(holdsSector("R","a")?" · theirs":""))));
-    const gl=el("div","board sec3"),gr=el("div","board sec3");secL.appendChild(gl);secR.appendChild(gr);
-    secL.grid=gl;secR.grid=gr;
-    flankRow.appendChild(secL);flankRow.appendChild(secR);
-    b.appendChild(mainRow);b.appendChild(flankRow);
+    /* WIDE FRONT: pan between three mini-fronts instead of cramming 11 lanes in */
+    const pan=UI.pan||"M";
+    const inView=(l,k)=>k==="M"?!l.flank:(l.flank?l.sector===k:l.adj===k);
+    vis=S.lanes.map((l,i)=>inView(l,pan)?i:-1).filter(i=>i>=0);
+    const nav=el("div","pannav");
+    const mm=el("div","minimap");
+    S.lanes.forEach((l,i)=>{const c=el("button","mmc"+(l.flank?" fl":"")+(vis.includes(i)?" on":""));c.type="button";
+      const cap=l.cap||0;c.style.background=cap>=20?"var(--gUnit)":cap<=-20?"var(--bUnit)":"var(--surface2)";
+      c.textContent=l.p.length+"·"+l.a.length;c.title=l.nm+" — "+(cap?Math.abs(cap)+"% "+(cap>0?"yours":"theirs"):"even")+" · "+l.p.length+" yours, "+l.a.length+" theirs";
+      if(interactive&&S.sel!=null&&canTarget(S.sel,l))c.classList.add("tgt");
+      c.addEventListener("click",()=>{UI.pan=l.flank?l.sector:"M";render();});mm.appendChild(c);});
+    [["L","◀ Left flank sector"+(holdsSector("L","p")?" · yours":(holdsSector("L","a")?" · theirs":""))],["M","Main front"],["R","Right flank sector"+(holdsSector("R","p")?" · yours":(holdsSector("R","a")?" · theirs":""))+" ▶"]].forEach(([k,t])=>{
+      const any=interactive&&S.sel!=null&&S.lanes.some(l=>inView(l,k)&&canTarget(S.sel,l));
+      const bt=el("button","panbtn"+(pan===k?" on":"")+(any?" tgt":""),t);bt.type="button";bt.addEventListener("click",()=>{UI.pan=k;render();});nav.appendChild(bt);
+      if(k==="M")nav.appendChild(mm);});
+    ct.appendChild(nav);
+    b.style.gridTemplateColumns="repeat("+vis.length+",minmax(0,1fr))";
   }
   S.lanes.forEach((l,li)=>{
+    if(wide&&!vis.includes(li))return;
     const d=el("div","lane"+(l.flank?" flank":""));d.dataset.li=li;
     if(interactive){
       d.addEventListener("dragover",e=>{if(DRAG.hi!=null&&canTarget(DRAG.hi,l)){e.preventDefault();d.classList.add("dragover");}});
       d.addEventListener("dragleave",()=>d.classList.remove("dragover"));
       d.addEventListener("drop",e=>{e.preventDefault();const hi=DRAG.hi;dragClear();if(hi!=null&&canTarget(hi,l)){S.sel=null;tryPlay(hi,li);}});
     }
-    if(interactive&&S.sel!=null&&canTarget(S.sel,l)){d.classList.add("targetable");d.addEventListener("click",()=>tryPlay(S.sel,li));}
+    if(interactive&&S.sel!=null&&canTarget(S.sel,l)){d.classList.add("targetable");d.addEventListener("click",()=>tryPlay(S.sel,li));
+      const pb=prevBadge(S.sel,l);if(pb)d.appendChild(pb);}
+    if(interactive&&S.infAsk&&S.infAsk.li===li){
+      const ask=el("div","tuask");ask.appendChild(el("b",null,"INFEST — which unit? (bigger hosts make fatter parasites)"));
+      l.a.forEach((u,ix)=>{const b=el("button","btn "+(ix===0?"primary":"ghost"),u.n+" "+atk(u,l,"a")+"/"+u.h+(Math.floor(u.h/3)?"  → +"+Math.floor(u.h/3)+"/+"+Math.floor(u.h/3):""));b.type="button";
+        b.addEventListener("click",ev=>{ev.stopPropagation();const a=S.infAsk;S.infAsk=null;S.infIdx=ix;act(()=>playCard(a.hi,a.li));});ask.appendChild(b);});
+      const cx=el("button","btn ghost","Cancel");cx.type="button";cx.addEventListener("click",ev=>{ev.stopPropagation();S.infAsk=null;render();});ask.appendChild(cx);
+      ask.addEventListener("click",ev=>ev.stopPropagation());d.appendChild(ask);
+    }
     if(interactive&&S.tuAsk&&S.tuAsk.li===li){
       const ask=el("div","tuask");ask.appendChild(el("b",null,"TEAM-UP — where does it go?"));
       const mkb=(txt,front)=>{const b=el("button","btn "+(front?"primary":"ghost"),txt);b.type="button";
         b.addEventListener("click",ev=>{ev.stopPropagation();const a=S.tuAsk;S.tuAsk=null;if(front==null)return render();S.tuFront=front;act(()=>playCard(a.hi,a.li));});return b;};
-      ask.appendChild(mkb("▲ In front",true));ask.appendChild(mkb("▼ Behind",false));ask.appendChild(mkb("Cancel",null));
+      const tn=TUT.on&&S.tut?tutNeed():null;
+      if(!(tn&&tn.behind))ask.appendChild(mkb("▲ In front",true));if(!(tn&&tn.front))ask.appendChild(mkb("▼ Behind",false));if(!(tn&&(tn.front||tn.behind)))ask.appendChild(mkb("Cancel",null));
       ask.addEventListener("click",ev=>ev.stopPropagation());d.appendChild(ask);
     }
     else if(interactive&&S.selHero&&canSuper(l,"p")){d.classList.add("targetable");d.addEventListener("click",()=>act(()=>useSuper("p",li)));}
@@ -4281,9 +4476,7 @@ function renderBoard(ct,interactive){
       x.appendChild(st);bot.appendChild(x);
     });
     d.appendChild(bot);
-    if(!wide)b.appendChild(d);
-    else if(!l.flank)mainRow.appendChild(d);
-    else (l.sector==="L"?secL:secR).grid.appendChild(d);
+    if(!wide||vis.includes(li)){if(wide&&!l.flank&&UI.pan&&UI.pan!=="M")d.classList.add("ctx");b.appendChild(d);}
   });
   ct.appendChild(b);
 }
@@ -4376,36 +4569,87 @@ function paintSoundBtn(){const sb=$("soundBtn");if(sb){sb.textContent=SFX.on?"So
    every Blight move are scripted, and each step only lets you do the one thing it
    asks for — so it always plays out the same way and always makes sense. */
 const TUT={on:false,i:0};
-const TUT_PACK_A=["thornling","seedpod","gallnut","wanderseed","brambleshot","thornling","sunflare","ironvine"];
-const TUT_PACK_B=["bristlecap","nettleweave","barkplate","titanbloom","worldroot","sunscorch","seedcall","rubble"];
-const TUT_HAND=["thornling","seedpod","gallnut","wanderseed","brambleshot"];
-const TUT_PILE=["ironvine","sunflare","thornling"];    // popped from the end: T2 thornling, T3 sunflare, T4 ironvine
-const TUT_AI={1:[["rotling",2]],2:[["gnawer",1],["crawler",2]],3:[["shamblehulk",3]],4:[["rotling",1]],5:[]};
+const TG_PACK_A=["thornling","seedpod","gallnut","sunflare","wanderseed","brambleshot","barkplate","ironvine"];
+const TG_PACK_B=["bristlecap","nettleweave","barkplate","titanbloom","worldroot","sunscorch","seedcall","rubble"];
+const TG_HAND=["thornling","seedpod","gallnut","sunflare","wanderseed"];
+const TG_PILE=["sunnymeadow","ironvine","barkplate","brambleshot"];   // popped from the end: T2 draw, T2 Flurry, T3, T4
+const TG_AI={1:[["rotling",2]],2:[["gnawer",1],["crawler",2]],3:[["shamblehulk",3]],4:[["rotling",1]],5:[]};
+const TC=t=>()=>S.phase==="combat"&&S.turn===t&&!S.beat;
+const HAND=".panel .cards",ENDB=".panel-head button.btn.primary";
 /* Each step: when it applies, what it says, what it lets you do (need), and what to highlight. */
-const TUT_STEPS=[
-  {t:"Welcome to Grove and Blight",x:"Two sides fight over five lanes. You are GROVE (plants). The twist: you never pick your own cards — your opponent stocks your shop, and you stock theirs. This tutorial plays one scripted round. Press Next.",need:{next:1}},
-  {t:"1 · Stock the enemy's shop",x:"This shelf is BLIGHT's cards. You build two packs of 8; Blight will buy ONE. For this tutorial just press the highlighted Random fill button.",need:{fill:1},sel:".fbar .fchip:nth-last-child(2)",when:()=>S.phase==="stock"},
-  {t:"Open the market",x:"Both packs are full — and Random fill also listed one upgrade for Blight. Listing one is required every round: you pick which and set the price, and if they buy it the meta comes to you. Press the green Open the market button.",need:{open:1},sel:"button.btn.primary",when:()=>S.phase==="stock"},
-  {t:"2 · Your shop",x:"Blight stocked two packs of GROVE cards for you. They're face down — the grey line under each is a free hint. Press Appraise on Pack B to learn more (free in the tutorial).",need:{appraise:1},sel:".pack:nth-child(2) .btn.ghost",when:()=>S.phase==="market"},
-  {t:"Spot the trap",x:"Pack B reads only FAIR, and the reasons say why: it's top-heavy (turn 1 gives just 3 sun) and several of its bodies have 0 attack. Pack A's free read shows lots of cheap cards — many plays, and your 3rd card each turn draws a card. Buy PACK A.",need:{buy:0},sel:".pack:nth-child(1) .btn:not(.ghost)",when:()=>S.phase==="market"},
-  {t:"Begin the fight",x:"Tonics, sticker crates and the workshop are optional extras — ignore them today. Press Begin combat.",need:{begin:1},sel:"button.btn.primary",when:()=>S.phase==="market"},
-  {t:"3 · The battlefield",x:"Five lanes: a FLANK on each edge and three MAIN lanes in the middle. Blight's units are on top, yours go on the bottom. After 5 turns, whoever HOLDS more main lanes wins the round.",need:{next:1},when:()=>S.phase==="combat"&&!S.beat},
-  {t:"Blight moves first",x:"Blight commits units first each turn, so you answer seeing everything. It put a Rotling (2/2) in MAIN 2. You have 3 sun. Click THORNLING in your hand, then click MAIN 2.",need:{play:["thornling",2]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===1&&!S.beat},
-  {t:"Take free ground",x:"MAIN 3 is empty — anything alone in a lane pushes its capture bar. Play SEEDPOD (1 sun) into MAIN 3.",need:{play:["seedpod",3]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===1&&!S.beat},
-  {t:"End your turn",x:"You're out of sun. Press the green End turn button and watch the fight.",need:{end:1},sel:".panel-head button.btn.primary",when:()=>S.phase==="combat"&&S.turn===1&&!S.beat},
-  {t:"What happened?",x:"In each lane, all your attack hits the enemy's FRONT unit. Thornling and Rotling (2 attack each) killed each other. Your Seedpod was alone in Main 3, so it pushed the bar: total attack × total health = 1 × 2 = 2%. Two units push much harder than one — and bigger units push much faster.",need:{next:1},when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
-  {t:"Beat a small unit",x:"Blight added a Gnawer (1/2) in MAIN 1 and a Crawler (1/4) in MAIN 2. You have 4 sun. Play WANDERSEED (3/3) into MAIN 1 — it kills the Gnawer and survives.",need:{play:["wanderseed",1]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
-  {t:"Build a wall",x:"Now play GALLNUT (1/4) into MAIN 2. It's tough, and every time it's hit it gains +1 attack (BULWARK). Hover any card to read what it does.",need:{play:["gallnut",2]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
-  {t:"End turn",x:"Press End turn.",need:{end:1},sel:".panel-head button.btn.primary",when:()=>S.phase==="combat"&&S.turn===2&&!S.beat},
-  {t:"Tricks",x:"Blight dropped a Shamblehulk (3/5) onto your Seedpod in MAIN 3. TRICKS are one-shot effects. Cast BRAMBLE SHOT (2 sun) on MAIN 2 to hit the Crawler for 3 — but careful: Blight units often do something when they DIE. Watch.",need:{play:["brambleshot",2]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===3&&!S.beat},
-  {t:"Death triggers",x:"The Crawler died — and burst for 4 on your Gallnut, taking it down too. That's Blight's style: its units pay off when they DIE, so think about who's standing in front when you kill one. Now play THORNLING (2 sun) into MAIN 3 to back up your Seedpod.",need:{play:["thornling",3]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===3&&!S.beat},
-  {t:"End turn",x:"Press End turn. Blight gets the LAST WORD — it may cast a trick after you.",need:{end:1},sel:".panel-head button.btn.primary",when:()=>S.phase==="combat"&&S.turn===3&&!S.beat},
-  {t:"Your first big unit",x:"You have 6 sun. Play IRONVINE (3/5, THORNMAIL — hurts whatever hits it) into MAIN 3 against the Shamblehulk.",need:{play:["ironvine",3]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===4&&!S.beat},
-  {t:"Cheap sun",x:"Play SUNFLARE (1 sun) anywhere. It refunds 1 sun — or 3 if you have a ROOT unit on the board. Your Roots (Seedpod, Gallnut) died, so it's just 1 this time. Cheap units in empty lanes still push the capture bar.",need:{play:["sunflare",-1]},sel:".panel .cards",when:()=>S.phase==="combat"&&S.turn===4&&!S.beat},
-  {t:"End turn",x:"Press End turn.",need:{end:1},sel:".panel-head button.btn.primary",when:()=>S.phase==="combat"&&S.turn===4&&!S.beat},
-  {t:"Last turn — your call",x:"Final turn of the round — you're free now. Main 2 is empty: a unit there pushes it. Play whatever you like (or nothing), then press End turn. A capture bar at 20%+ on your side means you HOLD that lane.",need:{free:1},when:()=>S.phase==="combat"&&S.turn===5&&!S.beat},
-  {t:"Round over!",x:"Whoever held more main lanes moved the front. Units clear between rounds, but your deck keeps what you bought — and cards that survived got permanently stronger (Veterancy ★). From next round, the depot's Workshop lets you COMBINE cards — graft three of one tribe into one big card. From here the match is yours to play freely. Open How to play (top right) any time. Good luck!",need:{next:1,last:1},when:()=>S.phase==="roundend"}
+const TG_STEPS=[
+  {t:"Welcome to Grove and Blight",x:"Two sides fight over five lanes. You are GROVE (plants) against BLIGHT (the undead). The twist: you never pick your own cards — your opponent stocks your shop, and you stock theirs. This scripted round shows you every part of the game. Press Next.",need:{next:1}},
+  /* ---- supply ---- */
+  {t:"1 · Stock the enemy's shop",x:"This shelf is BLIGHT's cards. You build two packs of 8 and Blight buys ONE — so you want packs that look fine but don't work together. Today, just press the highlighted Random fill.",need:{fill:1},sel:".fbar .fchip:nth-last-child(2)",when:()=>S.phase==="stock"},
+  {t:"List an upgrade (required)",x:"Every round you must also list ONE permanent upgrade in their shop. Its price is fixed. It's not a gift: if they buy it, the scrap comes to YOU — so pick the one that helps them least. Random fill already listed one — see the blue box.",need:{next:1},sel:".z-up",when:()=>S.phase==="stock"},
+  {t:"Open the market",x:"Press the green Open the market button.",need:{open:1},sel:"button.btn.primary",when:()=>S.phase==="stock"},
+  /* ---- market ---- */
+  {t:"2 · Your shop",x:"Blight stocked two face-down packs of GROVE cards for you. The purple ◆ is your SCRAP — the money you spend between rounds. The grey line shows each pack's shape for free. Press Appraise on Pack B (free today) to learn what it's worth to YOUR deck.",need:{appraise:1},sel:".pack:nth-child(2) .btn.ghost",when:()=>S.phase==="market"},
+  {t:"Spot the trap",x:"Pack B reads only FAIR: it's top-heavy (turn 1 gives just 3 sun) and several of its bodies have 0 attack. Pack A is full of cheap cards — many plays a turn. Each pack also carries a ★ BONUS STICKER. Buy PACK A.",need:{buy:0},sel:".pack:nth-child(1) .btn:not(.ghost)",when:()=>S.phase==="market"},
+  {t:"The rest of the depot",x:"Optional extras, all paid in meta: TONICS (yellow) permanently improve one card. The WORKSHOP combines cards — graft three of a tribe into one big card. CRATES give sticker pieces: perks, or companions you can deploy free. CUT CARDS removes weak ones. Your deck is always listed on the right.",need:{next:1},sel:".menubtns",when:()=>S.phase==="market"},
+  {t:"Begin the fight",x:"Press Begin combat.",need:{begin:1},sel:"button.btn.primary",when:()=>S.phase==="market"},
+  /* ---- turn 1: flanks and going wide ---- */
+  {t:"3 · The battlefield",x:"Three MAIN lanes in the middle, a FLANK on each edge. Blight's units are on top, yours on the bottom. Your ☀ SUN (top bar) pays for cards and refills every turn. After 5 turns, whoever HOLDS more main lanes pushes the front (left bar) toward the other's home. Push it all the way to win.",need:{next:1},sel:"#railL .vfront",when:TC(1)},
+  {t:"Why flanks matter",x:"Flanks don't count toward winning a round — but they're how you BREAK A STALEMATE. Capture moves 1.6× faster there. Hold one and your flankers SNEAK ATTACK the main lane next to it, hitting the enemy's BACK unit every turn. And if main lanes end level, whoever holds more flanks wins the round. The ⚔ icon on the Left Flank is OPEN GROUND: +1 attack there.",need:{next:1},when:TC(1)},
+  {t:"Take the flank",x:"Blight moves first each turn — it put a Rotling in Main 2. Ignore it. Click THORNLING, then the LEFT FLANK. (You can also drag cards onto lanes.)",need:{play:["thornling",0]},sel:HAND,when:TC(1)},
+  {t:"Go wide",x:"A lane's push is TOTAL attack × TOTAL health, so two units push far harder than one. Play SEEDPOD into the LEFT FLANK too.",need:{play:["seedpod",0]},sel:HAND,when:TC(1)},
+  {t:"End your turn",x:"You're out of sun. Press End turn and watch each lane fight, one at a time.",need:{end:1},sel:ENDB,when:TC(1)},
+  /* ---- turn 2: team-up, kickers, Flurry ---- */
+  {t:"The flank is yours",x:"Your flank pushed (3+2 attack) × (2+2 health) × 1.6 = 32% — past 20%, so you HOLD it. Blight's Rotling pushed Main 2. Now Blight added a Gnawer in Main 1 and a Crawler in Main 2 — the Crawler has TEAM-UP, so it stepped IN FRONT of the Rotling to shield it.",need:{next:1},when:TC(2)},
+  {t:"Plant a Root",x:"Play GALLNUT (a ROOT) into MAIN 3.",need:{play:["gallnut",3]},sel:HAND,when:TC(2)},
+  {t:"Kickers",x:"SUNFLARE refunds 1 sun — or 3 if you have a ROOT on the board. You just played one. Play SUNFLARE into MAIN 3.",need:{play:["sunflare",3]},sel:HAND,when:TC(2)},
+  {t:"Flurry",x:"The THIRD card you play in a turn draws you a card (FLURRY) — cheap cards keep your hand full. Play WANDERSEED (3/3) into MAIN 1, against the Gnawer.",need:{play:["wanderseed",1]},sel:HAND,when:TC(2)},
+  {t:"End turn",x:"You drew a card from Flurry. Press End turn — and watch Main 1.",need:{end:1},sel:ENDB,when:TC(2)},
+  /* ---- turn 3: sneak attack recap, team-up, tricks, last word ---- */
+  {t:"Sneak attack!",x:"Your flank reached 60% — CAPTURED — so its flankers hit the BACK of Main 1 at full strength before the lines met, and the Gnawer fell. That's the flank's power. The risk: if the enemy ever HOLDS the main lane next to your flank, your flankers are CUT OFF and lose 1 health a turn. Blight holds Main 2 now (22%) — watch that bar.",need:{next:1},when:TC(3)},
+  {t:"Team-up",x:"A SHAMBLEHULK (3/5) landed in Main 3, where your small Gallnut and Sunflare stand. BARKPLATE (0/8) has TEAM-UP: it can step in FRONT of your units and take the hits. Play BARKPLATE into MAIN 3, then choose ▲ In front.",need:{play:["barkplate",3],front:1},sel:HAND,when:TC(3)},
+  {t:"Tricks",x:"TRICKS are one-shot effects. Cast BRAMBLE SHOT on MAIN 3 to hit the Shamblehulk for 3 — your little units can finish it off.",need:{play:["brambleshot",3]},sel:HAND,when:TC(3)},
+  {t:"End turn",x:"Press End turn. Blight gets the LAST WORD this round: it may cast a trick AFTER you, with full sight of your board.",need:{end:1},sel:ENDB,when:TC(3)},
+  /* ---- turn 4: environments ---- */
+  {t:"Environments",x:"Blight answered with Witherbreath (−2 attack) on your Wanderseed, and your Barkplate soaked the Shamblehulk while your units killed it. Now take Main 2 back. SUNNY MEADOW is an ENVIRONMENT trick: the lane is framed and gets an icon, and your units played there give +1 sun. Cast it on MAIN 2. Hover any lane icon to read it.",need:{play:["sunnymeadow",2]},sel:HAND,when:TC(4)},
+  {t:"A big unit",x:"Play IRONVINE (3/5, THORNMAIL — hurts whatever hits it) into MAIN 2. The Meadow pays you +1 sun for it.",need:{play:["ironvine",2]},sel:HAND,when:TC(4)},
+  {t:"End turn",x:"Press End turn.",need:{end:1},sel:ENDB,when:TC(4)},
+  /* ---- turn 5 ---- */
+  {t:"Last turn — your call",x:"Main 2: when Blight's Crawler died it BURST for 4 and took your Ironvine with it — Blight's units pay off when they DIE. Final turn: play anything you like, then press End turn. Check the bars — 20% on your side means you HOLD a lane. If the main lanes finish level, your flank decides it.",need:{free:1},when:TC(5)},
+  /* ---- round end ---- */
+  {t:"Round over!",x:"The front moved. Between rounds: units clear, but your DECK keeps everything — cards that survived get ★ VETERANCY (permanently +1/+1), and the side that LOSES a round promotes its two hardest fighters too. Next you'll stock Blight's shop again, then buy from yours. Win by pushing the front all the way into Blight's home. Open How to play (top right) any time. Good luck!",need:{next:1,last:1},when:()=>S.phase==="roundend"}
 ];
+const TCS=(t,sub)=>()=>S.phase==="combat"&&S.turn===t&&!S.beat&&S.sub===sub;
+/* ---- the BLIGHT tutorial: you move first, so troops come before tricks ---- */
+const TB_PACK_A=["gnawer","crawler","rotling","sporeburst","leechling","bonepyre","hoardergrub","witherbreath"];
+const TB_PACK_B=["charnellord","gravebloom","fungalchorus","mycelia","bloatmass","rotburn","broodsong","rubble"];
+const TB_HAND=["gnawer","crawler","rotling","sporeburst","leechling"];
+const TB_PILE=["necrotize","witherbreath","hoardergrub","bonepyre"];   // T2 draw, T3 draw, T3 Flurry, T4
+const TB_AI={1:[["thornling",2]],2:[["wanderseed",2],["seedpod",3]],3:[["gallnut",3]],4:[["thornling",1]],5:[]};
+const TB_STEPS=[
+  {t:"Welcome to Grove and Blight",x:"You are BLIGHT (the undead) against GROVE (plants). You never pick your own cards — your opponent stocks your shop, and you stock theirs. Blight wins by DYING well: death triggers, parasites, sacrifices and extra cards. This scripted round shows you how. Press Next.",need:{next:1}},
+  {t:"1 · Stock the enemy's shop",x:"This shelf is GROVE's cards. You build two packs of 8 and Grove buys ONE — make packs that look fine but don't work together. Today, just press the highlighted Random fill.",need:{fill:1},sel:".fbar .fchip:nth-last-child(2)",when:()=>S.phase==="stock"},
+  {t:"List an upgrade (required)",x:"You must also list ONE permanent upgrade in Grove's shop. Its price is fixed, and if they buy it the scrap comes to YOU — so pick the one that helps them least. Random fill already listed one (blue box).",need:{next:1},sel:".z-up",when:()=>S.phase==="stock"},
+  {t:"Open the market",x:"Press the green Open the market button.",need:{open:1},sel:"button.btn.primary",when:()=>S.phase==="stock"},
+  {t:"2 · Your shop",x:"Grove stocked two face-down packs of BLIGHT cards for you. The purple ◆ is your META. Press Appraise on Pack B (free today).",need:{appraise:1},sel:".pack:nth-child(2) .btn.ghost",when:()=>S.phase==="market"},
+  {t:"Spot the trap",x:"Pack B is top-heavy with payoffs that need a tribe to feed them. Pack A is cheap and full of Blight tools. Buy PACK A.",need:{buy:0},sel:".pack:nth-child(1) .btn:not(.ghost)",when:()=>S.phase==="market"},
+  {t:"The rest of the depot",x:"Optional extras paid in meta: TONICS improve one card, the VATS roll two cards of a tribe into a random Abomination, GRAFTING turns three into one big card, CRATES give stickers, CUT CARDS removes weak ones. Your deck is listed on the right.",need:{next:1},sel:".menubtns",when:()=>S.phase==="market"},
+  {t:"Begin the fight",x:"Press Begin combat.",need:{begin:1},sel:"button.btn.primary",when:()=>S.phase==="market"},
+  {t:"3 · You move first",x:"Blight usually moves FIRST. Every turn has three steps — see the bar under the title: ① you commit UNITS blind, ② Grove answers with units AND tricks, ③ you get the LAST WORD with tricks. Tricks are locked 🔒 during your troop phase. Press Next.",need:{next:1},sel:".phasebar",when:TCS(1,"place")},
+  {t:"Troop phase",x:"Play GNAWER into MAIN 2. (Your Spore Burst is locked for now — it unlocks in step ③.)",need:{play:["gnawer",2]},sel:HAND,when:TCS(1,"place")},
+  {t:"Commit",x:"Press Commit units. Grove will see your line and answer.",need:{end:1},sel:ENDB,when:TCS(1,"place")},
+  {t:"The last word",x:"Grove answered with a Thornling in Main 2. Now it's YOUR last word — tricks are unlocked, and nothing can answer them. Cast SPORE BURST on MAIN 2 to kill the Thornling.",need:{play:["sporeburst",2]},sel:HAND,when:TCS(1,"tricks")},
+  {t:"Resolve",x:"Press Resolve combat.",need:{end:1},sel:ENDB,when:TCS(1,"tricks")},
+  {t:"Team-up — behind",x:"Your Gnawer pushed Main 2. CRAWLER has TEAM-UP and a death trigger (it bursts for 4 when it dies). Play it into MAIN 2 and choose ▼ Behind — keep it at the back, so it dies when YOU decide.",need:{play:["crawler",2],behind:1},sel:HAND,when:TCS(2,"place")},
+  {t:"Take more ground",x:"Play ROTLING into MAIN 3.",need:{play:["rotling",3]},sel:HAND,when:TCS(2,"place")},
+  {t:"Commit",x:"Press Commit units.",need:{end:1},sel:ENDB,when:TCS(2,"place")},
+  {t:"Nothing left",x:"Grove answered with a Wanderseed (3/3) in Main 2 and a Seedpod in Main 3. You're out of spore, so press Resolve combat.",need:{end:1},sel:ENDB,when:TCS(2,"tricks")},
+  {t:"Infest",x:"The Wanderseed killed your Gnawer but is down to 1 health. LEECHLING is an INFEST card: it goes INSIDE the enemy front unit (−1 attack, 1 damage a turn), drags the lane 5% your way every turn, and bursts out as YOUR unit when the host dies. Play LEECHLING into MAIN 2.",need:{play:["leechling",2]},sel:HAND,when:TCS(3,"place")},
+  {t:"Conjure",x:"Blight makes cards out of nothing. HOARDER GRUB CONJURES a random Rot card into your hand. Play it into MAIN 1.",need:{play:["hoardergrub",1]},sel:HAND,when:TCS(3,"place")},
+  {t:"Commit",x:"Press Commit units.",need:{end:1},sel:ENDB,when:TCS(3,"place")},
+  {t:"Sacrifice",x:"Your last word. BONEPYRE destroys one of YOUR units — and its death trigger fires TWICE. Cast it on MAIN 2: the Crawler bursts for 4, twice, into the infested Wanderseed. (This is your third card this turn, so FLURRY draws you one too.)",need:{play:["bonepyre",2]},sel:HAND,when:TCS(3,"tricks")},
+  {t:"Resolve",x:"The Wanderseed died, and your Leechling burst out of it onto YOUR side. Press Resolve combat.",need:{end:1},sel:ENDB,when:TCS(3,"tricks")},
+  {t:"Your call",x:"Two turns left — play freely. Remember the order: units first, then your last-word tricks. Cards that die, burst or kill earn XP toward permanent ★ veterancy.",need:{free:1},when:()=>S.phase==="combat"&&S.turn>=4&&!S.beat},
+  {t:"Round over!",x:"Units clear between rounds, but your DECK keeps everything — including ★ veterancy from XP. The loser of a round also promotes its two hardest fighters. Win by pushing the front all the way into Grove's home. Open How to play (top right) any time. Good luck!",need:{next:1,last:1},when:()=>S.phase==="roundend"}
+];
+let TUT_PACK_A=TG_PACK_A,TUT_PACK_B=TG_PACK_B,TUT_HAND=TG_HAND,TUT_PILE=TG_PILE,TUT_AI=TG_AI,TUT_STEPS=TG_STEPS;
+function tutUse(k){const g=k!=="blight";TUT.kind=g?"grove":"blight";
+  TUT_PACK_A=g?TG_PACK_A:TB_PACK_A;TUT_PACK_B=g?TG_PACK_B:TB_PACK_B;TUT_HAND=g?TG_HAND:TB_HAND;TUT_PILE=g?TG_PILE:TB_PILE;TUT_AI=g?TG_AI:TB_AI;TUT_STEPS=g?TG_STEPS:TB_STEPS;}
 function tutStep(){return TUT.on?TUT_STEPS[TUT.i]:null;}
 function tutNeed(){const st=tutStep();return st?st.need:null;}
 function tutAdvance(){if(!TUT.on)return;TUT.i++;if(TUT.i>=TUT_STEPS.length)endTutorial();}
@@ -4418,21 +4662,25 @@ function tutAllowPlay(hi,l){
 }
 function tutAfterPlay(id,li){const n=tutNeed();if(TUT.on&&n&&n.play&&n.play[0]===id&&(n.play[1]<0||n.play[1]===li))tutAdvance();}
 function tutAllowEnd(){if(!TUT.on||!S.tut)return true;const n=tutNeed();return !!(n&&(n.end||n.free));}
-function startTutorial(){
+function startTutorial(kind){
+  tutUse(kind);
   MAP_CHOICE="classic";ENV_CHOICE="lawn";CFG_PICK=Object.assign({},CFG_DEFAULT);HERO_CHOICE=null;
-  S=freshState("grove","classic","lawn",CFG_DEFAULT);S.tut=true;TUT.on=true;TUT.i=0;startStock();
+  S=freshState(TUT.kind,"classic","lawn",CFG_DEFAULT);S.tut=true;TUT.on=true;TUT.i=0;startStock();
   S.a.packs=[{cards:TUT_PACK_A.slice(),price:packPrice()},{cards:TUT_PACK_B.slice(),price:packPrice()}];
   S.p.freeAppraise=1;render();
 }
 /* scripted combat setup and Blight moves */
 function tutCombatSetup(){
   S.p.hand=TUT_HAND.slice();S.p.pile=TUT_PILE.slice();S.p.carry=[];
+  S.p.deck=TUT_HAND.concat(TUT_PILE);
   S.a.hand=[];S.a.pile=[];
-  S.lanes[0].terr=terrainByName("Thicket");S.lanes[4].terr=terrainByName("Open Ground");
+  S.lanes[0].terr=terrainByName("Open Ground");S.lanes[4].terr=terrainByName("Thicket");
   S.p.sun=income("p");S.a.sun=0;
 }
 function tutAiPlace(){
-  (TUT_AI[S.turn]||[]).forEach(([id,li])=>{const l=S.lanes[li];if(!laneRoom(l.a))return;const u=mk(id,"a");l.a.push(u);log(FNAME[S.af]+" plays "+C[id].n+" to "+l.nm+".");});
+  (TUT_AI[S.turn]||[]).forEach(([id,li])=>{const l=S.lanes[li];if(!laneRoom(l.a))return;const u=mk(id,"a");
+    if(u.teamup&&l.a.length){l.a.unshift(u);log(FNAME[S.af]+" plays "+C[id].n+" to "+l.nm+" — TEAM-UP: it steps in front.");}
+    else{l.a.push(u);log(FNAME[S.af]+" plays "+C[id].n+" to "+l.nm+".");}});
 }
 function tutAiTricks(){
   if(S.turn===3){const l=S.lanes[1];if(l.p.length){const u=l.p[0];u.weak=(u.weak||0)+2;log(FNAME[S.af]+" casts Witherbreath — "+u.n+" loses 2 attack this turn. That's Blight's last word.",true);}}
@@ -4496,7 +4744,10 @@ function renderPick(st){
   const tut=el("div","panel tutcard");
   const tl=el("div");tl.appendChild(el("h2","","New here?"));tl.appendChild(el("div","tiny muted","Play a guided first round against the AI. It shows you exactly what to press, step by step."));
   tut.appendChild(tl);
-  const tb=el("button","btn primary","Start the tutorial");tb.type="button";tb.addEventListener("click",startTutorial);tut.appendChild(tb);
+  const tbr=el("div","btnrow");
+  const tb=el("button","btn primary","Tutorial as Grove");tb.type="button";tb.addEventListener("click",()=>startTutorial("grove"));tbr.appendChild(tb);
+  const tb2=el("button","btn primary","Tutorial as Blight");tb2.type="button";tb2.addEventListener("click",()=>startTutorial("blight"));tbr.appendChild(tb2);
+  tut.appendChild(tbr);
   st.appendChild(tut);
   const top=el("div","panel");
   top.appendChild(el("h2","","Play"));
@@ -4618,7 +4869,7 @@ function renderStock(st){
     box.addEventListener("click",e=>{if(S.hold&&!e.target.closest(".mini,.qp"))dropInto(pi);});
     const ph=el("div","pack-head");
     ph.appendChild(el("h3","","Pack "+(pi===0?"A":"B")+" · "+pack.cards.length+"/"+PACK_SIZE_REQ));
-    ph.appendChild(el("span","mono tiny",pack.price+" meta"));
+    ph.appendChild(el("span","mono tiny",pack.price+" scrap"));
     box.appendChild(ph);
 
     const sr=el("div","slotrow");
@@ -4700,23 +4951,15 @@ function renderStock(st){
   const ur=el("div","offerrow");
   UPGRADES.filter(u=>!upLvl("a",u.k)).forEach(u=>{
     const sel=S.p.offer&&S.p.offer.k===u.k;
-    const b=el("button","fchip"+(sel?" on":""),u.n+" · "+(sel?S.p.offer.price:u.base));b.type="button";b.title=u.d;
-    b.addEventListener("click",()=>{S.p.offer=sel?null:{k:u.k,price:u.base};render();});ur.appendChild(b);
+    const b=el("button","fchip"+(sel?" on":""),u.n+" · "+upPrice(u));b.type="button";b.title=u.d;
+    b.addEventListener("click",()=>{S.p.offer=sel?null:{k:u.k,price:upPrice(u)};render();});ur.appendChild(b);
   });
   uw.appendChild(ur);
   if(S.p.offer){
     const u=UPGRADES.find(x=>x.k===S.p.offer.k);
-    const lo=Math.max(3,Math.floor(u.base/2)), hi=u.base*2;
-    const stp=el("div","btnrow");
-    uw.appendChild(el("div","tiny",u.d));
-    const dn=el("button","btn ghost","−");dn.type="button";dn.disabled=S.p.offer.price<=lo;
-    dn.addEventListener("click",()=>{S.p.offer.price=Math.max(lo,S.p.offer.price-1);render();});
-    const up=el("button","btn ghost","+");up.type="button";up.disabled=S.p.offer.price>=hi;
-    up.addEventListener("click",()=>{S.p.offer.price=Math.min(hi,S.p.offer.price+1);render();});
-    stp.appendChild(dn);stp.appendChild(el("b","mono",S.p.offer.price+" meta"));stp.appendChild(up);
-    stp.appendChild(el("span","tiny muted","price "+lo+"–"+hi+" · you get the meta if they buy"));
-    uw.appendChild(stp);
-  } else uw.appendChild(el("div","tiny muted","Pick the one that helps them least. You set the price; if they buy it, the meta is yours."));
+    S.p.offer.price=upPrice(u);
+    uw.appendChild(el("div","tiny",u.d+" Fixed price: "+S.p.offer.price+" scrap — you get it if they buy."));
+  } else uw.appendChild(el("div","tiny muted","Pick the one that helps them least. The price is fixed; if they buy it, the scrap is yours."));
 
   const row=el("div","btnrow");row.style.marginTop="14px";
   const goB=el("button","btn primary",mpOn()?(S.p.submitted?"Waiting for "+FNAME[S.af]+"…":"Lock in your packs"):"Open the market");
@@ -4729,7 +4972,7 @@ function renderStock(st){
   else if(!stockReady())row.appendChild(el("span","tiny muted","Now list one upgrade for them (left) — it's required."));
   else if(!mpOn())row.appendChild(el("span","tiny muted",(()=>{
     const want=needWord(S.a.deck);
-    return FNAME[S.af]+" holds "+S.a.meta+" meta"+(want?", and is short on "+want:"")+".";
+    return FNAME[S.af]+" holds "+S.a.meta+" scrap"+(want?", and is short on "+want:"")+".";
   })()));
   const cols=el("div","phasecols");
   const cL=el("div","pcol scroll"),cR=el("div","pcol shelfcol");
@@ -4769,7 +5012,7 @@ function quickPlace(pi,mode){
 function renderMarket(st){
   const p=el("div","panel"),h=el("div","panel-head"),hl=el("div");
   const mh=el("div","handhead");mh.appendChild(el("h2","",FNAME[S.af]+"'s depot"));
-  const mp=el("span","respill meta");mp.appendChild(document.createTextNode("◆"));mp.appendChild(el("b",null,String(S.p.meta)));mp.appendChild(document.createTextNode("meta to spend"));mh.appendChild(mp);
+  const mp=el("span","respill meta");mp.appendChild(document.createTextNode("◆"));mp.appendChild(el("b",null,String(S.p.meta)));mp.appendChild(document.createTextNode("scrap to spend"));mh.appendChild(mp);
   hl.appendChild(mh);
   hl.appendChild(el("div","tiny muted","Buy ONE pack of "+FNAME[S.pf]+" cards they chose for you. What you pay goes to them."));
   h.appendChild(hl);p.appendChild(h);
@@ -4778,7 +5021,7 @@ function renderMarket(st){
   S.a.packs.forEach((pack,pi)=>{
     const box=el("div","pack solid"),ph=el("div","pack-head");
     ph.appendChild(el("h3","","Pack "+(pi===0?"A":"B")));
-    ph.appendChild(el("span","mono tiny",pack.price+" meta"));
+    ph.appendChild(el("span","mono tiny",pack.price+" scrap"));
     box.appendChild(ph);
     /* Face down, always. The free read is the shape of the pack (tricks, curve,
        dead weight); a paid appraisal reads its SYNERGY and its main tribe. */
@@ -4821,7 +5064,7 @@ function renderMarket(st){
     const rr=refusalRubble(S.a.packs[0]?S.a.packs[0].price:packPrice(),"p");
     const wn=el("div","penalty");
     wn.appendChild(el("b",null,"⚠ Skip both packs and "+rr+" Rubble go into your deck."));
-    wn.appendChild(el("span",null," Rubble is a dead card: it clogs your draws every round until you pay to cut it. You keep your meta, but you get no new cards."));
+    wn.appendChild(el("span",null," Rubble is a dead card: it clogs your draws every round until you pay to cut it. You keep your scrap, but you get no new cards."));
     p.appendChild(wn);
   }
   p.appendChild(el("hr","sep"));
@@ -4830,7 +5073,7 @@ function renderMarket(st){
   const isGrove=S.pf==="grove";
   fw.appendChild(el("div","eyebrow",isGrove?"Workshop · Cross-breeding":"Workshop · The vats"));
   fw.appendChild(el("div","tiny muted",isGrove
-    ? "Grove CROSS-BREEDS: two copies of a base card become one Hybrid. A Hybrid that takes damage drops a tier instead of dying. Recipes: 2× Thornling → Bramblejack (3) · 2× Bramblejack → Thornwarden (7)."
+    ? "Grove CROSS-BREEDS: two copies of a base card become one Hybrid. A Hybrid that takes damage drops a tier instead of dying. Recipes: "+Object.keys(C).filter(k=>C[k].fuse&&C[k].s==="grove"&&!k.includes("~")).map(k=>"2× "+C[k].n+" → "+C[C[k].fuse].n+" ("+fuseCost(k)+")").join(" · ")+"."
     : "Blight EXPERIMENTS: feed the vats any two cards of one tribe and roll the table. Cheaper than fusing, and you can pay to roll again."));
   const fr=el("div","btnrow");fr.style.marginTop="8px";
   if(isGrove){
@@ -4840,7 +5083,7 @@ function renderMarket(st){
       const b=el("button","btn ghost","Cross-breed 2× "+C[id].n+" → "+C[C[id].fuse].n+" · "+c);b.type="button";
       b.disabled=S.p.meta<c;b.addEventListener("click",()=>doFuse(id));fr.appendChild(b);
     });
-    else fr.appendChild(el("span","tiny muted","Nothing to cross-breed yet — you need two Thornlings (or two Bramblejacks) in your deck."));
+    else fr.appendChild(el("span","tiny muted","Nothing to cross-breed yet — you need two copies of one of the base cards above."));
   } else if(S.p.pending){
     const r=C[S.p.pending.res];
     const box=el("div","pack solid");box.style.marginTop="4px";box.style.width="100%";
@@ -4864,23 +5107,21 @@ function renderMarket(st){
 
   if(!isGrove){
     const od=el("div","odds");od.style.marginTop="8px";
-    od.appendChild(el("div","tiny muted","The vats roll this table. Two cards of one tribe and "+EXP_COST+" meta buys one roll; "+REROLL_COST+" more rolls again, as often as you can pay."));
-    const tbl=el("div","oddsgrid");
-    EXPERIMENT_TABLE.forEach(e=>{
-      const c=C[e.id], row=el("div","oddsrow");
-      row.appendChild(el("span","op",Math.round(e.w*100/EXP_TOTAL)+"%"));
-      row.appendChild(el("span","on",c.n));
-      row.appendChild(el("span","os",c.a+"/"+c.h));
-      bindTip(row,e.id);
-      tbl.appendChild(row);
-    });
-    od.appendChild(tbl);
+    od.appendChild(el("div","tiny muted","WHAT you feed the vats decides the table. Two cards of one tribe and "+EXP_COST+" scrap buys one roll; "+REROLL_COST+" more rolls again, as often as you can pay."));
+    const tabs=canExperiment(S.p.deck);const show=(tabs.length?tabs:["Rot","Spore","Bone","Ichor"]).filter(t=>EXP_TABLES[t]);
+    show.forEach(tg=>{
+      od.appendChild(el("div","eyebrow",tg+" in → "));
+      const tbl=el("div","oddsgrid");const t=expTable(tg),tot=t.reduce((a,e)=>a+e.w,0);
+      t.forEach(e=>{const c=C[e.id],row=el("div","oddsrow");
+        row.appendChild(el("span","op",Math.round(e.w*100/tot)+"%"));row.appendChild(el("span","on",c.n));row.appendChild(el("span","os",c.a+"/"+c.h));
+        bindTip(row,e.id);tbl.appendChild(row);});
+      od.appendChild(tbl);});
     fw.appendChild(od);
   }
 
   /* graft — both factions */
   const gw=el("div");gw.style.marginTop="12px";
-  gw.appendChild(el("div","eyebrow","Graft · "+GRAFT_COST+" meta · three cards of one tribe become one big body"));
+  gw.appendChild(el("div","eyebrow","Graft · "+GRAFT_COST+" scrap · three cards of one tribe become one big body"));
   const how=el("div","howto");
   how.appendChild(el("div",null,"How it works: pick a tribe you have 3+ units of. Your 3 CHEAPEST units of that tribe leave your deck, and one big card of that tribe takes their place. Your deck gets smaller and stronger — you draw your best cards more often."));
   gw.appendChild(how);
@@ -4892,7 +5133,7 @@ function renderMarket(st){
     ins.forEach((o,k)=>{if(k)rec.appendChild(el("span","rop","+"));const c=el("span","rchip",C[o.id].n+" "+C[o.id].a+"/"+C[o.id].h);bindTip(c,o.id,true);rec.appendChild(c);});
     rec.appendChild(el("span","rop","→"));
     const out=el("span","rchip rout",r.n+" "+r.a+"/"+r.h);bindTip(out,"graft_"+t,true);rec.appendChild(out);
-    const b=el("button","btn primary","Graft · "+GRAFT_COST+" meta");b.type="button";
+    const b=el("button","btn primary","Graft · "+GRAFT_COST+" scrap");b.type="button";
     b.disabled=S.p.meta<GRAFT_COST||(mpOn()&&S.p.submitted);b.addEventListener("click",()=>doGraft(t));rec.appendChild(b);
     grow.appendChild(rec);});
   else grow.appendChild(el("span","tiny muted","You need three units sharing a tribe."));
@@ -4918,14 +5159,14 @@ function renderMarket(st){
   if(CFG.tonics)fw.appendChild(tw);
   /* sticker book */
   const cw=el("div");cw.style.marginTop="14px";
-  cw.appendChild(el("div","eyebrow","Sticker book · crate "+CRATE_COST+" meta · three pieces"));
+  cw.appendChild(el("div","eyebrow","Sticker book · crate "+CRATE_COST+" scrap · three pieces"));
   const crow=el("div","btnrow");crow.style.marginTop="8px";
   const cb=el("button","btn ghost","Open a crate · "+CRATE_COST);cb.type="button";
   cb.disabled=S.p.meta<CRATE_COST||(mpOn()&&S.p.submitted)||bookFull("p");
   if(bookFull("p"))cb.textContent="Book complete";
   cb.addEventListener("click",()=>{openCrate("p");render();});
   crow.appendChild(cb);
-  crow.appendChild(el("span","tiny muted","Perk pieces work at once, a level each. Companions join as rookies one piece short of complete, and deploy free once a round. A piece for a full set pays 1 meta back."));
+  crow.appendChild(el("span","tiny muted","Perk pieces work at once, a level each. Companions join as rookies one piece short of complete, and deploy free once a round. A piece for a full set pays 1 scrap back."));
   cw.appendChild(crow);
   if(S.p.lastCrate)cw.appendChild(el("div","read","Last crate: "+S.p.lastCrate.join(" · ")));
   if(S.p.lastCrate)cw.insertBefore(cw.lastChild,crow.nextSibling);
@@ -4960,7 +5201,7 @@ function renderMarket(st){
     const box=el("div","pack solid");box.style.marginTop="8px";
     const ph=el("div","pack-head");
     ph.appendChild(el("h3","",u.n));
-    ph.appendChild(el("span","mono tiny",cost+" meta"));
+    ph.appendChild(el("span","mono tiny",cost+" scrap"));
     box.appendChild(ph);
     box.appendChild(el("div","tiny",u.d+" Permanent, one-time."));
     const r=el("div","btnrow");
@@ -5016,14 +5257,14 @@ function renderMarket(st){
     if(!seen&&!(TUT.on&&S.tut)){const tip=el("div","worktip");tip.appendChild(el("b",null,"New: you can combine cards!"));
       tip.appendChild(el("span",null," You have enough cards of one kind to "+(canGraft().length?"GRAFT three into one big card":"combine them")+". Open the "+(S.pf==="grove"?"Workshop":"vats")+" to see the recipe."));mb.appendChild(tip);}}
   let stkBtn=null;
-  if(CFG.stickers){const cb2=mbtn("🎁 Buy a crate",bookFull("p")?"book complete":CRATE_COST+" meta · 3 random pieces",()=>{const g=openCrate("p");if(g)openModal({kind:"stickers"});else render();},S.p.meta<CRATE_COST||bookFull("p")||(mpOn()&&S.p.submitted),"m-crate");}
-  if(CFG.stickers)stkBtn=mbtn("⭐ Sticker book","crate "+CRATE_COST+" meta · "+(bookFull("p")?"complete":"3 pieces"),()=>openModal({kind:"stickers"}),false,"m-stick");
+  if(CFG.stickers){const cb2=mbtn("🎁 Buy a crate",bookFull("p")?"book complete":CRATE_COST+" scrap · 3 random pieces",()=>{const g=openCrate("p");if(g)openModal({kind:"stickers"});else render();},S.p.meta<CRATE_COST||bookFull("p")||(mpOn()&&S.p.submitted),"m-crate");}
+  if(CFG.stickers)stkBtn=mbtn("⭐ Sticker book","crate "+CRATE_COST+" scrap · "+(bookFull("p")?"complete":"3 pieces"),()=>openModal({kind:"stickers"}),false,"m-stick");
   if(CFG.stickers){
     const sets=stickerSets(S.pf),bk=S.p.book||{};
     const done=sets.filter(x=>(bk[x.k]||0)>=x.need).length,started=sets.filter(x=>bk[x.k]).length;
     if(stkBtn&&stkBtn.querySelector){const sp=stkBtn.querySelector("span");if(sp)sp.textContent=done+" done · "+started+" started · crate "+CRATE_COST;}
   }
-  mbtn("✂ Cut cards",S.p.freeThin?"1 free cut":"next cut "+thinCost()+" meta",()=>openModal({kind:"thin"}),mpOn()&&S.p.submitted,"m-cut");
+  mbtn("✂ Cut cards",S.p.freeThin?"1 free cut":"next cut "+thinCost()+" scrap",()=>openModal({kind:"thin"}),mpOn()&&S.p.submitted,"m-cut");
   const mw=el("div");mb.style.marginTop="0";mw.appendChild(mb);
   cR.appendChild(mw);
   const cols=el("div","phasecols");cols.appendChild(cL);cols.appendChild(cR);
@@ -5044,6 +5285,12 @@ function renderCombat(st){
     ? (sub==="place"?them+" is committing units":(sub==="respond"?them+" is answering":them+" has the last word"))
     : (sub==="place"?"Commit units":(sub==="respond"?"Your move — units and tricks":"Last word — tricks only"));
   hl.appendChild(el("h2","","Turn "+S.turn+" of "+TURNS+" · "+label));
+  /* the order of play this turn, with where we are now */
+  {const fm=firstMoverFaction?firstMoverFaction():(playerMovesFirst()?S.pf:S.af),sm=fm===S.pf?S.af:S.pf;
+   const steps=[[FNAME[fm]+" commits units","place"],[FNAME[sm]+" answers · units + tricks","respond"],[FNAME[fm]+" last word · tricks","tricks"],["⚔ Fight","fight"]];
+   const cur=S.beat&&/resolv|Fighting/i.test(S.beat)?"fight":sub;
+   const tl=el("div","phasebar");steps.forEach(([t,k],i)=>{const st=el("span","ph"+(k===cur?" now":"")+((steps.findIndex(x=>x[1]===cur)>i)?" done":""),(i+1)+" "+t);tl.appendChild(st);});
+   hl.appendChild(tl);}
   const blurb=waiting
     ? (sub==="place"
         ? them+" commits blind. You will see their whole line, then answer with units AND tricks."
@@ -5114,13 +5361,15 @@ function renderCombat(st){
     const d=C[id];
     const wrongPhase=d.trick?!trickPhase:(sub==="tricks");
     const unplayable=waiting||d.junk||costOf(id,"p")>S.p.sun||wrongPhase;
+    const locked=d.trick&&!trickPhase;
     const c=cardEl(id,{who:"p",picked:S.sel===i,onClick:waiting?null:()=>{S.selMinion=null;S.sel=S.sel===i?null:i;render();}});
+    if(locked){c.classList.add("locked");c.appendChild(el("div","lockt","🔒 after your troop phase"));}
     if(unplayable)c.style.opacity=".5";   // dimmed, but still selectable so you can scrap it
     else{
       c.draggable=true;
       c.addEventListener("dragstart",e=>{DRAG.hi=i;hideTip();c.classList.add("dragging");
         try{e.dataTransfer.setData("text/plain",String(i));e.dataTransfer.effectAllowed="move";}catch(x){}
-        document.querySelectorAll(".lane[data-li]").forEach(L=>{const l=S.lanes[+L.dataset.li];if(l&&canTarget(i,l))L.classList.add("droptarget");});});
+        document.querySelectorAll(".lane[data-li]").forEach(L=>{const l=S.lanes[+L.dataset.li];if(l&&canTarget(i,l)){L.classList.add("droptarget");const pb=prevBadge(i,l,"drag");if(pb)L.appendChild(pb);}});});
       c.addEventListener("dragend",dragClear);
     }
     bindTip(c,id,false,()=>deckStats(id,"p"));cs.appendChild(c);
@@ -5128,14 +5377,16 @@ function renderCombat(st){
   if(!S.p.hand.length)cs.appendChild(el("span","tiny muted","Nothing in hand. Buy packs next round — your deck is how you fight."));
   hw.appendChild(cs);
   const act=el("div","btnrow");act.style.marginTop="10px";
-  if(S.sel!=null&&!waiting){
+  if(S.sel!=null&&!waiting&&C[S.p.hand[S.sel]]&&C[S.p.hand[S.sel]].trick&&!trickPhase){
+    act.appendChild(el("span","lockmsg","🔒 Tricks can only be used after your troop phase — commit your units first, then you get the last word."));
+  } else if(S.sel!=null&&!waiting){
     act.appendChild(el("span","tiny muted","Click a highlighted lane to play it, or —"));
-    const sc=el("button","btn ghost","Scrap for 2 sun");sc.type="button";
+    const sc=el("button","btn ghost","Recycle for 2 "+FRES[S.pf]);sc.type="button";
     sc.disabled=S.p.discarded||sub==="tricks";
     sc.addEventListener("click",()=>scrap(S.sel));
     act.appendChild(sc);
   }
-  if(S.p.discarded&&sub!=="tricks"&&!waiting)act.appendChild(el("span","tiny muted","Already scrapped a card this turn."));
+  if(S.p.discarded&&sub!=="tricks"&&!waiting)act.appendChild(el("span","tiny muted","Already recycled a card this turn."));
   hw.appendChild(act);
   /* hero */
   const hh=heroOf("p");
@@ -5192,7 +5443,7 @@ function renderOver(st){
   inner.appendChild(el("p","oversub",win?("You pushed the front off their end. "+FNAME[S.pf]+" takes Neighborville."):(FNAME[S.af]+" drove you out of Neighborville.")));
   const vets=Object.keys(S.p.vet||{}).filter(k=>S.p.vet[k]>0).length;
   const sets=CFG.stickers?stickerSets(S.pf).filter(x=>((S.p.book||{})[x.k]||0)>=x.need).length:0;
-  const stats=[["Rounds",S.round],["Your deck",S.p.deck.length+" cards"],["Veteran cards",vets],["Cards cut",S.p.cutsTotal||0],["Sticker sets done",sets],["Meta left",S.p.meta]];
+  const stats=[["Rounds",S.round],["Your deck",S.p.deck.length+" cards"],["Veteran cards",vets],["Cards cut",S.p.cutsTotal||0],["Sticker sets done",sets],["Scrap left",S.p.meta]];
   const g=el("div","overstats");stats.forEach(([k,v])=>{const c=el("div");c.appendChild(el("b",null,String(v)));c.appendChild(el("span",null,k));g.appendChild(c);});
   inner.appendChild(g);
   const row=el("div","btnrow");row.style.justifyContent="center";
@@ -5213,7 +5464,7 @@ function renderDeck(){
   const d=$("decklist");d.innerHTML="";
   $("deckCount").textContent=S.p.deck.length;
   if(!S.p.deck.length){d.appendChild(el("span","tiny muted","Empty. Everything you fight with must be bought from the enemy's depot."));return;}
-  d.appendChild(el("div","read deckinfo","Cuts made this match: "+(S.p.cutsTotal||0)+" · next cut "+thinCost()+" meta · tonics bought: "+(S.p.tonicsBought||0)+" (next +"+tonicSurcharge("p")+")."));
+  d.appendChild(el("div","read deckinfo","Cuts made this match: "+(S.p.cutsTotal||0)+" · next cut "+thinCost()+" scrap · tonics bought: "+(S.p.tonicsBought||0)+" (next +"+tonicSurcharge("p")+")."));
   const canThin=S.phase==="market"&&(S.p.freeThin>0||S.p.meta>=thinCost());
   // group by tribe, then by card, with counts
   const groups={};
@@ -5238,7 +5489,8 @@ function renderDeck(){
       row.appendChild(el("span","dmul","×"+groups[t][id]));
       const vn=vet("p",id), md=cardMods("p",id), lbl=modLabel(md);
 
-      row.appendChild(el("span","dnm",C[id].n+(vn?" \u2605"+vn:"")+(lbl?" · "+lbl:"")));
+      const xpn=xpOf("p",id);
+      row.appendChild(el("span","dnm",C[id].n+(vn?" \u2605"+vn:"")+(xpn?" · "+xpn+"/"+XP_PER+"xp":"")+(lbl?" · "+lbl:"")));
       row.appendChild(el("span","dcost",C[id].junk?"—":String(C[id].c)));
       bindTip(row,id,false,()=>deckStats(id,"p"));
       if(false){
@@ -5284,7 +5536,7 @@ const KEYWORDS=[
     ["Brood / Hive","Brood: draw on play if you already have 3+ units on the board. Hive: an extra draw each turn while you have 5+ units out."],
     ["Conjure","Creates random cards straight into your hand — they aren't drawn from your deck."],
     ["Swarm cost","Chittering Host costs 1 less for every unit you have on the board."],
-    ["Infest","Played onto the enemy front unit. Weakens, damages or milks it — and bursts out on your side when it dies."],
+    ["Infest","Play it INTO an enemy unit you choose. While inside it drags that lane 5% your way each turn. It bursts out as your unit when the host dies, or after 2 turns anyway — +1/+1 for every 3 health the host had."],
     ["Sacrifice","Destroy your own unit on purpose to fire its death trigger."]]},
   {g:"Shared terms",b:"",items:[
     ["Aura / Scaling","Buffs its tribe in the lane / grows per tribe member you control. Both have 0 attack alone."],
@@ -5296,15 +5548,15 @@ const KEYWORDS=[
     ["Window","Playable only on early turns, or only from turn 4."],
     ["Token","A summoned Sprout. Counts half when capturing."],
     ["Resonance","3+ copies of a card costing 3 or less: all get +1/+1. 5+: +2/+2. Workshop cards never resonate."],
-    ["Hybrid","A cross-bred card. Damage knocks it down a tier instead of killing it."],
-    ["Veteran ★N","Survived N rounds: PERMANENTLY +N/+N. Caps at +3 for 1–2 costs, +2 for 3–4, +1 for 5+ and workshop cards."],
+    ["Hybrid","A cross-bred card. It keeps the tribe it came from, and damage knocks it down a tier instead of killing it."],
+    ["Veteran ★N","PERMANENTLY +N/+N. Cards earn XP by doing their job — surviving a round (3 XP), kills (1 each), holding the line as a wall (1), pushing a lane 10%+ (1), firing a death trigger (1), a parasite bursting out (1). Every 4 XP is a ★. Caps at +2 (cost 4 or less) or +1 (5+ and workshop cards). Cards with 0 attack only gain health."],
     ["Cost reducer","While it lives, cards of one tribe (or your tricks) cost 1 less."],
     ["Scaling","PERMANENTLY grows the card in your deck each time its condition happens. Starts weak."],
     ["PERMANENTLY","Always means the card in your deck. Every other buff lasts until the round ends."]]},
   {g:"Lanes & the front",b:"",items:[
     ["Capture %","Units alone in a lane push its bar by their total attack × total health each turn (two 2/2s = 4×4 = 16%). Flanks move 1.6× faster."],
     ["Held (20%)","Counts toward winning the round."],
-    ["Flank sector","Hold a flank (or 2 of a wide sector's 3) at the end of a round: +3 meta each, and if main lanes are level, whoever holds more sectors wins the round."],
+    ["Flank sector","Hold a flank (or 2 of a wide sector's 3) at the end of a round: +3 scrap each, and if main lanes are level, whoever holds more sectors wins the round."],
     ["Captured (60%)","Leaves a garrison for next round; a captured flank's sneak attack hits at full strength."],
     ["Sneak attack","Hold a flank (20%+) and your units there hit the enemy's REAR unit in the main lane beside it each turn it is contested — half their attack, or all of it once the flank is captured."],
     ["Cut off","If the enemy holds the main lane next to your flank, your units on that flank lose 1 health every turn."],
@@ -5321,13 +5573,13 @@ const KEYWORDS=[
   {g:"Shop & deck",b:"",items:[
     ["Fixed prices","Packs cost 6, 9, 12… for both sides. The seller receives three quarters; the depot keeps the rest."],
     ["Appraise","2 meta: a rough synergy read and the pack's main tribe."],
-    ["Refusing","Take neither pack: keep your meta, but Rubble goes into your deck."],
+    ["Refusing","Take neither pack: keep your scrap, but Rubble goes into your deck."],
     ["Tonic","Take one of three per round. Changes every copy of that card in your deck. Each purchase makes the next +2."],
-    ["Cutting","3 meta, +3 per extra cut that round, +1 for every real card you've ever cut."],
+    ["Cutting","3 scrap, +3 per extra cut that round, +1 for every real card you've ever cut."],
     ["Upgrade","Permanent. Your opponent chooses which one you're offered and its price."],
     ["Cross-breed (Grove)","At the workshop: two Thornlings → a Bramblejack, two Bramblejacks → a Thornwarden. Different from Fusion bases, which merge on the board."],
-    ["Experiment (Blight)","Two cards of one tribe + 4 meta → a random Abomination. Reroll for 2."],
-    ["Graft","Three cards of one tribe + 5 meta → one big body that keeps the tribe."],
+    ["Experiment (Blight)","Two cards of one tribe + 4 scrap → a random Abomination. Reroll for 2."],
+    ["Graft","Three cards of one tribe + 5 scrap → one big body that keeps the tribe."],
     ["Sticker book","Crates give pieces. Perks level up per piece; companions join one piece early as rookies."]]}
 ];
 let kwDone=false;
@@ -5355,9 +5607,9 @@ const RV={side:"mine",q:"",tribe:"all"};
 function rosterIds(fac){
   const uniq=a=>a.filter((v,i)=>a.indexOf(v)===i);
   const extras={
-    grove:["bramblejack","thornwarden","graft_Thorn","graft_Root","graft_Flower","graft_Aquatic"].concat(MINIONS.grove),
-    blight:["abom_runt","abom_brute","abom_horror","abom_titan","abom_lurker","abom_glutton","abom_perfect","abom_apex",
-            "graft_Rot","graft_Spore","graft_Bone","graft_Ichor"].concat(MINIONS.blight)};
+    /* everything the workshop / vats can make, found from the card table itself */
+    grove:Object.keys(C).filter(k=>C[k].s==="grove"&&(isT(C[k],"Hybrid")||k.startsWith("graft_"))&&!k.includes("~")).concat(MINIONS.grove),
+    blight:Object.keys(C).filter(k=>C[k].s==="blight"&&(isT(C[k],"Abomination")||k.startsWith("graft_"))&&!k.includes("~")).concat(MINIONS.blight)};
   return uniq(POOL[fac]).concat(extras[fac]);
 }
 let rosterKey=null;
@@ -5442,14 +5694,33 @@ function act(fn){
   const pre=snapBoard();
   ANIM.lock=true;
   try{fn();}finally{ANIM.lock=false;}
+  try{if(mpOn()&&S.phase==="combat"&&mpIsMyTurn()&&!MP.pushing)mpLivePush();}catch(e){}
   return animateFrom(pre);
 }
 function q(sel){try{return document.querySelector(sel);}catch(e){return null;}}
 function fxNum(node,txt,cls){if(!node)return;const f=el("div","fxnum "+cls,txt);node.appendChild(f);}
+/* A cast trick flashes its name over the lane it hit. Works for your tricks, the
+   AI's, and the other player's in multiplayer (read from the new log lines). */
+function trickFx(lines){
+  if(!canAnim()||REDUCED)return;
+  lines.forEach((e,k)=>{const m=/^(You cast|.+? casts) ([^—.]+?)(?: in | on | — |\.|$)/.exec(e.msg||"");if(!m)return;
+    const name=m[2].trim();const mine=m[1]==="You cast";
+    let li=e.li!=null?e.li:-1;if(li<0)S.lanes.forEach((l,i)=>{if(li<0&&(e.msg||"").indexOf(l.nm)>=0)li=i;});
+    setTimeout(()=>{
+      const L=li>=0?q('.lane[data-li="'+li+'"]'):q("#stage .phase .board");
+      const r=L?L.getBoundingClientRect():{left:innerWidth/2-100,top:innerHeight/2-40,width:200,height:80};
+      const f=el("div","trickfx "+(mine?"mine":"theirs"),"✦ "+name);document.body.appendChild(f);
+      f.style.left=(r.left+r.width/2)+"px";f.style.top=(r.top+Math.min(r.height*0.35,160))+"px";
+      if(L){L.classList.add("trickflash");setTimeout(()=>L.classList.remove("trickflash"),900);}
+      sfx("trick",true);setTimeout(()=>f.remove(),1300);
+    },k*350);
+  });
+}
 function animateFrom(pre){
   if(canAnim()&&!REDUCED&&(S.resolveTick||0)!==(pre.rt||0)&&(S.phase==="combat"||S.phase==="roundend"))return animateLanes(pre);
   const newLines=visibleLog().filter(e=>(e.n||0)>pre.logN);
   if(newLines.length)S.feed=newLines.slice(-16);
+  setTimeout(()=>trickFx(newLines.filter(e=>/\bcasts?\b/.test(e.msg||""))),60);
   if(!canAnim()||S.phase!=="combat"&&S.phase!=="roundend"){ANIM.pending=false;renderNow();return 0;}
   const post=snapBoard();
   const hurt=[],heal=[],dead=[],born=[],buff=[];
@@ -5504,6 +5775,24 @@ function animateFrom(pre){
 /* Combat plays out ONE LANE AT A TIME: the lane lights up, its fight and its
    capture bar play, the feed shows only that lane's lines, then the next lane. */
 const LANE_MS={clash:2300,push:1200};
+/* a flanker swings round from the flank into the back of the main lane */
+function sneakFx(li){
+  try{
+    const l=S.lanes[li];if(!l||!l.adj)return;
+    const src=S.lanes.map((x,i)=>({x,i})).filter(o=>o.x.flank&&o.x.sector===l.adj).map(o=>q('.lane[data-li="'+o.i+'"]')).find(Boolean);
+    const dst=q('.lane[data-li="'+li+'"] .lane-side.top')||q('.lane[data-li="'+li+'"]');
+    if(!dst)return;
+    const b=dst.getBoundingClientRect();
+    const a=src?src.getBoundingClientRect():{left:l.adj==="L"?0:window.innerWidth,top:b.top,width:0,height:b.height};
+    if(src)src.classList.add("sneakfrom");
+    const f=el("div","sneakfx","🗡 SNEAK ATTACK");document.body.appendChild(f);
+    const fx=a.left+a.width/2,fy=a.top+a.height*0.35,tx=b.left+b.width/2,ty=b.top+b.height*0.5;
+    f.style.left=(fx-70)+"px";f.style.top=(fy-14)+"px";
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{f.style.transform="translate("+(tx-fx)+"px,"+(ty-fy)+"px) rotate("+(l.adj==="L"?8:-8)+"deg) scale(1.1)";}));
+    setTimeout(()=>{f.style.opacity="0";},900);setTimeout(()=>{f.remove();if(src)src.classList.remove("sneakfrom");},1300);
+    setTimeout(()=>sfx("trick",true),150);
+  }catch(e){}
+}
 function animateLanes(pre){
   const newLines=visibleLog().filter(e=>(e.n||0)>pre.logN);
   const real=S.lanes, post=snapBoard(), keepBeat=S.beat;
@@ -5529,8 +5818,10 @@ function animateLanes(pre){
     const hasHits=hurt.length||dead.length;
     /* stage A — the lane before it fights */
     setTimeout(()=>{
+      if(real.length>5){const L=real[o.li];UI.pan=L.flank?L.sector:"M";}
       S.lanes=hybrid(o.li,"pre");S.feed=o.lines.length?o.lines:[{msg:nm+" — nothing to fight.",n:0}];
       S.beat="Fighting in "+nm+"…";renderNow();S.lanes=real;light(o.li);
+      if(o.lines.some(e=>/SNEAK ATTACK/.test(e.msg||"")))sneakFx(o.li);
       if(!hasHits)return;
       const L=q('.lane[data-li="'+o.li+'"]');if(L&&o.clash)L.classList.add("clash");
       setTimeout(()=>{
@@ -5595,7 +5886,7 @@ function fitOverflow(){
   const st=$("stage");if(!st)return false;
   const ph=st.querySelector(":scope>.panel.phase");
   if(ph&&ph.scrollHeight>ph.clientHeight+2)return true;
-  if(ph&&[...ph.querySelectorAll(".pcol.scroll")].some(c=>c.scrollHeight>c.clientHeight+2))return true;
+  if(ph&&[...ph.querySelectorAll(".pcol.scroll,.shelfcol .cards")].some(c=>c.scrollHeight>c.clientHeight+2))return true;
   return st.scrollHeight>st.clientHeight+2&&!document.body.classList.contains("pick");
 }
 function fitNow(){
@@ -5616,13 +5907,13 @@ function applyLayout(){
   if(!FIT.key)setZoom(fitZoom());
   body.classList.toggle("pick",S.phase==="pick"&&!S.over);
   const narrow=FIT.W<1080;
-  const openL=railPref("L2"+(narrow?"n":""),!narrow&&FIT.W>=1500),openR=railPref("R2"+(narrow?"n":""),!narrow);
+  const openL=railPref("L3"+(narrow?"n":""),!narrow&&FIT.W>=1180),openR=railPref("R2"+(narrow?"n":""),!narrow);
   const build=(rail,side,open,label,kids)=>{
     rail.classList.toggle("collapsed",!open);
     let tog=rail.querySelector(".railtog"),body2=rail.querySelector(".railbody");
     if(!tog){tog=document.createElement("button");tog.type="button";tog.className="railtog";rail.appendChild(tog);
       body2=document.createElement("div");body2.className="railbody";rail.appendChild(body2);
-      tog.addEventListener("click",()=>{const now=rail.classList.contains("collapsed");setRailPref(side+"2"+(FIT.W<1080?"n":""),now);render();});}
+      tog.addEventListener("click",()=>{const now=rail.classList.contains("collapsed");setRailPref(side+(side==="L"?"3":"2")+(FIT.W<1080?"n":""),now);render();});}
     tog.textContent=open?(side==="L"?"◀ Hide ":"Hide ▶ ")+label:(side==="L"?"▶ ":"◀ ")+label;
     kids.forEach(k=>{if(k)body2.appendChild(k);});
   };
@@ -5633,7 +5924,7 @@ function applyLayout(){
   build(Rr,"R",openR,"Your deck",[deckP]);
 }
 /* ---- menus that open over the page: tonics, cutting, your deck ---- */
-const UI={modal:null,lastTonic:null,nodes:null};
+const UI={modal:null,lastTonic:null,nodes:null,pan:"M"};
 function openModal(m){UI.modal=m;UI.lastTonic=null;render();}
 function closeModal(){UI.modal=null;render();}
 function deckGroups(w){
@@ -5663,7 +5954,7 @@ function renderModal(){
   const box=el("div","mbox");m.appendChild(box);
   const head=el("div","mhead"),x=el("button","btn ghost","✕");x.type="button";x.addEventListener("click",closeModal);
   const mm=UI.modal,body=el("div","mbody");
-  const meta=el("span","respill meta");meta.appendChild(document.createTextNode("◆"));meta.appendChild(el("b",null,String(S.p.meta)));meta.appendChild(document.createTextNode("meta"));
+  const meta=el("span","respill meta");meta.appendChild(document.createTextNode("◆"));meta.appendChild(el("b",null,String(S.p.meta)));meta.appendChild(document.createTextNode("scrap"));
   const grid=el("div","dgrid");
   if(mm.kind==="tonic"){
     const t=tonicDef(mm.k),off=(S.p.tonics||[]).find(o=>o.k===mm.k),price=tonicPrice(t);
@@ -5672,7 +5963,7 @@ function renderModal(){
     if(mm.step==="info"){
       const why=off.taken?"You already used this one.":(S.p.tonicUsed?"One tonic per round — you've had yours.":(S.p.meta<price?"You need "+price+" meta.":null));
       const row=el("div","btnrow");
-      const buy=el("button","btn primary",t.purge?"Buy and purge · "+price:"Buy · "+price+" meta");buy.type="button";buy.disabled=!!why||(mpOn()&&S.p.submitted);
+      const buy=el("button","btn primary",t.purge?"Buy and purge · "+price:"Buy · "+price+" scrap");buy.type="button";buy.disabled=!!why||(mpOn()&&S.p.submitted);
       buy.addEventListener("click",()=>{if(t.purge){applyTonic(t.k,null);UI.modal={kind:"tonic",k:t.k,step:"done"};render();}else{UI.modal={kind:"tonic",k:t.k,step:"pick"};render();}});
       row.appendChild(buy);if(why)row.appendChild(el("span","tiny muted",why));
       else if(!t.purge)row.appendChild(el("span","tiny muted","Next you pick the one card it goes on. You're only charged when you apply it."));
