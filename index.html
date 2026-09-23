@@ -93,6 +93,7 @@
     {})});
 </script>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Grove and Blight</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -174,6 +175,11 @@ header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
 .lane{background:var(--surface2);border:1px solid var(--line);border-radius:3px;display:flex;flex-direction:column;min-height:230px;overflow:hidden}
 .lane.flank{background:var(--sunken)}
 .lane.targetable{cursor:pointer;outline:1px dashed var(--grove);outline-offset:-3px}
+.lane.nogo{cursor:help}
+.whytoast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:200;max-width:min(560px,92vw);
+  background:#2B2A26;color:#FFF6DF;border:2px solid var(--warn);border-radius:8px;padding:10px 14px;font:600 15px/1.35 "Bitter",serif;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);cursor:pointer;text-align:center}
+@media (max-width:760px){.whytoast{font-size:16px;left:8px;right:8px;transform:none;max-width:none}}
 .lane.targetable:hover{background:var(--groveSoft)}
 .lane-name{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-align:center;
   padding:5px 2px;font-weight:600;border-bottom:1px solid var(--line)}
@@ -380,6 +386,14 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:4px 0}
   border-radius:3px;padding:9px 11px;box-shadow:0 6px 22px rgba(0,0,0,.22);pointer-events:none;
   display:flex;flex-direction:column;gap:4px}
 #tip[hidden]{display:none}
+#tip.sheet{left:8px!important;right:8px!important;top:auto!important;bottom:8px!important;max-width:none;width:auto;
+  font-size:15.5px;line-height:1.4;padding:12px 14px;box-shadow:0 -6px 24px rgba(0,0,0,.3);z-index:200}
+#tip.sheet .tt,#tip.sheet .tm,#tip.sheet .tg{font-size:15px}
+#tip .tclose{margin-top:8px;text-align:center;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+.card{position:relative}
+.cinfo{position:absolute;top:2px;right:2px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);
+  border-radius:999px;width:22px;height:22px;line-height:1;font-size:13px;cursor:pointer;padding:0;display:none}
+@media (hover:none){.cinfo{display:block}}
 #tip.big{max-width:320px;padding:0;gap:0;overflow:hidden;border-radius:6px}
 #tip.big .ihead{color:#fff;font:700 16px "Bitter",serif;padding:8px 12px}
 #tip.big .ikind{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:700;padding:8px 12px 0}
@@ -1254,6 +1268,26 @@ const C = cardTable({
   thornpetal:{n:"Thornpetal",s:"grove",c:2,a:2,h:2,tag:"Flower",tag2:"Thorn",t:"Your other THORN and FLOWER units in this lane get +1 attack.",aura:"Thorn",aura2:"Flower"},
   bonerot:{n:"Bonerot",s:"blight",c:3,a:2,h:4,tag:"Rot",tag2:"Bone",t:"On death: deal 2 damage to the enemy front unit.",rattledmg:2},
   ichorspore:{n:"Ichorspore",s:"blight",c:2,a:1,h:3,tag:"Ichor",tag2:"Spore",t:"Can be played in Water lanes. +1 spore at the start of every turn it survives.",prod:1},
+  /* --- more DEAD WEIGHT: each one hurts in its own way --- */
+  mildew:{n:"Creeping Mildew",s:"both",c:0,junk:true,t:"Dead weight. SPREADS: if it is still in your hand when the round ends, another one joins your deck.",spread:1},
+  maggots:{n:"Maggot Nest",s:"both",c:0,junk:true,t:"Dead weight. SPREADS: if it is still in your hand when the round ends, another one joins your deck.",spread:1},
+  aphids:{n:"Aphids",s:"both",c:0,junk:true,t:"Dead weight. While it sits in your hand you get 1 less sun each turn.",drain:1},
+  crackedvial:{n:"Cracked Vial",s:"both",c:0,junk:true,t:"Dead weight. While it sits in your hand you get 1 less spore each turn.",drain:1},
+  lodestone:{n:"Lodestone",s:"both",c:0,junk:true,t:"Dead weight. Can't be recycled, and hauling it out costs 6 scrap instead of 3 (shears still work).",noscrap:true,cutcost:6},
+  /* --- more TRIBELESS: nothing buffs them, nothing needs them --- */
+  scarecrow:{n:"Scarecrow",s:"grove",c:2,a:0,h:5,tag:"Tribeless",t:"TEAM-UP. THORNMAIL 1.",teamup:1,thornmail:1},
+  weathervane:{n:"Weathervane",s:"grove",c:3,a:2,h:4,tag:"Tribeless",t:"SURVEY — each turn it survives, this lane's capture moves 5% your way.",survey:5},
+  millstone:{n:"Millstone",s:"grove",c:5,a:2,h:9,tag:"Tribeless",t:"TEAM-UP. SHIELD 1. It grinds, slowly.",teamup:1,shield:1},
+  carrioncrow:{n:"Carrion Crow",s:"blight",c:2,a:2,h:2,tag:"Tribeless",t:"SNIPER.",sniper:1},
+  rageffigy:{n:"Rag Effigy",s:"blight",c:1,a:0,h:3,tag:"Tribeless",t:"On death: draw a card. Stuffed with something that twitches.",rattledraw:1},
+  plaguecart:{n:"Plague Cart",s:"blight",c:5,a:4,h:6,tag:"Tribeless",t:"SPLASH 1. On death: draw a card.",splash:1,rattledraw:1},
+  /* --- new faction mechanics --- */
+  rootbridge:{n:"Rootbridge",s:"grove",c:3,a:1,h:5,tag:"Root",t:"NURTURE: at the end of every turn, your front units in the lanes BESIDE this one get +0/+1.",nurture:1},
+  pollendrift:{n:"Pollen Drifter",s:"grove",c:2,a:1,h:3,tag:"Flower",t:"On play: your units in the lanes BESIDE this one get +1 attack this round.",sidebuff:1},
+  undertow:{n:"Undertow",s:"grove",c:3,trick:true,t:"Drag the enemy's BACK unit to the FRONT of its lane and deal 2 damage to it.",yank:2},
+  swarmmother:{n:"Swarm Mother",s:"blight",c:4,a:1,h:4,tag:"Spore",t:"SPAWN: at the end of every turn it survives, a Sprout joins its lane.",spawn:1},
+  bonecollector:{n:"Bone Collector",s:"blight",c:2,a:1,h:3,tag:"Bone",t:"SCAVENGE: +1/+1 every time ANY unit dies in its lane.",scavenge:1},
+  hexgrasp:{n:"Hexing Grasp",s:"blight",c:2,trick:true,t:"The enemy front unit in a lane deals NO damage this turn.",zeroatk:1},
   /* --- phase cards: bounce, gravestones, ambush, last word --- */
   pollinate:{n:"Pollination",s:"grove",c:6,trick:true,t:"The bees are out. Every unit you have on the board gets +1/+1 — and so does every unit in your hand when you play it this round.",pollinate:1},
   uproot:{n:"Uproot",s:"grove",c:2,trick:true,t:"BOUNCE an enemy unit with 5 or less health: it goes back to its owner's hand.",bounce:5},
@@ -1288,6 +1322,8 @@ const BLIGHT_POOL=["rotling","rotling","gnawer","gnawer","hivecaller","rotchoir"
   "sporeburst","sporelance","witherbreath","necrotize","displace","mirepull","sporestorm","rotburn",
   "bonepyre","graverob","broodsong","plaguewind","hungermaw","tallyworm","blightpit","gravemarker","mireover","rotfog","mutationchamber","whisperingcrypt","bonechute","sporematron","hexwright","hoardergrub","pallidscribe","gravedigger","chitterhost",
   "whisperspores","rotharvest","broodsurge","carrioncall","plaguetide","nightmarket","sporetax","rottingpact","vivisector","leechling","sporetick","marrowfluke","ichorwasp","broodhusk","rubble","tangle"];
+GROVE_POOL.push("mildew","aphids","lodestone","scarecrow","weathervane","millstone","rootbridge","pollendrift","undertow");
+BLIGHT_POOL.push("maggots","crackedvial","lodestone","carrioncrow","rageffigy","plaguecart","swarmmother","bonecollector","hexgrasp");
 GROVE_POOL.push("mossback","thornpetal","pollinate","uproot","gale","gravebuster","snapdragon","forecast");BLIGHT_POOL.push("bonerot","ichorspore","scatter","gravelurker","tombcrawler","cryptkeeper","headstone","finalhowl");
 const POOL={grove:GROVE_POOL,blight:BLIGHT_POOL};
 const FNAME={grove:"Grove",blight:"Blight"};
@@ -1657,7 +1693,8 @@ function openingHand(deck,who){
 function incomeParts(w){
   const mains=S.lanes.filter(l=>!l.flank).length;
   const parts=[["base",2+Math.min(4,S.turn)],["wide front",S.map==="wide"?2:0],
-               ["Irrigation",S.turn>=3?upLvl(w,"sun"):0]];
+               ["Irrigation",S.turn>=3?upLvl(w,"sun"):0],
+               ["dead weight in hand",-(S[w].hand||[]).reduce((t,id)=>t+((C[id]&&C[id].drain)||0),0)]];
   let prod=0;S.lanes.forEach(l=>l[w].forEach(u=>prod+=u.prod||0));parts.push(["producers",prod]);
   /* Sporeticks: a parasite in an enemy unit feeds its owner. */
   const fac=w==="p"?S.pf:S.af;let dr=0;
@@ -1682,6 +1719,7 @@ const ABILITY_VALUE={
   crowd:0.7, horde:2.2, screen:2.0, ward:1.6, bolster:0.7, aurav:1.9, tough:1.1,
   bloom:2.4, thornmail:1.6, bulwark:1.5, vigil:2.2, regrow:1.8, rally:1.4, sniper:2.0,
   entrench:2.2, splash:1.8, consume:1.2, mutate:0.8, warp:0.4, evolve:1.6, corrode:1.5,
+  nurture:1.6, spawn:2.2, scavenge:1.6, sidebuff:1.4,
   rattledraw:2.2, rattledmg:1.7, crossv:1.5, crosswardv:0.7, devour:0.9, summon:1.6, sprouts:1.5, gainflat:0.8
 };
 function abilityValue(d){
@@ -1705,10 +1743,10 @@ function abilityValue(d){
 }
 function cardPower(id){
   const d=C[id];
-  if(d.junk)return -3.5;
+  if(d.junk)return -3.5-(d.drain?2:0)-(d.spread?2.5:0)-(d.cutcost?0.5:0);
   if(d.trick)return abilityValue(d)+(d.dmg?d.dmg*0.95:0)+(d.slayer?4.5:0)
     +(d.shove?1.6:0)+(d.strikenow?(d.strikebonus?3.2:2.4):0)+(d.buff?(d.buff[0]+d.buff[1])*0.6:0)
-    +(d.debuff?d.debuff*0.5:0)+(d.shunt?1.3:0)+(d.pyre?2.6:0)+(d.sweep?d.sweep*1.5+(d.sweepside||0)*1.5:0)+(d.sweepdebuff?d.sweepdebuff*1.1:0)+(d.laneward?d.laneward*0.8:0)+(d.sprouts?d.sprouts*1.1:0)+(d.swarmdraw?2.4:0)+(d.conjure?d.conjure.n*1.8:0)+(d.surge?2.2:0)+(d.swarmbuff?2.0:0)+(d.sweepall?4.5:0)+(d.churn?1.8:0)+(d.tax?2.2:0)+(d.pact?1.5:0)+(d.borrow?1.6:0)+(d.terraform?1.4:0)+(d.envset?2.6:0)+(d.nextdisc?1.4:0)-(d.c||0)*1.05;
+    +(d.debuff?d.debuff*0.5:0)+(d.shunt?1.3:0)+(d.pyre?2.6:0)+(d.sweep?d.sweep*1.5+(d.sweepside||0)*1.5:0)+(d.sweepdebuff?d.sweepdebuff*1.1:0)+(d.laneward?d.laneward*0.8:0)+(d.sprouts?d.sprouts*1.1:0)+(d.swarmdraw?2.4:0)+(d.conjure?d.conjure.n*1.8:0)+(d.surge?2.2:0)+(d.swarmbuff?2.0:0)+(d.sweepall?4.5:0)+(d.churn?1.8:0)+(d.tax?2.2:0)+(d.pact?1.5:0)+(d.borrow?1.6:0)+(d.terraform?1.4:0)+(d.envset?2.6:0)+(d.nextdisc?1.4:0)+(d.yank?2.6:0)+(d.zeroatk?2.6:0)+(d.bounce?2.8:0)+(d.bounceAll?5:0)-(d.c||0)*1.05;
   const a=d.a||0, h=d.h||0;
   let v=a*1.35+h*0.8;
   if(a===0)v-=1.7;            // cannot take ground, ever
@@ -2039,6 +2077,7 @@ function aiPlaceUnits(){
       u.base+=food.base;lane.a=lane.a.filter(x=>x!==food);
       log(FNAME[S.af]+"'s "+d.n+" devours its own "+food.n+".");
     }
+    if(d.sidebuff){const li=S.lanes.indexOf(lane);[li-1,li+1].forEach(k=>{const L=S.lanes[k];if(L)L.a.forEach(o=>o.base+=d.sidebuff);});}
     pollenFor("a",pick.id,u);dawnFix(u);u.src=originOf("a",pick.id,"Played from "+FNAME[S.af]+"'s hand");
     const ue=envOnLand(lane,"a",u);
     if(d.grave){gsOf(lane,"a").push(ue);log(FNAME[S.af]+" buries something in "+lane.nm+". 🪦");continue;}
@@ -2151,6 +2190,14 @@ function aiTricks(){
       log(FNAME[S.af]+" casts "+d.n+" and draws "+nd+".");
       triggerSpite("p");continue;
     }
+    if(d.yank){
+      const L=S.lanes.filter(x=>x.p.length>1).sort((x,y)=>atk(y.p[y.p.length-1],y,"p")-atk(x.p[x.p.length-1],x,"p"))[0];
+      if(!L){tskip[tid]=1;continue;}spend();const t=L.p[L.p.length-1];L.p=L.p.filter(x=>x!==t);L.p.unshift(t);
+      log(FNAME[S.af]+" casts "+d.n+" — your "+t.n+" is dragged to the front of "+L.nm+".",true);applyDmg(t,d.yank,L,"p");cull(L,"p");triggerSpite("p");continue;}
+    if(d.zeroatk){
+      const L=S.lanes.filter(x=>x.p.length&&x.a.length).sort((x,y)=>atk(y.p[0],y,"p")-atk(x.p[0],x,"p"))[0];
+      if(!L||atk(L.p[0],L,"p")<3){tskip[tid]=1;continue;}spend();const t=L.p[0];t.weak=(t.weak||0)+atk(t,L,"p");
+      log(FNAME[S.af]+" casts "+d.n+" — your "+t.n+" deals no damage this turn.",true);triggerSpite("p");continue;}
     if(d.unearth){
       const L=S.lanes.find(x=>gsOf(x,"p").length);if(!L){tskip[tid]=1;continue;}spend();
       const r=bustGrave(L,"a");log(FNAME[S.af]+" casts "+d.n+" — it digs up your "+r.u.n+" in "+r.L.nm+" before it can rise.",true);drawFor("a",1);triggerSpite("p");continue;}
@@ -2433,6 +2480,8 @@ function onDeathMap(l,side,u){
 }
 function burst(l,side,u){
   if(u)onDeathMap(l,side,u);
+  /* SCAVENGE: every death in the lane feeds them (burst runs on every death) */
+  if(u)["p","a"].forEach(w=>l[w].forEach(o=>{const sc=o!==u&&C[o.id]&&C[o.id].scavenge;if(sc){o.base+=sc;o.h+=sc;}}));
   if(!u||!u.infest||!u.infest.length)return;
   spawnParasites(l,u,u.infest);
   u.infest=[];
@@ -2637,6 +2686,10 @@ function resolveLaneBody(l){
       };
       rot("p","a");rot("a","p");
     }
+    /* NURTURE (Grove) feeds the lanes beside it; SPAWN (Blight) breeds Sprouts. */
+    {const li=S.lanes.indexOf(l);["p","a"].forEach(w=>l[w].forEach(u=>{const d=C[u.id]||{};
+      if(d.nurture)[li-1,li+1].forEach(k=>{const L=S.lanes[k];if(L&&L[w].length){L[w][0].h+=d.nurture;}});
+      if(d.spawn&&addU(l[w],mk("sprout",w)))log("   "+u.n+" spawns a Sprout.");}));}
     /* BLOOM (Grove): grows a little every turn it is still standing. */
     ["p","a"].forEach(w=>l[w].forEach(u=>{
       if(u.bloom){u.base+=u.bloom;u.h+=u.bloom;log("   "+u.n+" blooms to "+u.base+"/"+u.h+".");}
@@ -2846,6 +2899,10 @@ function bankMomentum(loser){
       if(w==="p")log(C[id].n+" evolves into a "+C[into].n+", and comes back +2/+2.",true);
     });
   });
+  // 2c. SPREADING dead weight still in hand breeds another copy into the deck.
+  ["p","a"].forEach(w=>{const sp=(S[w].hand||[]).filter(id=>C[id]&&C[id].spread);
+    sp.forEach(id=>S[w].deck.push(baseId(id)));
+    if(sp.length)log((w==="p"?"Your ":FNAME[S.af]+"'s ")+sp.map(id=>C[id].n).join(", ")+" spread"+(sp.length===1?"s":"")+" — "+sp.length+" more dead weight in "+(w==="p"?"your":"its")+" deck.",w==="p");});
   // 3. Reserve — up to three unplayed cards stay in hand.
   S.p.carry=S.p.hand.slice(0,3);
   S.a.carry=S.a.hand.slice(0,3);
@@ -3543,12 +3600,13 @@ function refusalRubble(price,w){return Math.max(0,2+Math.ceil(price/6)-(w?perkLv
 const JUNK_CUT=3, SHEAR_CUTS=2;   // a pair of shears = two cuts
 function shears(w){return (S[w||"p"].freeThin)||0;}
 function thinCost(){return JUNK_CUT;}
-function canCut(id){const d=C[id];if(!d)return false;if(d.junk)return shears()>0||S.p.meta>=JUNK_CUT;return shears()>0&&depth("p")>THIN_FLOOR;}
+function junkCut(id){return (C[id]&&C[id].cutcost)||JUNK_CUT;}
+function canCut(id){const d=C[id];if(!d)return false;if(d.junk)return shears()>0||S.p.meta>=junkCut(id);return shears()>0&&depth("p")>THIN_FLOOR;}
 function thin(i){
   const gone=S.p.deck[i],d=C[gone];if(!d)return;
   if(!d.junk&&depth("p")<=THIN_FLOOR){log("Your deck is down to "+THIN_FLOOR+" real cards. You can only cut dead weight now.");render();return;}
   let how;
-  if(d.junk&&S.p.meta>=JUNK_CUT){S.p.meta-=JUNK_CUT;how=" for "+JUNK_CUT+" scrap";}
+  if(d.junk&&S.p.meta>=junkCut(gone)){const jc=junkCut(gone);S.p.meta-=jc;how=" for "+jc+" scrap";}
   else if(shears()>0){S.p.freeThin--;how=" with your shears";}
   else return;
   if(!d.junk)S.p.cutsTotal=(S.p.cutsTotal||0)+1;
@@ -3559,13 +3617,13 @@ function thin(i){
 }
 /* Every card has a floor: cash one in for sun instead of being bricked. Once a turn. */
 function scrap(hi){
-  if(S.p.discarded||S.sub==="tricks")return;
+  if(S.p.discarded){showWhy("You have already recycled a card this turn — one a turn.");return;}
   if(mpOn()&&!mpIsMyTurn())return;
   const id=S.p.hand[hi], d=C[id];
   if(d.noscrap){log(d.n+" cannot be recycled. It just sits there.");render();return;}
   const worth=d.noscrapvalue?0:2+perkLvl("p","scrapper");
   S.p.discarded=true;S.p.sun+=worth;S.p.hand.splice(hi,1);S.sel=null;
-  log("You recycle "+d.n+(worth?" for "+worth+" sun.":" for nothing at all."));
+  log("You recycle "+d.n+(worth?" for "+worth+" "+FRES[S.pf]+".":" for nothing at all."));
   render();
 }
 function canTarget(hi,l){
@@ -3603,6 +3661,53 @@ function canTarget(hi,l){
   if(d.cond==="losing"&&(l.cap||0)>-40)return false;   // only where Blight is ahead
   return true;
 }
+/* Plain-language reason a card can't go in that lane. Mirrors canTarget. */
+function whyNot(hi,l){
+  const id=S.p.hand[hi],d=C[id];if(!d)return null;
+  if(mpOn()&&!mpIsMyTurn())return "It isn't your move yet — wait for "+FNAME[S.af]+".";
+  if(!tutAllowPlay(hi,l))return "The tutorial is asking for a particular play right now.";
+  if(d.junk)return d.n+" is DEAD WEIGHT — it can never be played. Recycle it, or cut it out of your deck between rounds.";
+  const cost=costOf(id,"p");
+  const short=cost>S.p.sun?(d.n+" costs "+cost+" "+FRES[S.pf]+" and you have "+S.p.sun+" left this turn."):null;
+  const trickWindow=(S.sub==="tricks"||S.sub==="respond");
+  if(d.trick){
+    if(!trickWindow)return "Tricks are locked during your troop phase. Commit your units first — you cast tricks in your last word.";
+    if(d.lastword&&S.sub!=="tricks")return d.n+" is LAST WORD ONLY: it can only be cast in the final trick step.";
+    if(short)return short;
+    if((d.pyre||d.laneward||d.swarmbuff||d.pact||d.own||d.strikenow)&&!l.p.length)return d.n+" needs one of YOUR units in "+l.nm+".";
+    if(d.shove&&!l.flank)return d.n+" only works on a flank lane.";
+    if(d.unearth)return "There are no enemy 🪦 gravestones to dig up.";
+    if(d.envset&&l.env&&l.env.k===d.envset&&envOwnerSide(l)==="p")return l.nm+" already has your "+l.env.n+".";
+    if(d.bounce&&!l.a.some(u=>u.h<=d.bounce))return "Nothing in "+l.nm+" has "+d.bounce+" health or less to bounce.";
+    if(!l.a.length)return d.n+" needs an enemy unit in "+l.nm+".";
+    return d.n+" has nothing to work with in "+l.nm+".";
+  }
+  if(d.infest&&!l.a.length)return d.n+" is a parasite: it needs an enemy unit in "+l.nm+" to infest.";
+  if(S.sub==="tricks"&&!d.infest)return "The unit window is closed — in your last word you can only cast tricks (INFEST parasites still go in).";
+  if(short)return short;
+  if(d.early&&S.turn>d.early)return d.n+" can only be played on turn "+d.early+" or earlier.";
+  if(d.late&&S.turn<d.late)return d.n+" can only be played from turn "+d.late+" onward.";
+  if(d.devour&&!l.p.length)return d.n+" DEVOURS one of your own units — you need one in "+l.nm+".";
+  if(l.terr&&l.terr.water&&!d.infest&&!canSwim(d))return l.nm+" is a WATER lane — only AQUATIC (Grove) and ICHOR (Blight) units can go there.";
+  if(!d.infest&&!d.teamup&&!(d.fusion===undefined&&l.p.some(u=>u.fbase))&&!laneRoom(l.p.concat(gsOf(l,"p"))))return l.nm+" is full ("+CFG.laneCap+" units). TEAM-UP units don't take a slot.";
+  if(d.flank&&!l.flank)return d.n+" can only be played on a FLANK lane.";
+  if(d.cond==="losing"&&(l.cap||0)>-40)return d.n+" only works in a lane where "+FNAME[S.af]+" is already ahead.";
+  return "You can't play "+d.n+" in "+l.nm+" right now.";
+}
+/* A short message that floats over the board and also lands in the feed. */
+function showWhy(msg){
+  if(!msg)return;
+  plog(msg);
+  try{
+    if(typeof document.querySelector!=="function")return;
+    const old=$("whytoast");if(old)old.remove();
+    const t=el("div","whytoast");t.id="whytoast";t.textContent=msg;
+    t.addEventListener("click",()=>t.remove());
+    document.body.appendChild(t);
+    setTimeout(()=>{if(t.parentNode)t.remove();},5000);
+  }catch(e){}
+}
+function explainNot(hi,li){showWhy(whyNot(hi,S.lanes[li]));}
 function playCard(hi,li){
   const id=S.p.hand[hi],d=trickDef(id,"p"),l=S.lanes[li];
   if(!canTarget(hi,l))return;
@@ -3624,6 +3729,8 @@ function playCard(hi,li){
       if(d.drawt){drawFor("p",d.drawt);plog("   you draw "+d.drawt+".");}
       if(d.conjure)conjure("p",d.conjure);
     }
+    else if(d.yank){const t=l.a[l.a.length-1];l.a=l.a.filter(x=>x!==t);l.a.unshift(t);log("You cast "+d.n+" — "+t.n+" is dragged to the front of "+l.nm+".",true);applyDmg(t,d.yank,l,"a");cull(l,"a");}
+    else if(d.zeroatk){const t=l.a[0];t.weak=(t.weak||0)+atk(t,l,"a");log("You cast "+d.n+" — "+t.n+" deals no damage this turn.",true);}
     else if(d.unearth){const r=bustGrave(l,"p");if(r){log("You cast "+d.n+" — you dig up "+FNAME[S.af]+"'s "+r.u.n+" in "+r.L.nm+" before it can rise.",true);drawFor("p",1+(d.drawt||0));}}
     else if(d.pollinate){const k=castPollen("p",d);log("You cast "+d.n+" — 🐝 "+k+" unit"+(k===1?"":"s")+" on the board get +"+d.pollinate+"/+"+d.pollinate+", and your units in hand will too.",true);}
     else if(d.lastword){l.p.forEach(u=>u.weak=(u.weak||0)-d.lastword);log("You cast "+d.n+" — your units in "+l.nm+" get +"+d.lastword+" attack this turn.",true);}
@@ -3746,6 +3853,7 @@ function playCard(hi,li){
         log(d.n+" consumes "+food.n+" — that card is PERMANENTLY +"+S.p.vet[food.id]+"/+"+S.p.vet[food.id]+" in your deck.",true);
       }
     }
+    if(d.sidebuff){const li=S.lanes.indexOf(l);let k2=0;[li-1,li+1].forEach(k=>{const L=S.lanes[k];if(L)L.p.forEach(o=>{o.base+=d.sidebuff;k2++;});});if(k2)log(d.n+" drifts pollen — "+k2+" unit"+(k2>1?"s":"")+" beside it get +"+d.sidebuff+" attack this round.");}
     pollenFor("p",id,u);dawnFix(u);u.src=originOf("p",id,"Played from your hand");
     const ue=envOnLand(l,"p",u);
     if(d.grave){gsOf(l,"p").push(ue);log("You bury "+d.n+" in "+l.nm+". 🪦 It rises when the last word begins — nothing can touch it till then.");S.tuFront=false;S.sel=null;render();return;}
@@ -4366,12 +4474,49 @@ function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 const TIP=(function(){
   const t=document.createElement("div");t.id="tip";t.hidden=true;document.body.appendChild(t);return t;
 })();
+/* Phones have no hover: tips open as a sheet at the bottom on a tap. */
+function coarse(){try{return window.matchMedia&&window.matchMedia("(hover: none)").matches;}catch(e){return false;}}
+function showSheet(){
+  TIP.classList.add("sheet");TIP.hidden=false;
+  TIP.style.left="";TIP.style.top="";
+  if(!TIP._close){TIP._close=el("div","tclose","Tap to close");TIP.appendChild(TIP._close);}
+  else TIP.appendChild(TIP._close);
+  clearTimeout(TIP._t);TIP._t=setTimeout(()=>{TIP.hidden=true;TIP.classList.remove("sheet");},9000);
+}
+function tapTip(node,fill){
+  node.addEventListener("click",e=>{
+    if(!coarse())return;
+    /* while a card is picked, tapping the board should PLAY, not explain */
+    if(S&&S.sel!=null&&node.closest&&node.closest(".lane"))return;
+    fill(e);showSheet();
+  });
+}
 function place(e){
   const pad=14,w=TIP.offsetWidth,h=TIP.offsetHeight;
   let x=e.clientX+pad,y=e.clientY+pad;
   if(x+w>window.innerWidth-8)x=e.clientX-w-pad;
   if(y+h>window.innerHeight-8)y=e.clientY-h-pad;
   TIP.style.left=Math.max(8,x)+"px";TIP.style.top=Math.max(8,y)+"px";
+}
+/* The ⓘ sheet: the whole card, readable, on any screen. */
+function cardSheet(id,w){
+  const d=C[id];if(!d)return;
+  TIP.innerHTML="";TIP.classList.remove("big");TIP._close=null;
+  TIP.appendChild(el("div","tn",d.n));
+  const L=w?deckStats(id,w):null;
+  TIP.appendChild(el("div","tm",d.junk?"no cost · does nothing":
+    (costOf(id,w||"p")+" "+FRES[d.s==="blight"?"blight":"grove"]+(d.trick?" · trick":" · "+(L?L.a:d.a)+" attack / "+(L?L.h:d.h)+" health"))));
+  if(L&&L.notes&&L.notes.length)TIP.appendChild(el("div","tt tl",L.notes.join(" · ")));
+  TIP.appendChild(el("div","tg",d.junk?"Dead weight":(d.trick?"Trick":tagLabel(d))));
+  if(d.t)TIP.appendChild(el("div","tt",d.t));
+  const tr=traitsIn(d.t);
+  if(tr.length){const kd=el("div","tkw");tr.forEach(k=>{const r=el("div");r.appendChild(el("b",null,k.full+": "));r.appendChild(document.createTextNode(k.v));kd.appendChild(r);});TIP.appendChild(kd);}
+  if(S&&S.phase==="combat"&&S.lanes){
+    const ok=S.lanes.filter(L2=>S.p.hand.indexOf(id)>=0&&canTarget(S.p.hand.indexOf(id),L2));
+    const hi=S.p.hand.indexOf(id);
+    if(hi>=0)TIP.appendChild(el("div","tt tl",ok.length?"Can be played in: "+ok.map(L2=>L2.nm).join(", "):"⚠ "+whyNot(hi,S.lanes.find(L2=>!L2.flank)||S.lanes[0])));
+  }
+  showSheet();
 }
 /* What a card is RIGHT NOW for you: veterancy, tonics and resonance included. */
 function deckStats(id,w){
@@ -4431,7 +4576,7 @@ function textWithTraits(text){
 function bindTip(node,id,side,live){
   const d=C[id];
   node.classList.add("hoverable");
-  node.addEventListener("mouseenter",e=>{
+  const fill=e=>{
     TIP.innerHTML="";TIP.classList.remove("big");
     TIP.appendChild(el("div","tn",d.n));
     const res=d.s==="blight"?"spore":"sun";
@@ -4452,25 +4597,29 @@ function bindTip(node,id,side,live){
       if(d.cond)extra.push("Unplayable unless you are behind in that lane.");
       if(extra.length)TIP.appendChild(el("div","tt","⚠ "+extra[0]));
     }
-    TIP.hidden=false;place(e);
-  });
-  node.addEventListener("mousemove",place);
-  node.addEventListener("mouseleave",()=>{TIP.hidden=true;});
+    TIP.hidden=false;
+  };
+  node.addEventListener("mouseenter",e=>{if(coarse())return;TIP.classList.remove("sheet");fill(e);place(e);});
+  node.addEventListener("mousemove",e=>{if(!coarse())place(e);});
+  node.addEventListener("mouseleave",()=>{if(!coarse())TIP.hidden=true;});
   node.addEventListener("mouseenter",()=>{TIP.owner=node;});
+  tapTip(node,fill);
 }
 /* Big, plain tooltip for lane terrain and environments. */
 function bindInfoTip(node,o){
   node.style.cursor="help";
-  node.addEventListener("mouseenter",e=>{
+  const fill=e=>{
     TIP.innerHTML="";TIP.classList.add("big");
     const hd=el("div","ihead");hd.style.background=o.col||"var(--ink3)";hd.textContent=o.title;TIP.appendChild(hd);
     if(o.kind)TIP.appendChild(el("div","ikind",o.kind));
     TIP.appendChild(el("div","ieff",o.effect));
     (o.rows||[]).forEach(([k,v])=>{const r=el("div","irow");r.appendChild(el("b",null,k));r.appendChild(el("span",null,v));TIP.appendChild(r);});
-    TIP.hidden=false;TIP.owner=node;place(e);
-  });
-  node.addEventListener("mousemove",place);
-  node.addEventListener("mouseleave",()=>{TIP.hidden=true;TIP.classList.remove("big");});
+    TIP.hidden=false;TIP.owner=node;
+  };
+  node.addEventListener("mouseenter",e=>{if(coarse())return;TIP.classList.remove("sheet");fill(e);place(e);});
+  node.addEventListener("mousemove",e=>{if(!coarse())place(e);});
+  node.addEventListener("mouseleave",()=>{if(!coarse()){TIP.hidden=true;TIP.classList.remove("big");}});
+  tapTip(node,fill);
 }
 const TERR_ICON={"Thicket":"🌿","Open Ground":"⚔","Marsh":"💧","Ruins":"🧱","Bramble Wall":"🌵","Water":"🌊","High Ground":"⛰"};
 const ENV_ICON={fog:"🌫",meadow:"🌻",echo:"🔁",gallery:"🏹",chamber:"🧪",crypt:"🕯",chute:"🦴"};
@@ -4494,7 +4643,8 @@ function envTip(eb,e){
 /* A re-render removes the hovered element without a mouseleave, which used to
    strand the tooltip on screen. Hide it on every render, on scroll and clicks,
    and whenever the pointer is no longer over the element that opened it. */
-function hideTip(){if(TIP){TIP.hidden=true;TIP.classList.remove("big");}}
+function tipIsSheet(){try{return !!(TIP&&TIP.classList&&TIP.classList.contains&&TIP.classList.contains("sheet"));}catch(e){return false;}}
+function hideTip(){if(TIP&&!tipIsSheet()){TIP.hidden=true;TIP.classList.remove("big");}}
 if(typeof document.addEventListener==="function"){
   document.addEventListener("mousemove",e=>{if(TIP.hidden)return;const o=TIP.owner;
     if(!o||!o.isConnected||!(o===e.target||o.contains(e.target)))TIP.hidden=true;},true);
@@ -4635,10 +4785,14 @@ function renderBoard(ct,interactive){
     if(interactive){
       d.addEventListener("dragover",e=>{if(DRAG.hi!=null&&canTarget(DRAG.hi,l)){e.preventDefault();d.classList.add("dragover");}});
       d.addEventListener("dragleave",()=>d.classList.remove("dragover"));
-      d.addEventListener("drop",e=>{e.preventDefault();const hi=DRAG.hi;dragClear();if(hi!=null&&canTarget(hi,l)){S.sel=null;tryPlay(hi,li);}});
+      d.addEventListener("drop",e=>{e.preventDefault();const hi=DRAG.hi;dragClear();if(hi==null)return;
+        if(canTarget(hi,l)){S.sel=null;tryPlay(hi,li);}else showWhy(whyNot(hi,l));});
     }
     if(interactive&&S.sel!=null&&canTarget(S.sel,l)){d.classList.add("targetable");d.addEventListener("click",()=>tryPlay(S.sel,li));
       const pb=prevBadge(S.sel,l);if(pb)d.appendChild(pb);}
+    else if(interactive&&S.sel!=null&&S.selHero==null&&!S.infAsk&&!S.tuAsk){
+      /* not a legal lane — say WHY instead of doing nothing */
+      d.classList.add("nogo");d.addEventListener("click",()=>explainNot(S.sel,li));}
     if(interactive&&S.infAsk&&S.infAsk.li===li){
       const ask=el("div","tuask");ask.appendChild(el("b",null,"INFEST — which unit? (bigger hosts make fatter parasites)"));
       l.a.forEach((u,ix)=>{const b=el("button","btn "+(ix===0?"primary":"ghost"),u.n+" "+atk(u,l,"a")+"/"+u.h+(Math.floor(u.h/3)?"  → +"+Math.floor(u.h/3)+"/+"+Math.floor(u.h/3):""));b.type="button";
@@ -5606,7 +5760,8 @@ function renderCombat(st){
     const wrongPhase=d.trick?(!trickPhase||(d.lastword&&sub!=="tricks")):(sub==="tricks"&&!d.infest);
     const unplayable=waiting||d.junk||costOf(id,"p")>S.p.sun||wrongPhase;
     const locked=d.trick&&!trickPhase;
-    const c=cardEl(id,{who:"p",picked:S.sel===i,onClick:waiting?null:()=>{S.selMinion=null;S.sel=S.sel===i?null:i;render();}});
+    const c=cardEl(id,{who:"p",picked:S.sel===i,onClick:waiting?null:()=>{S.selMinion=null;const was=S.sel;S.sel=S.sel===i?null:i;render();
+      if(S.sel===i&&!S.lanes.some(L=>canTarget(i,L)))showWhy(whyNot(i,S.lanes.find(L=>!L.flank)||S.lanes[0]));}});
     if(locked){c.classList.add("locked");c.appendChild(el("div","lockt","🔒 after your troop phase"));}
     if(unplayable)c.style.opacity=".5";   // dimmed, but still selectable so you can scrap it
     else{
@@ -5616,21 +5771,27 @@ function renderCombat(st){
         document.querySelectorAll(".lane[data-li]").forEach(L=>{const l=S.lanes[+L.dataset.li];if(l&&canTarget(i,l)){L.classList.add("droptarget");const pb=prevBadge(i,l,"drag");if(pb)L.appendChild(pb);}});});
       c.addEventListener("dragend",dragClear);
     }
-    bindTip(c,id,false,()=>deckStats(id,"p"));cs.appendChild(c);
+    bindTip(c,id,false,()=>deckStats(id,"p"));
+    {const ib=el("button","cinfo","ⓘ");ib.type="button";ib.title="What does this card do?";
+     ib.addEventListener("click",ev=>{ev.stopPropagation();ev.preventDefault();cardSheet(id,"p");});
+     c.appendChild(ib);}
+    cs.appendChild(c);
   });
   if(!S.p.hand.length)cs.appendChild(el("span","tiny muted","Nothing in hand. Buy packs next round — your deck is how you fight."));
   hw.appendChild(cs);
   const act=el("div","btnrow");act.style.marginTop="10px";
   if(S.sel!=null&&!waiting&&C[S.p.hand[S.sel]]&&C[S.p.hand[S.sel]].trick&&!trickPhase){
     act.appendChild(el("span","lockmsg","🔒 Tricks can only be used after your troop phase — commit your units first, then you get the last word."));
+    const sc0=el("button","btn ghost","Recycle for 2 "+FRES[S.pf]);sc0.type="button";
+    sc0.disabled=S.p.discarded;sc0.addEventListener("click",()=>scrap(S.sel));act.appendChild(sc0);
   } else if(S.sel!=null&&!waiting){
     act.appendChild(el("span","tiny muted","Click a highlighted lane to play it, or —"));
     const sc=el("button","btn ghost","Recycle for 2 "+FRES[S.pf]);sc.type="button";
-    sc.disabled=S.p.discarded||sub==="tricks";
+    sc.disabled=S.p.discarded;
     sc.addEventListener("click",()=>scrap(S.sel));
     act.appendChild(sc);
   }
-  if(S.p.discarded&&sub!=="tricks"&&!waiting)act.appendChild(el("span","tiny muted","Already recycled a card this turn."));
+  if(S.p.discarded&&!waiting)act.appendChild(el("span","tiny muted","Already recycled a card this turn."));
   hw.appendChild(act);
   /* hero */
   const hh=heroOf("p");
@@ -5790,6 +5951,11 @@ const KEYWORDS=[
     ["Honing / Quickening","Trick tonics: one copy of a trick gets +1 to its number (Honing) or costs 1 less (Quickening)."],
     ["Shears ✂","A pair of shears cuts TWO real cards from your deck. One pack each round carries a pair; losing a round and the Pruning Shed upgrade give one too. Dead weight can also be cut for 3 scrap."],
     ["How long things last","THIS TURN = until the fight ends. THIS ROUND = until the board clears at round's end. FOR THE REST OF THE MATCH = upgrades and landmarks that stay. PERMANENTLY = the card in your DECK changes (tonics, veterancy ★, growth, cuts)."],
+    ["Dead weight kinds","Rubble (recycle for resource) · Tangle (can't recycle) · Blighted Soil (recycles for nothing) · Mildew / Maggot Nest (SPREADS if still in hand at round end) · Aphids / Cracked Vial (−1 resource each turn while in hand) · Lodestone (can't recycle, 6 scrap to haul out)."],
+    ["Spreads","Dead weight that breeds: if it is still in your hand when the round ends, another copy joins your deck. Recycle it or play around it."],
+    ["Nurture","End of every turn: your front units in the lanes beside it get +0/+1."],
+    ["Spawn","End of every turn it survives: a Sprout joins its lane."],
+    ["Scavenge","+1/+1 whenever ANY unit dies in its lane."],
     ["Bounce","Sends a unit back to its owner's hand. No death trigger; they must pay for it again. Tokens just vanish."],
     ["Ambush","Bonus when the unit is played while ANSWERING (you are not the side that commits first)."],
     ["Last word","A trick that can only be cast in the final trick step, by the side that committed first."],
@@ -6285,7 +6451,7 @@ function renderModal(){
     body.appendChild(el("p","mstep","✂ You have "+shears()+" cut"+(shears()===1?"":"s")+" left (each pair of shears gives 2). A cut PERMANENTLY removes one card. Dead weight can also be hauled out for "+JUNK_CUT+" scrap. Shears come with one pack each round, when you lose a round, and from the Pruning Shed."+(depth("p")<=THIN_FLOOR?" You're at "+THIN_FLOOR+" real cards — only dead weight can go now.":"")));
     deckGroups("p").forEach(g=>{
       const d=C[g.id];const off2=!canCut(g.id)||(mpOn()&&S.p.submitted);
-      grid.appendChild(deckTile(g.id,g.idx.length,{off:off2,note:off2?(d.junk?null:"needs shears"):"cut · "+(d.junk&&S.p.meta>=JUNK_CUT?JUNK_CUT+" scrap":"✂ shears"),onClick:()=>{thin(g.idx[g.idx.length-1]);}}));
+      grid.appendChild(deckTile(g.id,g.idx.length,{off:off2,note:off2?(d.junk?null:"needs shears"):"cut · "+(d.junk&&S.p.meta>=junkCut(g.id)?junkCut(g.id)+" scrap":"✂ shears"),onClick:()=>{thin(g.idx[g.idx.length-1]);}}));
     });
     body.appendChild(grid);
     const ok=el("button","btn primary","Done");ok.type="button";ok.addEventListener("click",closeModal);body.appendChild(ok);
@@ -6296,6 +6462,10 @@ function renderModal(){
   }
   head.appendChild(meta);head.appendChild(x);box.appendChild(head);box.appendChild(body);
 }
+/* any tap closes an open sheet first; a tap ON a tipped node then reopens it */
+try{document.addEventListener&&document.addEventListener("click",()=>{
+  if(TIP&&!TIP.hidden&&tipIsSheet()){TIP.hidden=true;TIP.classList.remove("sheet");}
+},true);}catch(e){}
 function renderNow(){
   wireDrawer();hideTip();applyLayout();
   try{if(typeof document.querySelectorAll==="function")setTimeout(renderTutorial,0);}catch(e){}
